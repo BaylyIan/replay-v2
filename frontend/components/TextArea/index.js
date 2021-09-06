@@ -5,12 +5,9 @@ import { Theme } from '../../styles/theme'
 
 import { MdMail } from 'react-icons/md'
 
-const Input = ({ icon, placeholder, value, register, disabled, onBlur, name, type, required, label, onChange, onKeyPress}) => {
+const TextArea = ({ icon, placeholder, value, register, disabled, onBlur, name, type, required, label, rows, height}) => {
     return (
-        <>
-        <p style={{color:`${Theme.colors.white}`, paddingBottom:'5px'}}>{label}</p>
-        
-        <Container>
+        <Container height={height}>
             {icon}
             <InputField
                 fontSize={'14px'}
@@ -20,22 +17,18 @@ const Input = ({ icon, placeholder, value, register, disabled, onBlur, name, typ
                 name={name}
                 type={type}
                 onBlur={(e)=>{onBlur(e)}}
-                onChange={onChange}
-                onKeyPress={onKeyPress}
+                rows={rows}
             />
         </Container>
-        </>
     );
 }
 
-Input.defaultProps = {
+TextArea.defaultProps = {
     onBlur: ()=> {},
-    onChange:()=>{},
-    onKeyPress:()=>{},
 
 }
 
-Input.propTypes = {
+TextArea.propTypes = {
 }
 
-export default Input;
+export default TextArea;

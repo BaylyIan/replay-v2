@@ -7,8 +7,8 @@ export const Container = styled.div`
     height:100vh;
     display:flex;
     min-width:100%;
-    min-height:100%;
-    position:absolute;
+    min-height:100vh;
+    flex-direction: column;
 `;
 export const Nav = styled.div`
     min-width:${({ toggle }) => toggle ? '81px' : '300px'};
@@ -16,6 +16,8 @@ export const Nav = styled.div`
     background-color:${Theme.colors.darkGrey};
     display:flex;
     flex-direction:column;
+    position: absolute;
+    z-index:1;
     padding:${({ toggle }) => toggle ? '0px 0px 0px 10px' : '0px 0px 0px 20px'};
     /* border:1px solid blue; */
     @media (max-width: ${SMALL}){
@@ -29,13 +31,11 @@ export const NavHeader = styled.div`
     width:100%;
     height:110px;
     display:flex;
-    /* align-items:${({ toggle }) => toggle ? ' center' : 'flex-start'}; */
     align-items:center;
     justify-content:${({ toggle }) => toggle ? 'center' : 'flex-start'};
     padding-left:${({ toggle }) => toggle ? null : '24px'};
     /* border:1px solid blue; */
     margin-right:${({ toggle }) => toggle ? '8px' : null};
-    /* padding-top:${({ toggle }) => toggle ? null : '40px'}; */
     & > h1 {
         color:${Theme.colors.white};
         margin-left:16px;
@@ -66,7 +66,6 @@ export const ItemWrap = styled.div`
 export const NavFooter = styled.div`
     width:100%;
     height:244px;
-    /* border:1px solid red; */
     display:flex;
     flex-direction: column;
     justify-content:flex-end;
@@ -80,11 +79,11 @@ export const NavFooter = styled.div`
 export const Slider = styled.div`
     width:4px;
     height:100%;
-    /* background-color:green; */
     `;
 export const Indicator = styled.div`
     width:4px;
     height:51px;
+    display:${({ slide }) => slide === 4 ? 'none' : 'block'};
     background-color:${Theme.colors.orange};
     transform:${({ slide }) => slide === 1 ? 'translateY(0)' : null || slide === 2 ? 'translateY(122%)' : null || slide === 3 ? 'translateY(242%)' : null};
     transition: transform 150ms ease-in-out;
@@ -123,13 +122,14 @@ export const HeaderGradient = styled.div`
     width:100%;
     height:80px;
     background: linear-gradient(180deg, #050505 50%, rgba(18, 18, 18, 0) 100%, rgba(5, 5, 5, 0) 100%);
-    z-index:2;
     `;
 export const Header = styled.div`
-    width:100%;
+    width:${({ toggle }) => toggle ? `calc(100% - 81px)` : `calc(100% - 300px)`};
     height: 58px;
-    z-index:1;
     background-color:${Theme.colors.black};
+    position:absolute;
+    z-index:2;
+    right:0;
 `;
 export const SearchCont = styled.div`
     display:flex;
@@ -148,7 +148,6 @@ export const SearchCont = styled.div`
 `;
 export const PageTitle = styled.div`
     display:flex;
-    flex:1;
     height:100%;
     /* border:1px solid blue; */
     align-items:center;
@@ -159,9 +158,13 @@ export const PageTitle = styled.div`
     }
 `;
 export const Page = styled.div`
-    z-index: 3;
-    overflow: auto;
+    z-index: 0;
     height: 100vh;
+    overflow-y:scroll;
+    position:relative;
+    padding-top:58px;
+    /* border:1px solid red; */
+    background-color:${Theme.colors.medGrey};
     margin-left: ${({ toggle }) => toggle ? '80px' : '300px'};
     @media (max-width: ${SMALL}){
         margin-left:${({ toggle }) => toggle ? '60px' : '300px'};

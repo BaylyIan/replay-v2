@@ -5,7 +5,7 @@ import { Theme } from '../../styles/theme'
 export const Container = styled.div`
     flex:4;
     height:28px;
-    display:flex;
+    display:${({ show }) => show ? 'flex' : 'none'};
     background-color: #57535C;
     border-radius: 7px;
     padding-left:30px;

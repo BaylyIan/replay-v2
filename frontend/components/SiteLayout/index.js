@@ -35,7 +35,9 @@ const SiteLayout = ({ children }) => {
         } else if (router.route.startsWith("/Explore")) {
             setTabs(2)
         }
-        else if (router.route.startsWith("/")) {
+        else if(router.route.startsWith("/CreatePlaylist")) {
+            setTabs(4)
+        } else if (router.route.startsWith("/")) {
             setTabs(1)
         }
     }
@@ -143,6 +145,12 @@ const SiteLayout = ({ children }) => {
                             textColor={`${Theme.colors.white}`}
                             width={toggle ? '51px' : 'calc(100% - 25px)'}
                             height={'51px'}
+                            onClick={() => {
+                                setTabs(4)
+                                router.push({
+                                    pathname: "/CreatePlaylist"
+                                });
+                            }}
                         />
                         <UserCont toggle={toggle}>
                             <Avatar />
@@ -156,16 +164,16 @@ const SiteLayout = ({ children }) => {
                         </ToggleCont>
                     </NavFooter>
                 </Nav>
-                <Header toggle={toggle}>
+                <Header toggle={toggle} >
                     <HeaderGradient>
                         <SearchCont>
-                            <PageTitle><h3 style={{ color: `${Theme.colors.white}` }}>{pageName}</h3></PageTitle>
+                            <PageTitle><h3 style={{ color: `${Theme.colors.white}` }}>{router.pathname.startsWith("/CreatePlaylist") ? null : pageName}</h3></PageTitle>
                             <SearchBar onChange={(handleKeyword)} />
                         </SearchCont>
                     </HeaderGradient>
                 </Header>
-            </Container>
             <Page toggle={toggle}>{children}</Page>
+            </Container>
         </>
     );
 }

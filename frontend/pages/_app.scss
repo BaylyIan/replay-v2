@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-
 // @import "../pageStyles/Home/style.js";
 // @import "../pageStyles/Register/style.js";
 
@@ -9,6 +8,8 @@ html, body {
     font-style: normal;
     font-weight: 300;
     overflow-x: hidden;
+    // overflow-y: scroll;
+    background:#1E1C21;
   }
   h1 {
     font-family: 'Inter', sans-serif;
@@ -53,3 +54,4 @@ html, body {
     font-weight: 300;
     font-size: 13px;
   };
+
