@@ -12,6 +12,8 @@ import { BsUpload } from 'react-icons/bs'
 import { Theme } from '../../styles/theme'
 import { useForm } from "react-hook-form";
 
+import { addTag } from '../../utils'
+
 
 const CreatePlaylist = ({ }) => {
 
@@ -24,9 +26,10 @@ const CreatePlaylist = ({ }) => {
     const [value, setValue] = useState()
 
     let tempTags = [...tags]
+    let ogTags = [...tags]
 
     const onSubmit = () => {
-        console.log(name, desc, tags, 'submitted')
+        // console.log(name, desc, tags, 'submitted')
     }
 
 
@@ -37,14 +40,18 @@ const CreatePlaylist = ({ }) => {
                 text: e
             })
             setValue('')
+            console.log(tempTags)
             setTags(tempTags)
         }
     }
 
-    const removeTag = (index) => {
-        // console.log(i, 'page')
-        // const tag = tempTags.indexOf(i)
-        console.log(index, 'func')
+    const removeTag = (tag) => {
+        for (let i = 0; i < tempTags.length; i++) {
+            if (tag === tempTags.indexOf(tempTags[i])) {
+                tempTags.splice(tag, 1)
+            }
+        }
+        setTags(tempTags)
     }
 
     return (
@@ -90,8 +97,8 @@ const CreatePlaylist = ({ }) => {
                         <TagWrap>
                             <TagArea
                                 arr={tags}
-                                deleteTag={(index)=> {
-                                    removeTag(index)
+                                deleteTag={(tag) => {
+                                    removeTag(tag)
                                 }}
                             />
                         </TagWrap>

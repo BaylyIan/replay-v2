@@ -11,14 +11,13 @@ const TagArea = ({ arr, deleteTag }) => {
     return (
         <Container>
             {arr && arr.length !== 0 ? arr.map((o, i) => {
-               const index = Object.assign({}, o, { id: i })
                 return (
                     <Tag
-                        key={index}
+                        key={i}
                         text={o.text}
                         showClose={true}
-                        deleteTag={()=>{
-                            deleteTag(index)
+                        deleteTag={() => {
+                            deleteTag(i)
                         }}>
                     </Tag>
                 )
@@ -28,7 +27,7 @@ const TagArea = ({ arr, deleteTag }) => {
 }
 
 TagArea.defaultProps = {
-    deleteTag:()=>{}
+    deleteTag: () => { }
 }
 
 TagArea.propTypes = {

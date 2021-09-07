@@ -35,9 +35,14 @@ export const PhotoWrap = styled.div`
     min-width:350px;
     display:flex;
     flex-direction: column;
-    /* background-color:red; */
+    background-color:red;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    position:relative;
+    & > button {
+        position:absolute;
+        bottom:0;
+    }
     @media (max-width: ${MED}){
         min-width:calc(100% - 10px);
     }
@@ -71,7 +76,7 @@ export const FormWrap = styled.div`
         height:100%;
         flex-direction: column;
         padding:0px 20px 0px 20px;
-        /* border:1px solid blue; */
+        border:1px solid blue;
         justify-content: space-between;
     }
     @media (max-width: ${MED}){
@@ -93,6 +98,6 @@ export const ButtonWrap = styled.div`
     width:100%;
     height:auto;
     display:flex;
-    /* border:1px solid red; */
+    border:1px solid red;
     justify-content: flex-end;
 `;
