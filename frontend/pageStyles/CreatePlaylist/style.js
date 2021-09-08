@@ -29,19 +29,37 @@ export const Wrap = styled.div`
     align-items: center;
 
 `;
-export const PhotoWrap = styled.div`
+export const PhotoWrap = styled.form`
     flex:3;
     height: 100%;
     min-width:350px;
     display:flex;
     flex-direction: column;
-    background-color:red;
+    /* background-color:red; */
     align-items: center;
-    justify-content: center;
+    /* justify-content: center;; */
     position:relative;
-    & > button {
-        position:absolute;
-        bottom:0;
+    object-fit:cover;
+    overflow:hidden;
+    & > img {
+        height:100%;
+        width:100%;
+        object-fit:cover;
+        overflow: hidden;
+        margin-top:20px;
+    }
+    & > :nth-child(3) {
+            position:absolute;
+            bottom:0;
+        }
+    & > :nth-child(2) {
+        width:330px;
+        height:330px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        margin-top:20px;
+        background-color:${Theme.colors.orange};
     }
     @media (max-width: ${MED}){
         min-width:calc(100% - 10px);
@@ -51,13 +69,17 @@ export const PhotoWrap = styled.div`
     }
 
 `;
-export const Photo = styled.div`
-    width:330px;
-    height:330px;
-    background-color:${Theme.colors.orange};
+export const FileLabel = styled.label`
+    width:150px;
+    height:51px;
+    /* background-color:${Theme.colors.orange}; */
     display:flex;
     align-items:center;
     justify-content:center;
+    margin-top:20px;
+    cursor:pointer;
+    border:1px solid ${Theme.colors.orange};
+    border-radius: 7px;
     @media (max-width: ${MED}){
         width:330px;
         height:330px;
@@ -67,16 +89,27 @@ export const Photo = styled.div`
         height:280px;
     }
 `;
+export const FileInput = styled.input`
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+    border:1px solid red;
+
+	/* position: absolute; */
+	/* z-index: -1; */
+`;
 export const FormWrap = styled.div`
     flex:4;
     height: 100%;
     min-width:300px;
+    position:relative;
     & > form {
         display:flex;
         height:100%;
         flex-direction: column;
         padding:0px 20px 0px 20px;
-        border:1px solid blue;
+        /* border:1px solid blue; */
         justify-content: space-between;
     }
     @media (max-width: ${MED}){
@@ -98,6 +131,6 @@ export const ButtonWrap = styled.div`
     width:100%;
     height:auto;
     display:flex;
-    border:1px solid red;
+    /* border:1px solid red; */
     justify-content: flex-end;
 `;

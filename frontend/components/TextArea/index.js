@@ -5,7 +5,7 @@ import { Theme } from '../../styles/theme'
 
 import { MdMail } from 'react-icons/md'
 
-const TextArea = ({ icon, placeholder, value, register, disabled, onBlur, name, type, required, label, rows, height}) => {
+const TextArea = ({ icon, placeholder, value, register, disabled, onBlur, name, type, required, label, rows, height, onChange}) => {
     return (
         <Container height={height}>
             {icon}
@@ -18,6 +18,7 @@ const TextArea = ({ icon, placeholder, value, register, disabled, onBlur, name, 
                 type={type}
                 onBlur={(e)=>{onBlur(e)}}
                 rows={rows}
+                onChange={onChange}
             />
         </Container>
     );
@@ -25,7 +26,7 @@ const TextArea = ({ icon, placeholder, value, register, disabled, onBlur, name, 
 
 TextArea.defaultProps = {
     onBlur: ()=> {},
-
+    onChange: ()=> {},
 }
 
 TextArea.propTypes = {

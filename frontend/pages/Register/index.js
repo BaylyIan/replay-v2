@@ -44,12 +44,13 @@ const Register = ({}) => {
           break;
         case false:
           //sign up
+          console.log(e, 'e')
           const _result = await axios.post("http://localhost:4200/api/create_user", {
-            name: e.username,
+            name: e.name,
             email: e.email,
             password: e.password,
           });
-
+          console.log(_result, '_result')
           const _token = _result.data.token
           sessionStorage.setItem('token', _token);
           jsCookie.set("token", _token);
@@ -83,10 +84,9 @@ const Register = ({}) => {
         <Form
           toggle={toggle}
           onChangeToggle={handleChangeToggle}
-          // onSubmit={(e)=>{handleSubmit(e)}}
           onSubmit={(e) => {
             handleSubmit(e)
-
+            // console.log(e, 'comp')
           }} />
       </Right>
     </Main>

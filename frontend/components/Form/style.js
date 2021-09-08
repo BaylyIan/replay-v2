@@ -12,7 +12,7 @@ export const Container = styled.div`
     justify-content:space-between;
     position:relative;
     /* border:1px solid red; */
-    & > form {
+    & > div {
         width:100%;
         /* border:1px solid red; */
         & > * {

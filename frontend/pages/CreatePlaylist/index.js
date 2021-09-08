@@ -5,14 +5,15 @@ import Input from '../../components/Input'
 import TextArea from '../../components/TextArea'
 import TagArea from '../../components/TagArea'
 
-import { Container, Wrap, PhotoWrap, FormWrap, ButtonWrap, Photo, TagWrap } from '../../pageStyles/CreatePlaylist/style'
+import { Container, Wrap, PhotoWrap, FormWrap, ButtonWrap, FileLabel, FileInput, TagWrap, Pic} from '../../pageStyles/CreatePlaylist/style'
 
 import { BsUpload } from 'react-icons/bs'
 
 import { Theme } from '../../styles/theme'
 import { useForm } from "react-hook-form";
 
-import { addTag } from '../../utils'
+import { postImage } from '../../utils'
+import axios from 'axios';
 
 
 const CreatePlaylist = ({ }) => {
@@ -22,7 +23,8 @@ const CreatePlaylist = ({ }) => {
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
     const [tags, setTags] = useState([])
-
+    const [file, setFile] = useState()
+    const [tempFile, setTempFile] = useState()
     const [value, setValue] = useState()
 
     let tempTags = [...tags]
@@ -54,24 +56,37 @@ const CreatePlaylist = ({ }) => {
         setTags(tempTags)
     }
 
+    const fileSelected = event => {
+        const file = event.target.files[0]
+        console.log(file, 'file')
+        if(file){
+            setTempFile(URL.createObjectURL(file))
+            setFile(file)
+        }
+    }
+
+    const submit = async event => {
+        event.preventDefault()
+        // const result = await postImage({image: file, type:'playlist'})
+        // console.log(result)
+        console.log({name:name, description:desc, tags:tags, image:file})
+        const result = await axios.post('http://localhost:4200/api/create_playlist', ({}))
+
+    }
+
     return (
         <Container>
             <h1>Create Playlist</h1>
             <Wrap>
-                <PhotoWrap>
-                    <Photo>
-                        <BsUpload size={60} fill={Theme.colors.white} />
-                    </Photo>
-                    <Button
-                        width={'200px'}
-                        height={'51px'}
-                        textColor={`${Theme.colors.orange}`}
-                        text={'Upload Photo'}
-                        color={`${Theme.colors.medGrey}`}
-                    />
+                <PhotoWrap onSubmit={submit}>
+                    <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
+                    {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
+                    <FileLabel for='file'>
+                        <p style={{ color: `${Theme.colors.orange}`}}>Upload Photo</p>
+                    </FileLabel>
                 </PhotoWrap>
                 <FormWrap>
-                    <form onSubmit={e => { e.preventDefault(); }}>
+                    <form onSubmit={e => { e.preventDefault(); }, submit}>
                         <Input
                             placeholder={'Playlist Name'}
                             value={name}

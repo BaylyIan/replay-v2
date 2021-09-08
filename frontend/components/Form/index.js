@@ -17,17 +17,22 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
 
     const { register, handleSubmit, errors } = useForm();
 
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+
     return (
         <Container>
             <Toggle toggle={toggle}>
                 <p onClick={onChangeToggle}>Sign in</p>
                 <p onClick={onChangeToggle}>Sign up</p>
             </Toggle>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
                 {!toggle ? <Input
                     icon={<MdPerson size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Username'}
-                    register={register}
+                    onChange={(e)=>{setName(e.target.value)}}
                     label="username"
                     required
                 /> : null}
@@ -35,7 +40,7 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
                 <Input
                     icon={<MdMail size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Email'}
-                    register={register}
+                    onChange={(e)=>{setEmail(e.target.value)}}
                     label="email"
                     required
                 />
@@ -43,14 +48,16 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
                 <Input
                     icon={<MdLock size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Password'}
-                    register={register}
+                    onChange={(e)=>{setPassword(e.target.value)}}
                     label="password"
                     required
                 />
                 {/* {errors.password && <Error>This is required!</Error>} */}
-                <Button text={toggle ? 'login' : 'Sign up'} type='submit' width={'100%'}/>
+                <Button text={toggle ? 'login' : 'Sign up'} type='submit' width={'100%'}
+                    onClick={()=> {onSubmit({name, email, password})}}
+                />
                 {/* <input type='submit' /> */}
-            </form>
+            </div>
         </Container>
     );
 }
