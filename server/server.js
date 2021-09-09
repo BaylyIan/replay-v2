@@ -76,7 +76,7 @@ app.post('/playlistImage', uploadPlaylist.single('image'), async (req, res) => {
   const result = await uploadPlaylistPicture(file)
   await unlinkFile(file.path)
   console.log(result)
-  res.send({imagePath: `/playlistImage/${result.key}`})
+  res.send({ imagePath: `/playlistImage/${result.key}` })
 })
 
 //get playlist Picture from s3
@@ -84,15 +84,29 @@ app.get('/playlistImage/:key', (req, res) => {
   const key = req.params.key
   const readStream = getPlaylistFileStream(key)
   readStream.pipe(res)
-  
+
 })
 
 //create new playlist
 app.post('/api/create_playlist', jwt.authorize, (req, res) => {
   const userId = req.user.userId
   const playlist = req.body
-  database.createPlaylist(playlist, userId, (error, result) => {
-    res.send({ result })
+
+//create playlist in db
+database.createPlaylist(playlist, userId, (error, playlistId) => {
+    // console.log(playlistId, 'playlist id')
+
+    //loop through tags, add each one to db
+    for (let i = 0; i < playlist.tags.length; i++) {
+      database.createTags(playlist.tags[i].text, (error, result) => {
+        // console.log(result.insertId, playlistId, 'both')
+        const tagId = result.insertId
+        //create a tag/playlist relationship
+        database.createPlaylistTag(playlistId, tagId, (error, result) => {
+          console.log(result)
+        })
+      })
+    }
   })
 })
 
