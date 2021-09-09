@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { PageContext } from "../../utils/context";
 
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import TextArea from '../../components/TextArea'
 import TagArea from '../../components/TagArea'
 
-import { Container, Wrap, PhotoWrap, FormWrap, ButtonWrap, FileLabel, FileInput, TagWrap, Pic} from '../../pageStyles/CreatePlaylist/style'
+import { Container, Wrap, PhotoWrap, FormWrap, ButtonWrap, FileLabel, FileInput, TagWrap, Pic } from '../../pageStyles/CreatePlaylist/style'
 
 import { BsUpload } from 'react-icons/bs'
 
@@ -19,6 +20,8 @@ import axios from 'axios';
 const CreatePlaylist = ({ }) => {
 
     const { register, handleSubmit, errors } = useForm();
+
+    const { user } = useContext(PageContext);
 
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
@@ -34,6 +37,11 @@ const CreatePlaylist = ({ }) => {
         // console.log(name, desc, tags, 'submitted')
     }
 
+    //need to check f user is logged in, if not show a login modal
+    useEffect(() => {
+        console.log(user, 'user')
+    }, [user])
+
 
     const addTag = (e) => {
         if (event.key === 'Enter' || event.key === " " && e.length > 1) {
@@ -42,7 +50,7 @@ const CreatePlaylist = ({ }) => {
                 text: e
             })
             setValue('')
-            console.log(tempTags)
+            // console.log(tempTags)
             setTags(tempTags)
         }
     }
@@ -58,19 +66,26 @@ const CreatePlaylist = ({ }) => {
 
     const fileSelected = event => {
         const file = event.target.files[0]
-        console.log(file, 'file')
-        if(file){
+        // console.log(file, 'file')
+        if (file) {
             setTempFile(URL.createObjectURL(file))
             setFile(file)
         }
     }
 
-    const submit = async event => {
-        event.preventDefault()
+    const submit = async ({ name, desc, tags, file }) => {
+
+        console.log({ name: name, description: desc, tags: tags, image: file })
+        const result = await axios.post('http://localhost:4200/api/create_playlist', ({
+            name:name,
+            image:file.name,
+            description:desc,
+            userId:user.id,
+            tags:tags
+        }))
+        console.log(result)
         // const result = await postImage({image: file, type:'playlist'})
         // console.log(result)
-        console.log({name:name, description:desc, tags:tags, image:file})
-        const result = await axios.post('http://localhost:4200/api/create_playlist', ({}))
 
     }
 
@@ -82,11 +97,11 @@ const CreatePlaylist = ({ }) => {
                     <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
                     {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
                     <FileLabel for='file'>
-                        <p style={{ color: `${Theme.colors.orange}`}}>Upload Photo</p>
+                        <p style={{ color: `${Theme.colors.orange}` }}>Upload Photo</p>
                     </FileLabel>
                 </PhotoWrap>
                 <FormWrap>
-                    <form onSubmit={e => { e.preventDefault(); }, submit}>
+                    <div>
                         <Input
                             placeholder={'Playlist Name'}
                             value={name}
@@ -126,9 +141,10 @@ const CreatePlaylist = ({ }) => {
                                 text={'Next'}
                                 textColor={`${Theme.colors.white}`}
                                 color={`${Theme.colors.orange}`}
+                                onClick={() => submit({ name, desc, tags, file })}
                             />
                         </ButtonWrap>
-                    </form>
+                    </div>
                 </FormWrap>
             </Wrap>
         </Container>

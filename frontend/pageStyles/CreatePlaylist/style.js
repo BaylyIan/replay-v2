@@ -104,7 +104,7 @@ export const FormWrap = styled.div`
     height: 100%;
     min-width:300px;
     position:relative;
-    & > form {
+    & > div {
         display:flex;
         height:100%;
         flex-direction: column;
