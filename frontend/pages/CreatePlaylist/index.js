@@ -15,13 +15,16 @@ import { useForm } from "react-hook-form";
 
 import { postImage } from '../../utils'
 import axios from 'axios';
-
+import router from 'next/router';
+import { useRouter } from 'next/router'
 
 const CreatePlaylist = ({ }) => {
 
     const { register, handleSubmit, errors } = useForm();
 
     const { user } = useContext(PageContext);
+
+    const router = useRouter()
 
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
@@ -30,19 +33,13 @@ const CreatePlaylist = ({ }) => {
     const [tempFile, setTempFile] = useState()
     const [value, setValue] = useState()
 
+    const [error, setError] = useState(false)
+
     let tempTags = [...tags]
     let ogTags = [...tags]
 
-    const onSubmit = () => {
-        // console.log(name, desc, tags, 'submitted')
-    }
-
-    //need to check f user is logged in, if not show a login modal
-    useEffect(() => {
-        console.log(user, 'user')
-    }, [user])
-
-
+    
+    
     const addTag = (e) => {
         if (event.key === 'Enter' || event.key === " " && e.length > 1) {
             if (e.includes(" ") || e === "") return
@@ -54,7 +51,7 @@ const CreatePlaylist = ({ }) => {
             setTags(tempTags)
         }
     }
-
+    
     const removeTag = (tag) => {
         for (let i = 0; i < tempTags.length; i++) {
             if (tag === tempTags.indexOf(tempTags[i])) {
@@ -63,7 +60,7 @@ const CreatePlaylist = ({ }) => {
         }
         setTags(tempTags)
     }
-
+    
     const fileSelected = event => {
         const file = event.target.files[0]
         // console.log(file, 'file')
@@ -72,10 +69,15 @@ const CreatePlaylist = ({ }) => {
             setFile(file)
         }
     }
-
+    
     const submit = async ({ name, desc, tags, file }) => {
-
-        console.log({ name: name, description: desc, tags: tags, image: file })
+        
+        if(name === "" || file === undefined) {
+            setError(true)
+            return
+        }
+        setError(false)
+        // console.log({ name: name, description: desc, tags: tags, image: file })
         const result = await axios.post('http://localhost:4200/api/create_playlist', ({
             name:name,
             image:file.name,
@@ -83,13 +85,25 @@ const CreatePlaylist = ({ }) => {
             userId:user.id,
             tags:tags
         }))
-        console.log(result)
-        // const result = await postImage({image: file, type:'playlist'})
         // console.log(result)
+        const result_ = await postImage({image: file, type:'playlist'})
+        console.log(result_)
 
+        //new thing to work on - profile page
+        // router.push('/Profile')
     }
+    
+    //need to check f user is logged in, if not show a login modal
+    useEffect(() => {
+        if(user === null || user === undefined){
+            console.log('no user')
+        }else{
+            console.log('logged in')
+        }
+    }, [user])
 
-    return (
+
+    return user ? (
         <Container>
             <h1>Create Playlist</h1>
             <Wrap>
@@ -132,9 +146,9 @@ const CreatePlaylist = ({ }) => {
                                 }}
                             />
                         </TagWrap>
+                        {error ? <p style={{color:`${Theme.colors.orange}`}}>Please fill out alll required fields</p> : null}
                         <ButtonWrap>
                             <Button
-                                onClick={onSubmit}
                                 type='submit'
                                 width={'110px'}
                                 height={'51px'}
@@ -148,7 +162,20 @@ const CreatePlaylist = ({ }) => {
                 </FormWrap>
             </Wrap>
         </Container>
-    );
+    ) : (
+        <Container>
+            <h2 style={{color:`${Theme.colors.white}`, paddingBottom:'20px'}}>Please login or create an account to begin creating playlists</h2>
+            <Button 
+            width={'110px'}
+            height={'51px'}
+            text={'Login / Sign up'}
+            color={`${Theme.colors.medGrey}`}
+            onClick={()=>{
+                router.push('/Register')
+            }}
+            />
+        </Container>
+    )
 }
 
 export default CreatePlaylist;

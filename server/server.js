@@ -67,6 +67,45 @@ const { uploadPlaylistPicture, getPlaylistFileStream } = require('./s3')
 //   })
 // })
 
+//USER AUTH
+
+// create a user
+app.post('/api/create_user', (req, res) => {
+  console.log(req.body, 'here')
+  const { name, email, password } = req.body
+  database.createUser(name, email, password, (error, userId) => {
+    if (error) {
+      res.send({ error: error.message })
+      return
+    }
+    // res.send({ token })
+    const token = jwt.generateToken({ userId: userId, name: name, email: email })
+    res.send({ userId, name, email, token })
+    // console.log({ userId, name, email, token }, 'here')
+  })
+})
+
+
+// log in a user
+app.post('/api/users/login', (req, res) => {
+  const { email, password } = req.body
+  database.getUser(email, password, (error, user) => {
+    console.log(error)
+    if (error) {
+      res.send({ error })
+      // console.log("we have an issue")
+      return
+    }
+    const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
+    // res.send({ userId: user.id, name: user.name, email: user.email })
+    res.send({ token })
+    console.log({ token })
+  })
+})
+
+
+//CREATE PLAYLIST
+
 //upload playlist picture w/ S3
 //bucket name replayv2-playlist-images
 //user replayv2-user
@@ -109,6 +148,20 @@ database.createPlaylist(playlist, userId, (error, playlistId) => {
     }
   })
 })
+
+//GET PLAYLISTS
+
+// get all playlists
+app.get('/api/playlists', (req, res) => {
+  database.allPlaylists((error, playlists) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ playlists })
+  })
+})
+
 
 //need token as const id when that user is uploading an avatar
 //user posts a profile picture, saves to s3 and database
@@ -169,39 +222,7 @@ database.createPlaylist(playlist, userId, (error, playlistId) => {
 // })
 
 
-// create a user
-app.post('/api/create_user', (req, res) => {
-  console.log(req.body, 'here')
-  const { name, email, password } = req.body
-  database.createUser(name, email, password, (error, userId) => {
-    if (error) {
-      res.send({ error: error.message })
-      return
-    }
-    // res.send({ token })
-    const token = jwt.generateToken({ userId: userId, name: name, email: email })
-    res.send({ userId, name, email, token })
-    // console.log({ userId, name, email, token }, 'here')
-  })
-})
 
-
-// log in a user
-app.post('/api/users/login', (req, res) => {
-  const { email, password } = req.body
-  database.getUser(email, password, (error, user) => {
-    console.log(error)
-    if (error) {
-      res.send({ error })
-      // console.log("we have an issue")
-      return
-    }
-    const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
-    // res.send({ userId: user.id, name: user.name, email: user.email })
-    res.send({ token })
-    console.log({ token })
-  })
-})
 
 
 //get users profile
@@ -213,16 +234,6 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
   })
 })
 
-// get all playlists
-app.get('/api/playlists', (req, res) => {
-  database.allPlaylists((error, playlists) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    res.send({ playlists })
-  })
-})
 
 
 

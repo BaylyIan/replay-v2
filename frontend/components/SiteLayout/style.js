@@ -130,6 +130,12 @@ export const Header = styled.div`
     position:absolute;
     z-index:2;
     right:0;
+    @media (max-width: ${SMALL}){
+        width:${({ toggle }) => toggle ? `calc(100% - 61px)` : `calc(100% - 300px)`};
+    }
+    @media (max-width: ${MED}){
+        width:${({ toggle }) => toggle ? `calc(100% - 71px)` : `calc(100% - 300px)`};
+    }
 `;
 export const SearchCont = styled.div`
     display:flex;
@@ -165,11 +171,11 @@ export const Page = styled.div`
     padding-top:58px;
     /* border:1px solid red; */
     background-color:${Theme.colors.medGrey};
-    margin-left: ${({ toggle }) => toggle ? '80px' : '300px'};
+    margin-left: ${({ toggle }) => toggle ? '81px' : '300px'};
     @media (max-width: ${SMALL}){
-        margin-left:${({ toggle }) => toggle ? '60px' : '300px'};
+        margin-left:${({ toggle }) => toggle ? '50px' : '300px'};
     }
     @media (max-width: ${MED}){
-        margin-left:${({ toggle }) => toggle ? '64px' : '300px'};
+        margin-left:${({ toggle }) => toggle ? '54px' : '300px'};
     }
 `;

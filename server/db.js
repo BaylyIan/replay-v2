@@ -255,7 +255,7 @@ exports.createPlaylist = createPlaylist
 
 function createTags(tag, callback) {
   const query = `
-      INSERT IGNORE INTO tags (text)
+      INSERT INTO tags (text)
       VALUES (?)
   `
   const params = [tag]
