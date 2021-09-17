@@ -173,9 +173,9 @@ export const Page = styled.div`
     background-color:${Theme.colors.medGrey};
     margin-left: ${({ toggle }) => toggle ? '81px' : '300px'};
     @media (max-width: ${SMALL}){
-        margin-left:${({ toggle }) => toggle ? '50px' : '300px'};
+        margin-left:${({ toggle }) => toggle ? '52px' : '300px'};
     }
     @media (max-width: ${MED}){
-        margin-left:${({ toggle }) => toggle ? '54px' : '300px'};
+        margin-left:${({ toggle }) => toggle ? '70px' : '300px'};
     }
 `;

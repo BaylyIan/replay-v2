@@ -7,6 +7,8 @@ export const PageContext = createContext({
     setKeyword:()=>{},
     loggedIn:{},
     setLoggedIn:()=>{},
+    toggle:{},
+    setToggle:()=>{},
 })
 
 const Provider = ({children}) => {
@@ -14,6 +16,7 @@ const Provider = ({children}) => {
     const [user, setUser] = useState()
     const [keyword, setKeyword] = useState("");
     const [loggedIn, setLoggedIn] = useState(false)
+    const [toggle, setToggle] = useState(true)
     
     useEffect(()=>{
         const userData = sessionStorage.getItem("user");
@@ -26,7 +29,7 @@ const Provider = ({children}) => {
     }, []);
 
     return (
-        <PageContext.Provider value={{user, setUser, keyword, setKeyword, loggedIn, setLoggedIn}}>
+        <PageContext.Provider value={{user, setUser, keyword, setKeyword, loggedIn, setLoggedIn, toggle, setToggle}}>
             {children}
         </PageContext.Provider>
     )

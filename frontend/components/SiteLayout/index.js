@@ -17,7 +17,7 @@ import { BsToggleOff, BsToggleOn } from 'react-icons/bs'
 
 const SiteLayout = ({ children }) => {
 
-    const { user, keyword, setKeyword } = useContext(PageContext);
+    const { user, keyword, setKeyword, toggle, setToggle } = useContext(PageContext);
 
     const router = useRouter()
     const { id, params } = router.query;
@@ -25,7 +25,7 @@ const SiteLayout = ({ children }) => {
 
     // console.log(user, 'siteLay')
 
-    const [toggle, setToggle] = useState(true)
+    // const [toggle, setToggle] = useState(true)
     const [tabs, setTabs] = useState()
     const [pageName, setPageName] = useState("Home")
 

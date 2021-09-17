@@ -15,7 +15,7 @@ export default function Home() {
 
   const router = useRouter()
 
-  const { user, keyword } = useContext(PageContext)
+  const { user, keyword, toggle } = useContext(PageContext)
 
   const [playlists, setPlaylists] = useState([])
 
@@ -34,10 +34,13 @@ export default function Home() {
   },[])
 
   return (
-    <Container>
+    <Container toggle={toggle}>
      {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
                 return (
-                    <PlaylistCard key={i}>
+                    <PlaylistCard key={i}
+                      toggle={toggle}
+                      liked={false}
+                    >
 
                     </PlaylistCard>
                        
