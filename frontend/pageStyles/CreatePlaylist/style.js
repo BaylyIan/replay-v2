@@ -11,6 +11,7 @@ export const Container = styled.div`
     justify-content:center;
     flex-direction:column;
     padding:0px 20px 0px 20px;
+    /* border:1px solid red; */
     @media (max-width: ${SMALL}){
         padding:0px 10px 0px 10px;
     }
