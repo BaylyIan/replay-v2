@@ -6,16 +6,15 @@ import { Container } from './style'
 import Tag from '../Tag'
 
 
-const TagArea = ({ arr, deleteTag }) => {
-
+const TagArea = ({ arr, deleteTag, showClose }) => {
     return (
         <Container>
             {arr && arr.length !== 0 ? arr.map((o, i) => {
                 return (
                     <Tag
                         key={i}
-                        text={o.text}
-                        showClose={true}
+                        text={o.text || o.tag}
+                        showClose={showClose}
                         deleteTag={() => {
                             deleteTag(i)
                         }}>
@@ -27,7 +26,8 @@ const TagArea = ({ arr, deleteTag }) => {
 }
 
 TagArea.defaultProps = {
-    deleteTag: () => { }
+    deleteTag: () => { },
+    showClose:true
 }
 
 TagArea.propTypes = {

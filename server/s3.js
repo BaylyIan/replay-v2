@@ -31,6 +31,7 @@ exports.uploadPlaylistPicture = uploadPlaylistPicture
 
 // // downloads a file from s3
 function getPlaylistFileStream(fileKey) {
+  console.log(fileKey, 'fileKey')
   const downloadParams = {
     Key: fileKey,
     Bucket: playlistBucket
