@@ -279,6 +279,21 @@ connection.query(query, params, (error, result, fields) => {
 }
 exports.createPlaylistTag = createPlaylistTag
 
+//get playlist tags
+function getPlaylistTags(playlistId, callback) {
+  const query = `
+    SELECT * FROM playlist_tags
+    INNER JOIN tags ON tags.id_tag = playlist_tags.tag_id
+    WHERE playlist_tags.playlist_id = ? 
+  `
+  const params = [playlistId, callback]
+  connection.query(query, params, function (error, result, fields) {
+  callback(error, result)
+})
+}
+exports.getPlaylistTags = getPlaylistTags
+
+
 //delete a playlist and all its contents
 function deletePlaylist(playlist_id, callback) {
   const query = `

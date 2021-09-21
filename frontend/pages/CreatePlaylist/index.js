@@ -31,7 +31,7 @@ const CreatePlaylist = ({ }) => {
     const [tags, setTags] = useState([])
     const [file, setFile] = useState()
     const [tempFile, setTempFile] = useState()
-    const [value, setValue] = useState()
+    const [value, setValue] = useState('')
 
     const [error, setError] = useState(false)
 
@@ -77,17 +77,16 @@ const CreatePlaylist = ({ }) => {
             return
         }
         setError(false)
-        // console.log({ name: name, description: desc, tags: tags, image: file })
+        console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
+        const result_ = await postImage({image: file, type:'playlist'})
         const result = await axios.post('http://localhost:4200/api/create_playlist', ({
             name:name,
-            image:file.name,
+            image:result_.imagePath.replace('/playlistImage/', ''),
             description:desc,
             userId:user.id,
             tags:tags
         }))
-        // console.log(result)
-        const result_ = await postImage({image: file, type:'playlist'})
-        console.log(result_)
+        // console.log(result_.imagePath.replace('/playlistImage/', ''), 'upload imagepath')
 
         //new thing to work on - profile page
         // router.push('/Profile')
@@ -110,7 +109,7 @@ const CreatePlaylist = ({ }) => {
                 <PhotoWrap onSubmit={submit}>
                     <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
                     {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
-                    <FileLabel for='file'>
+                    <FileLabel htmlFor='file'>
                         <p style={{ color: `${Theme.colors.orange}` }}>Upload Photo</p>
                     </FileLabel>
                 </PhotoWrap>

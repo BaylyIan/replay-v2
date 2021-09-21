@@ -111,10 +111,8 @@ app.post('/api/users/login', (req, res) => {
 //user replayv2-user
 app.post('/playlistImage', uploadPlaylist.single('image'), async (req, res) => {
   const file = req.file
-  // console.log(file)
   const result = await uploadPlaylistPicture(file)
   await unlinkFile(file.path)
-  console.log(result)
   res.send({ imagePath: `/playlistImage/${result.key}` })
 })
 
@@ -123,7 +121,6 @@ app.get('/playlistImage/:key', (req, res) => {
   const key = req.params.key
   const readStream = getPlaylistFileStream(key)
   readStream.pipe(res)
-
 })
 
 //create new playlist
@@ -131,18 +128,19 @@ app.post('/api/create_playlist', jwt.authorize, (req, res) => {
   const userId = req.user.userId
   const playlist = req.body
 
-//create playlist in db
-database.createPlaylist(playlist, userId, (error, playlistId) => {
+  //create playlist in db
+  database.createPlaylist(playlist, userId, (error, playlistId) => {
     // console.log(playlistId, 'playlist id')
+    res.send({playlistId})
 
     //loop through tags, add each one to db
     for (let i = 0; i < playlist.tags.length; i++) {
       database.createTags(playlist.tags[i].text, (error, result) => {
         // console.log(result.insertId, playlistId, 'both')
         const tagId = result.insertId
+
         //create a tag/playlist relationship
         database.createPlaylistTag(playlistId, tagId, (error, result) => {
-          console.log(result)
         })
       })
     }
@@ -161,6 +159,31 @@ app.get('/api/playlists', (req, res) => {
     res.send({ playlists })
   })
 })
+
+//get playlist tags
+app.get('/api/playlist_tags/:id', (req, res) => {
+  const playlist_id = req.params.id
+  console.log(playlist_id, 'testid')
+  database.getPlaylistTags(playlist_id, (error, tags) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({tags})
+  })
+})
+
+// app.get('/api/playlist_songs/:id', (req, res) => {
+//   const playlist_id = req.params.id
+//   database.getPlaylistSongs(playlist_id, (error, result) => {
+//     if (error) {
+//       res.send({ error })
+//       return
+//     }
+//     res.send({ result })
+//   })
+// })
+
 
 
 //need token as const id when that user is uploading an avatar

@@ -36,7 +36,6 @@ export const PhotoWrap = styled.form`
     min-width:350px;
     display:flex;
     flex-direction: column;
-    /* background-color:red; */
     align-items: center;
     /* justify-content: center;; */
     position:relative;
@@ -81,14 +80,6 @@ export const FileLabel = styled.label`
     cursor:pointer;
     border:1px solid ${Theme.colors.orange};
     border-radius: 7px;
-    @media (max-width: ${MED}){
-        width:330px;
-        height:330px;
-    }
-    @media (max-width: ${SMALL}){
-        width:280px;
-        height:280px;
-    }
 `;
 export const FileInput = styled.input`
     width: 0.1px;
