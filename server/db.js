@@ -410,7 +410,7 @@ exports.allLikedPlaylists = allLikedPlaylists
 //user likes a playlist
 function likePlaylist(playlistId, userId, callback) {
   const query = `
-    INSERT INTO liked (playlist_id, user_id)
+    INSERT IGNORE INTO liked (playlist_id, user_id)
     VALUES (?,?)
   `
   const params = [playlistId, userId]
@@ -446,6 +446,19 @@ function userLikedPlaylists(user_id, callback) {
   })
 }
 exports.userLikedPlaylists = userLikedPlaylists
+
+function unlikePlaylist(playlist_id, user_id, callback){
+  const query = `
+    DELETE FROM liked
+    WHERE playlist_id = ?
+    AND user_id = ?
+  `
+  const params = [playlist_id, user_id]
+  connection.query(query, params, (error, result) => {
+    callback(error, result)
+  })
+}
+exports.unlikePlaylist = unlikePlaylist
 
 //count number of likes on a playlist
 function countPlaylistLikes(playlist_id, callback) {

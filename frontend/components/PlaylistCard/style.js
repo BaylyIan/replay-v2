@@ -15,8 +15,10 @@ export const Container = styled.div`
     aspect-ratio:1/ 1.7;
     border-radius: 20px;
     background-color: ${Theme.colors.darkGrey};
-    /* max-width:300px; */
-    /* max-height:800px; */
+    @media (max-width: ${MED}){
+        aspect-ratio:1/ 1.5;
+    }
+
     `;
 
 export const Header = styled.div`
@@ -59,6 +61,7 @@ export const Cover = styled.div`
     display:flex;
     object-fit:cover;
     overflow:hidden;
+    border-radius:10px;
     /* border:1px solid purple; */
     & > img {
         height:100%;
@@ -135,7 +138,7 @@ export const TitleCont = styled.div`
 
 export const TagWrap = styled.div`
     width:100%;
-    height:96px;
+    height:70px;
     display:flex;
     flex-wrap: wrap;
     /* border:1px solid red; */

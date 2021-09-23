@@ -57,16 +57,18 @@ const SiteLayout = ({ children }) => {
                 setPageName("Profile")
                 if (user) {
                     router.push({
-                        pathname: "/Profile/[profile]",
+                        pathname: "/Profile/[id]/[profile]",
                         query: {
-                            profile: user.name
+                            id:'view',
+                            profile:user.id
                         },
                     });
                 } else {
                     router.push({
-                        pathname: "/Profile/[profile]",
+                        pathname: "/Profile/[id]/[profile]",
                         query: {
-                            profile: 'no-user'
+                            id:'view',
+                            profile:'no-user'
                         },
                     });
                 }
@@ -80,7 +82,7 @@ const SiteLayout = ({ children }) => {
 
     useEffect(() => {
         handleTabs()
-
+        // console.log(user, 'new')
     })
 
     return (

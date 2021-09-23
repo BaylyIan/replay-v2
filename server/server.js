@@ -67,7 +67,7 @@ const { uploadPlaylistPicture, getPlaylistFileStream } = require('./s3')
 //   })
 // })
 
-//USER AUTH
+//USER AUTH ----------------------------------------------------------------
 
 // create a user
 app.post('/api/create_user', (req, res) => {
@@ -104,7 +104,7 @@ app.post('/api/users/login', (req, res) => {
 })
 
 
-//CREATE PLAYLIST
+//CREATE PLAYLIST ------------------------------
 
 //upload playlist picture w/ S3
 //bucket name replayv2-playlist-images
@@ -147,7 +147,7 @@ app.post('/api/create_playlist', jwt.authorize, (req, res) => {
   })
 })
 
-//GET PLAYLISTS
+//GET PLAYLISTS ----------------------------------------------------------------
 
 // get all playlists
 app.get('/api/playlists', (req, res) => {
@@ -163,13 +163,58 @@ app.get('/api/playlists', (req, res) => {
 //get playlist tags
 app.get('/api/playlist_tags/:id', (req, res) => {
   const playlist_id = req.params.id
-  console.log(playlist_id, 'testid')
   database.getPlaylistTags(playlist_id, (error, tags) => {
     if (error) {
       res.send({ error })
       return
     }
     res.send({tags})
+  })
+})
+
+//LIKES ----------------------------------------------------------------
+
+//user liked a playlist
+app.post('/api/like_playlist', jwt.authorize, (req, res) => {
+  const playlistId = req.body.playlist_id //playlist id
+  const userId = req.user.userId
+  console.log(playlistId, userId, 'req like')
+
+  database.likePlaylist(playlistId, userId, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    // playlist.id = playlist_id
+    console.log(result, 'back like')
+    res.send({ result })
+  })
+})
+
+//user unliked a playlists
+app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
+  const playlist_id = req.body.playlist_id
+  const user_id = req.user.userId
+  console.log(playlist_id, user_id, 'req unlike')
+  database.unlikePlaylist(playlist_id, user_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    console.log(result, 'unlike back')
+    res.send({result})
+  })
+})
+
+//get all of a users liked playlists
+app.get('/api/users_liked_playlists', jwt.authorize, (req, res) => {
+  const user_id = req.user.userId
+  database.userLikedPlaylists(user_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ result })
   })
 })
 
@@ -373,31 +418,8 @@ app.get('/api/liked_playlists', (req, res) => {
 })
 
 
-//user liked a playlist
-app.post('/api/like_playlist', jwt.authorize, (req, res) => {
-  const playlistId = req.body.playlist_id //playlist id
-  const userId = req.user.userId
-  database.likePlaylist(playlistId, userId, (error, playlist_id) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    // playlist.id = playlist_id
-    res.send({ playlist_id })
-  })
-})
 
-//get all of a users liked playlists
-app.get('/api/users_liked_playlists', jwt.authorize, (req, res) => {
-  const user_id = req.user.userId
-  database.userLikedPlaylists(user_id, (error, result) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    res.send({ result })
-  })
-})
+
 
 // count number of likes on a playlist
 app.get('/api/count_playlist_likes', (req, res) => {
