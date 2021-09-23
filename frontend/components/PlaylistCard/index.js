@@ -23,12 +23,12 @@ const PlaylistCard = ({ toggle, username, user_pic, playlist_pic, playlist_name,
       <TitleCont>
         <h1>{playlist_name}</h1>
         {liked ? <AiFillHeart
-          size={42}
-          color={'red'}
+          size={36}
+          color={'#CA3433'}
           onClick={onLike}
        
         /> : <AiOutlineHeart
-          size={42}
+          size={36}
           color={`${Theme.colors.white}`}
           onClick={onLike}
         />}
