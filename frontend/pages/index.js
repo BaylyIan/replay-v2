@@ -26,6 +26,16 @@ export default function Home() {
   const getPlaylists = async () => {
     const result = await axios.get(`${URL}/api/playlists`)
     const playlistArr = result.data.playlists
+    const liked = await axios.get(`${URL}/api/users_liked_playlists`)
+
+    for(let i = 0; i < playlistArr.length; i++) {
+      const playlist = playlistArr[i]
+      for(const i of liked.data.result) {
+        if(i.id === playlist.id) {
+          playlist.liked = true
+        }
+      }
+    }
 
     for (let i = 0; i < playlistArr.length; i++) {
       const playlist_id = playlistArr[i].id
@@ -35,11 +45,18 @@ export default function Home() {
     setPlaylists(playlistArr)
   }
 
+  // const getLikedPlaylists = async () => {
+  //   if(user){
+  //     const result = await axios.get(`${URL}/api/users_liked_playlists`)
+  //     setLiked(result.data.result)
+  //   }
+  // }
   const likePlaylist = async (id) => {
       const result = await axios.post(`${URL}/api/like_playlist`, {
         playlist_id:id
       })
-      getLikedPlaylists()
+    
+      getPlaylists()
 
     }
   
@@ -47,31 +64,25 @@ export default function Home() {
     const result = await axios.post(`${URL}/api/unlike_playlist`, {
       playlist_id:id
     })
-    getLikedPlaylists()
+    getPlaylists()
 
   }
 
-  const getLikedPlaylists = async () => {
-    if(user){
-      const result = await axios.get(`${URL}/api/users_liked_playlists`)
-      setLiked(result.data.result)
-    }
-  }
 
   useEffect(() => {
     getPlaylists()
-    getLikedPlaylists()
+    // getLikedPlaylists()
   }, [])
 
   return (
     <Container toggle={toggle}>
-      {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
-        let state = false
-        for(const i of liked) {
-          if(i.id === o.id) {
-            state = true
-          }
-        }
+      {playlists && liked && playlists.length !== 0 ? playlists.map((o, i) => {
+        // let state = false
+        // for(const i of liked) {
+        //   if(i.id === o.id) {
+        //     state = true
+        //   }
+        // }
         return (
           <PlaylistCard key={i}
             toggle={toggle}
@@ -82,9 +93,9 @@ export default function Home() {
             user_pic={o.usersimg ? usersimg : '/Icons/default_profile.png'}
             tags={o.tags}
             showClose={false}
-            liked={state}
+            liked={o.liked}
             onLike={() => {
-              if(state){
+              if(o.liked){
                 unlikePlaylist(o.id)
               }else{
                 likePlaylist(o.id)
@@ -101,3 +112,5 @@ export default function Home() {
     </Container>
   )
 }
+
+

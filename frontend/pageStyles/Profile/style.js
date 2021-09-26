@@ -5,7 +5,7 @@ import { Theme } from '../../styles/theme'
 export const Page = styled.div`
     display:flex;
     flex-direction:column;
-    padding:50px 0px 0px 0px;
+    padding:50px 10px 0px 10px;
     align-items:Center;
     position:relative;
     z-index:1;
@@ -25,6 +25,7 @@ export const Gradient = styled.div`
     position:absolute;
     top:0;
     z-index:2;
+    max-height:300px;
 `;
 
 export const Avatar = styled.div`
@@ -72,4 +73,65 @@ export const Line = styled.div`
     background-color: ${Theme.colors.lightGrey};
     position:absolute;
     left:50%;
+`;
+export const Wrap = styled.div`
+    width:100%;
+    display: grid;
+    grid-template-columns: minmax(200px, auto);
+    grid-gap: 20px;
+    width: 100%;
+    min-height: auto;
+    margin-top:40px;
+    /* & > * {
+        margin:10px;
+    } */
+    @media (min-width: 550px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(2, minmax(200px, 1fr))' : null};
+        padding: 10px;
+    }
+    @media (min-width: 750px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(3, minmax(200px, 1fr))' : null};
+        padding: 10px;
+    }
+    @media (min-width: 980px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(4, minmax(200px, 1fr))' : null};
+        padding: 10px;
+    }
+    @media (min-width: 1200px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(5, minmax(200px, 1fr))' : null};
+        padding: 10px;
+    }
+    @media (min-width: 1650px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(6, minmax(200px, 1fr))' : null};
+        padding: 10px;
+    }
+    @media (min-width: 1900px) {
+        grid-template-columns:${({ toggle }) => toggle ? 'repeat(7, minmax(200px, 1fr))' : null};
+        padding: 20px;
+    }
+
+    @media (min-width: 750px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(2, minmax(200px, 1fr))'};
+        padding: 10px;
+    }
+    @media (min-width: 1000px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(3, minmax(200px, 1fr))'};
+        padding: 10px;
+    }
+    @media (min-width: 1250px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(4, minmax(200px, 1fr))'};
+        padding: 10px;
+    }
+    @media (min-width: 1450px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(5, minmax(200px, 1fr))'};
+        padding: 10px;
+    }
+    @media (min-width: 1750px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(6, minmax(200px, 1fr))'};
+        padding: 10px;
+    }
+    @media (min-width: 2090px) {
+        grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(7, minmax(200px, 1fr))'};
+        padding: 20px;
+    } 
 `;

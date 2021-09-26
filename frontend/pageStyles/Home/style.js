@@ -8,7 +8,7 @@ export const Container = styled.div`
     grid-template-columns: minmax(250px, auto);
     grid-gap: 20px;
     width: 100%;
-    min-height: 100vh;
+    min-height: auto;
     & > * {
         margin:10px;
     }
