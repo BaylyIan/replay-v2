@@ -460,6 +460,20 @@ function unlikePlaylist(playlist_id, user_id, callback){
 }
 exports.unlikePlaylist = unlikePlaylist
 
+//count a users total likePlaylist
+function countUserLikes(user_id, callback){
+  const query = `
+  SELECT COUNT(*) FROM liked
+  INNER JOIN playlists ON liked.playlist_id = playlists.id 
+  WHERE playlists.user_id = ?
+  `
+  const params = [user_id, callback]
+  connection.query(query, params, (error, result) => {
+    callback(error, result)
+  })
+}
+exports.countUserLikes = countUserLikes
+
 //count number of likes on a playlist
 function countPlaylistLikes(playlist_id, callback) {
   const query = `
@@ -495,7 +509,7 @@ function getPlaylistInfo(playlist_id, callback) {
   const query = `
     SELECT *
     FROM playlists
-    WHERE id = ?;
+    WHERE id = ?
   `
   const params = [playlist_id]
   connection.query(query, params, function (error, result, fields) {
@@ -503,3 +517,16 @@ function getPlaylistInfo(playlist_id, callback) {
   })
 }
 exports.getPlaylistInfo = getPlaylistInfo
+
+function getPlaylistById(playlist_id, callback) {
+  const query = `
+    SELECT * 
+    FROM playlists 
+    WHERE user_id = ?
+  `
+  const params = [playlist_id, callback]
+  connection.query(query, params, function (error, result) {
+    callback(error, result)
+  })
+}
+exports.getPlaylistById = getPlaylistById

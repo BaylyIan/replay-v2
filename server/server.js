@@ -131,7 +131,7 @@ app.post('/api/create_playlist', jwt.authorize, (req, res) => {
   //create playlist in db
   database.createPlaylist(playlist, userId, (error, playlistId) => {
     // console.log(playlistId, 'playlist id')
-    res.send({playlistId})
+    res.send({ playlistId })
 
     //loop through tags, add each one to db
     for (let i = 0; i < playlist.tags.length; i++) {
@@ -168,7 +168,20 @@ app.get('/api/playlist_tags/:id', (req, res) => {
       res.send({ error })
       return
     }
-    res.send({tags})
+    res.send({ tags })
+  })
+})
+
+//get playlist by id
+app.get('/api/playlist_by_id/:id', (req, res) => {
+  const user_id = req.params.id
+  console.log(req.params, 'user_id')
+  database.getPlaylistById(user_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ result })
   })
 })
 
@@ -202,7 +215,7 @@ app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
       return
     }
     console.log(result, 'unlike back')
-    res.send({result})
+    res.send({ result })
   })
 })
 
@@ -210,6 +223,19 @@ app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
 app.get('/api/users_liked_playlists', jwt.authorize, (req, res) => {
   const user_id = req.user.userId
   database.userLikedPlaylists(user_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ result })
+  })
+})
+
+//count how many likes a users playlists have gotten
+app.get('/api/count_user_likes/:id', (req, res) => {
+  const user_id = req.params.id
+  console.log(req.params.id, 'count')
+  database.countUserLikes(user_id, (error, result) => {
     if (error) {
       res.send({ error })
       return
