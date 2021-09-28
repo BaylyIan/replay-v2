@@ -12,7 +12,7 @@ export const Container = styled.div`
     flex-direction: column;
     position: relative;
     cursor: pointer;
-    aspect-ratio:1/ 1.7;
+    aspect-ratio:1/ 1.6;
     border-radius: 20px;
     background-color: ${Theme.colors.darkGrey};
     @media (max-width: ${MED}){

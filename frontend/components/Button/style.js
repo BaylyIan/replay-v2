@@ -14,6 +14,7 @@ export const Container = styled.button`
     background-color:${({ color }) => color ? color : Theme.colors.black};
     & > p{
         color:${({ textColor }) => textColor ? textColor : Theme.colors.orange};
+        font-size: 16px;
         /* margin-left:${({ margin }) => margin ? null : '0px'}  */
     }
 `;

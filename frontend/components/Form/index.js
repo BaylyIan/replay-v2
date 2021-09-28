@@ -55,6 +55,8 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
                 {/* {errors.password && <Error>This is required!</Error>} */}
                 <Button text={toggle ? 'login' : 'Sign up'} type='submit' width={'100%'}
                     onClick={()=> {onSubmit({name, email, password})}}
+                    height={'51px'}
+
                 />
                 {/* <input type='submit' /> */}
             </div>

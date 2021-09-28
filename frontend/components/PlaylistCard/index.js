@@ -8,7 +8,7 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
 import { Container, Header, Avatar, Cover, TitleCont, TagWrap } from './style'
 import TagArea from '../TagArea';
 
-const PlaylistCard = ({ toggle, username, user_pic, playlist_pic, playlist_name, liked, onLike, tags, showClose}) => {
+const PlaylistCard = ({ toggle, username, user_pic, playlist_pic, playlist_name, liked, onLike, tags, showClose, showLike}) => {
   return (
     <Container toggle={toggle}>
       <Header>
@@ -22,16 +22,16 @@ const PlaylistCard = ({ toggle, username, user_pic, playlist_pic, playlist_name,
       </Cover>
       <TitleCont>
         <h1>{playlist_name}</h1>
-        {liked ? <AiFillHeart
+        {showLike && liked ? <AiFillHeart
           size={36}
           color={'#CA3433'}
           onClick={onLike}
        
-        /> : <AiOutlineHeart
+        /> :null}{showLike && !liked ? <AiOutlineHeart
           size={36}
           color={`${Theme.colors.white}`}
           onClick={onLike}
-        />}
+        /> : null} 
       </TitleCont>
       <TagWrap>
           <TagArea 
@@ -48,7 +48,8 @@ PlaylistCard.defaultProps = {
   user_pic: '/Icons/default_profile.png',
   playlist_pic: '/Icons/default_playlist.png',
   playlist_name: 'playlist name',
-  onLike:()=>{}
+  onLike:()=>{},
+  showLike:false
 }
 
 PlaylistCard.propTypes = {

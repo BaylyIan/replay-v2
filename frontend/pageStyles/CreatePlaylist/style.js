@@ -23,7 +23,7 @@ export const Container = styled.div`
 export const Wrap = styled.div`
     display:flex;
     width:100%;
-    height:60%;
+    height:500px;
     min-height:200px;
     /* border:1px solid red; */
     flex-wrap: wrap;
