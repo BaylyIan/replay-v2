@@ -8,23 +8,24 @@ import axios from 'axios'
 import { URL } from "../../../utils/constants"
 
 //comps 
-import { Page, Avatar, Gradient, InfoCont, Line, Wrap } from '../../../pageStyles/Profile/style';
+import { Page, Avatar, Gradient, InfoCont, Line, Wrap, LoginCont } from '../../../pageStyles/Profile/style';
 import PlaylistTab from '../../../components/PlaylistTab'
+import Button from '../../../components/Button'
 import { AiFillHeart } from 'react-icons/ai'
 
 const Profile = ({ }) => {
 
-  const { user, keyword, loggedIn, toggle } = useContext(PageContext)
+  const { user, keyword, toggle } = useContext(PageContext)
   const router = useRouter()
 
   const { id, profile } = router.query
 
-  // console.log(user, 'user')
 
   const [num_playlists, setNum_playlists] = useState()
   const [num_likes, setNum_likes] = useState(0)
   const [playlists, setPlaylists] = useState()
   const [liked, setLiked] = useState([])
+  const [loggedIn, setLoggedIn] = useState()
 
   const playlistByUser = async () => {
     const result = await axios.get(`${URL}/api/playlist_by_id/${profile}`)
@@ -34,39 +35,60 @@ const Profile = ({ }) => {
   }
 
   const getLikedPlaylists = async () => {
-    const result = await axios.get(`${URL}/api/users_liked_playlists`)
+    console.log(loggedIn, 'user')
+    if(loggedIn){
+      const result = await axios.get(`${URL}/api/users_liked_playlists`)
+      setLiked(result.data.result)
+    }
     // console.log(result.data.result)
-    setLiked(result.data.result)
   }
 
   const getUserLikes = async () => {
     const userData = sessionStorage.getItem("user");
     const { id } = JSON.parse(userData)
     const result = await axios.get(`${URL}/api/count_user_likes/${id}`)
-    console.log(result.data.result[0], 'count front')
-    // setNum_likes(result.data.result[0])
-    // console.log(count, 'cc')
-
+    let count = result.data.result[0]
+    setNum_likes(count[Object.keys(count)[0]])
   }
 
+  useEffect(()=>{
+    if(window.sessionStorage.getItem("token")){
+      setLoggedIn(true)
+    }else{
+      setLoggedIn(false)
+      setUser({})
+    } 
+  })
+
   useEffect(() => {
-  
-    getUserLikes()
+    if(loggedIn){
+      getUserLikes()
+    }
   }, [user])
 
   useEffect(() => {
-    playlistByUser()
-    getLikedPlaylists()
-  }, [profile])
+    if(loggedIn){
+      playlistByUser()
+      getLikedPlaylists()
+    }
+  }, [profile, loggedIn])
 
 
   var page = <Page />
 
   // console.log(id, user, profile)
 
-  if (id === 'view' && profile === 'no-user' || !user) {
+  if (id === 'view' && !user) {
     page = <Page>
-      <h1>NEED TO LOGIN</h1>
+      <LoginCont>
+      <h1>Please login or sign up to Replay to view the profile page.</h1>
+      <Button text={'login/sign up'} 
+          height={'51px'}
+          color={`${Theme.colors.orange}`}
+          textColor={`${Theme.colors.white}`}
+          onClick={()=>{router.push('/Register')}}
+        />
+      </LoginCont>
     </Page>
   } else if (id === 'view' && profile == user.id) {
     page = <Page>

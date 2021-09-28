@@ -13,4 +13,5 @@ export const Container = styled.div`
     border:1px solid #A1A1A1;
     border-radius: 50px;
     min-width:30px;
+    text-align:center;
 `;

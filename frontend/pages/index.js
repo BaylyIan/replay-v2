@@ -15,27 +15,30 @@ export default function Home() {
 
   const router = useRouter()
 
-  const { user, keyword, toggle } = useContext(PageContext)
+  const { user, keyword, toggle, loggedIn } = useContext(PageContext)
 
   const [playlists, setPlaylists] = useState([])
   const [liked, setLiked] = useState([])
 
   // console.log(user, 'user on page')
-  // console.log(keyword, 'keyword')
+  console.log(loggedIn, 'keyword')
 
   const getPlaylists = async () => {
     const result = await axios.get(`${URL}/api/playlists`)
     const playlistArr = result.data.playlists
-    const liked = await axios.get(`${URL}/api/users_liked_playlists`)
-
-    for(let i = 0; i < playlistArr.length; i++) {
-      const playlist = playlistArr[i]
-      for(const i of liked.data.result) {
-        if(i.id === playlist.id) {
-          playlist.liked = true
+    if(loggedIn){
+      const liked = await axios.get(`${URL}/api/users_liked_playlists`)
+      for(let i = 0; i < playlistArr.length; i++) {
+        const playlist = playlistArr[i]
+        for(const i of liked.data.result) {
+          if(i.id === playlist.id) {
+            playlist.liked = true
+          }
         }
       }
+
     }
+
 
     for (let i = 0; i < playlistArr.length; i++) {
       const playlist_id = playlistArr[i].id
@@ -94,6 +97,7 @@ export default function Home() {
             tags={o.tags}
             showClose={false}
             liked={o.liked}
+            showLike={loggedIn}
             onLike={() => {
               if(o.liked){
                 unlikePlaylist(o.id)

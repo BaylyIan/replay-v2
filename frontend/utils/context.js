@@ -21,10 +21,12 @@ const Provider = ({children}) => {
     useEffect(()=>{
         const userData = sessionStorage.getItem("user");
         setUser(JSON.parse(userData));  
+        console.log('loggedIncontete')
         if(window.sessionStorage.getItem("token")){
             setLoggedIn(true)
           }else{
             setLoggedIn(false)
+            setUser({})
           } 
           console.log('run')
     }, []);

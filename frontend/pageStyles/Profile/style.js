@@ -9,6 +9,8 @@ export const Page = styled.div`
     align-items:Center;
     position:relative;
     z-index:1;
+
+    /* border:1px solid red; */
     & > h1 {
         color:${Theme.colors.white};
         font-size:26px;
@@ -134,4 +136,26 @@ export const Wrap = styled.div`
         grid-template-columns:${({ toggle }) => toggle ? null : 'repeat(7, minmax(200px, 1fr))'};
         padding: 20px;
     } 
+`;
+
+export const LoginCont = styled.div`
+    width:50%;
+    min-width:350px;
+    max-width:500px;
+    height:auto;
+    padding:30px 20px 30px 20px;
+    display:flex;
+    /* border: 1px solid green; */
+    background-color:${Theme.colors.darkGrey};
+    flex-direction: column;
+    margin-top:15%;
+    @media (max-width: ${MED}){
+        margin-top:40%;
+    }
+    & > h1 {
+        color:${Theme.colors.white};
+        font-size:26px;
+        z-index:4;
+        margin-bottom:100px;
+    }
 `;
