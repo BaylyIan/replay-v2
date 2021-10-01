@@ -3,7 +3,7 @@ import { SMALL, MED, LARGE, XLARGE} from '../../utils/constants'
 import { Theme } from '../../styles/theme'
 
 export const Container = styled.div`
-    width:70%;
+    width:100%;
     max-width:400px; 
      min-height:350px;
     display:flex;

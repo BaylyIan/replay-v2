@@ -1,5 +1,7 @@
 import { GlobalStyles } from '../styles/global';
 import Provider from '../utils/context'
+import App from "next/app"
+import { useEffect, useState } from 'react'
 
 import "./_app.scss";
 import SiteLayout from "../components/SiteLayout"
@@ -7,46 +9,61 @@ import SiteLayout from "../components/SiteLayout"
 // cookies / axios
 import axios from 'axios';
 import jsCookie from 'js-cookie';
-import jsHttpCookie from 'cookie';
+import { AuthProvider, getUser } from "../utils/authContext"
+import { getSessionStorage } from '../utils'
 
-function MyApp({ Component, pageProps, router }) {
+
+function MyApp({ Component, pageProps, router, auth }) {
 
   const { id, params } = router.query;
 
-  var tokenCheck = false;
-  if (process.browser) {
-    const token = sessionStorage.getItem("token");
-    if (token) {
-      jsCookie.set("token", token);
-      axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-      tokenCheck = true
-    }else{
-      tokenCheck = false
-    }
-  }
 
-  console.log(tokenCheck, 'tokenCheck')
 
-  if(router.pathname === '/Register'){
+  // useEffect(() => {
+  //   (async () => {
+  //     const token = window.sessionStorage.getItem('token');
+  //     axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+  //     const res = await getUser(token)
+  //     if(!res) return 
+  //     setAuth(res)
+  //   })()
+  // }, [])
+
+
+
+  console.log(auth, 'app')
+
+
+
+  if (router.pathname === '/Register') {
     console.log('path')
-    return(
-      <Provider>
-        <Component {...pageProps} />
-      </Provider>
+    return (
+      <AuthProvider myAuth={auth}>
+        <Provider>
+          <Component {...pageProps} />
+        </Provider>
+      </AuthProvider>
     )
-  }else{
-    return (<Provider>
-      <GlobalStyles />
-      <SiteLayout>
-      <Component {...pageProps} />
-      </SiteLayout>
-    </Provider>);
+  } else {
+    return (<AuthProvider myAuth={auth}>
+      <Provider>
+        <GlobalStyles />
+        <SiteLayout>
+          <Component {...pageProps} />
+        </SiteLayout>
+      </Provider>
+    </AuthProvider>
+    )
   }
 }
 
-export async function getServerSideProps({ req, res }) {
-  const { token } = jsHttpCookie.parse(req.headers.cookie);
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext)
+  const auth = await getUser()
+  console.log('getInitialProps ran')
+  return { ...appProps, auth: auth }
 }
+
 
 export default MyApp
 

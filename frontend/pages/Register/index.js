@@ -10,13 +10,14 @@ import Form from '../../components/Form'
 //utills
 import jsCookie from 'js-cookie';
 import axios from 'axios';
+import { useAuth } from '../../utils/authContext'
 
 const Register = ({}) => {
   //check if user has been logged in recently, and either set toggle to true or bypass login entirely
   const [toggle, setToggle] = useState(true)
+  const { login, register } = useAuth()
 
   //add user priviledges collumn in db to have basic user, admin, etc. 
-  const { setUser, setLoggedIn } = useContext(PageContext);
   const router = useRouter()
 
   const handleSubmit = async (e) => {
@@ -24,47 +25,20 @@ const Register = ({}) => {
       switch (toggle) {
         case true:
           //login
-          const result = await axios.post('http://localhost:4200/api/users/login', {
-            email: e.email,
-            password: e.password
-          })
-
-          const token = result.data.token
-          sessionStorage.setItem('token', token);
-          jsCookie.set("token", token);
-          axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-
-          const user = await axios.get('http://localhost:4200/api/profile', { token: token });
-
-          sessionStorage.setItem("user", JSON.stringify(user.data.result[0]));
-          setUser(JSON.parse(sessionStorage.user))
-          setLoggedIn(true)
-          router.push("/");
-
+        const result = login(e)
+        if(result){
+          console.log(result, 'rererere')
+          router.push("/")
+        }
           break;
         case false:
           //sign up
-          console.log(e, 'e')
-          const _result = await axios.post("http://localhost:4200/api/create_user", {
-            name: e.name,
-            email: e.email,
-            password: e.password,
-          });
-          console.log(_result, '_result')
-          const _token = _result.data.token
-          sessionStorage.setItem('token', _token);
-          jsCookie.set("token", _token);
-          axios.defaults.headers.common['Authorization'] = "Bearer " + _token;
-
-          console.log(_result.data.token, 'token')
-
-          const _user = await axios.get('http://localhost:4200/api/profile', { token: _token });
-
-          sessionStorage.setItem("user", JSON.stringify(_user.data.result[0]));
-          setUser(JSON.parse(sessionStorage.user))
-          setLoggedIn(true)
-          router.push("/");
-          break;
+        const _result = register(e)
+        if(_result){
+          router.push("/")
+          console.log(_result, 'signup')
+        }
+        break;
       }
     } catch (err) {
       console.log(err)

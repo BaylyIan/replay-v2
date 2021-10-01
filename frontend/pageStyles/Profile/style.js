@@ -145,17 +145,30 @@ export const LoginCont = styled.div`
     height:auto;
     padding:30px 20px 30px 20px;
     display:flex;
-    /* border: 1px solid green; */
+    border: 1px solid green;
     background-color:${Theme.colors.darkGrey};
     flex-direction: column;
-    margin-top:15%;
-    @media (max-width: ${MED}){
+    position:absolute;
+    /* @media (max-width: ${MED}){
         margin-top:40%;
-    }
+    } */
     & > h1 {
         color:${Theme.colors.white};
         font-size:26px;
         z-index:4;
         margin-bottom:100px;
     }
+`;
+
+export const NoUserWrap = styled.div`
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border:1px solid red;
+    width:100%;
+    min-height:100%;
+    max-height:100%;
+    position:absolute;
+    top:0;
+
 `;
