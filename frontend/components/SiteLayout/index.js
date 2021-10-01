@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { Theme } from '../../styles/theme';
 import { PageContext } from "../../utils/context";
 import { useRouter } from "next/router";
+import { useModal } from "../../utils/useModal"
+import { useAuth } from "../../utils/authContext"
 
 //comps
 import { Container, Nav, Header, Page, NavHeader, Icon, ItemWrap, NavFooter, Slider, Indicator, ToggleCont, UserCont, HeaderGradient, SearchCont, PageTitle } from './style'
@@ -14,16 +16,21 @@ import Avatar from '../Avatar'
 import SearchBar from '../SearchBar'
 import { RiHomeLine, RiCompassLine, RiUserLine, RiAddLine } from 'react-icons/ri'
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs'
+import CustomModal from '../../components/Modal'
+import Form from '../Form'
 
 const SiteLayout = ({ children }) => {
 
-    const { user, keyword, setKeyword, toggle, setToggle } = useContext(PageContext);
+    const { keyword, setKeyword, toggle, setToggle } = useContext(PageContext);
+    const { auth, login, register } = useAuth()
+    const [visible, setVisible, toggleModal] = useModal()
+    const [formToggle, setFormToggle] = useState()
+
 
     const router = useRouter()
     const { id, params } = router.query;
     // console.log(router.route.startsWith('/Profile'), 'params')
-
-    // console.log(user, 'siteLay')
+    // console.log(auth.user.result[0].id, 'here')
 
     // const [toggle, setToggle] = useState(true)
     const [tabs, setTabs] = useState()
@@ -35,7 +42,7 @@ const SiteLayout = ({ children }) => {
         } else if (router.route.startsWith("/Explore")) {
             setTabs(2)
         }
-        else if(router.route.startsWith("/CreatePlaylist")) {
+        else if (router.route.startsWith("/CreatePlaylist")) {
             setTabs(4)
         } else if (router.route.startsWith("/")) {
             setTabs(1)
@@ -55,22 +62,17 @@ const SiteLayout = ({ children }) => {
                 break;
             case tab = 3:
                 setPageName("Profile")
-                if (user) {
+                if (auth.status === "SIGNED_IN") {
                     router.push({
                         pathname: "/Profile/[id]/[profile]",
                         query: {
-                            id:'view',
-                            profile:user.id
+                            id: 'view',
+                            profile: auth.user.id
                         },
                     });
                 } else {
-                    router.push({
-                        pathname: "/Profile/[id]/[profile]",
-                        query: {
-                            id:'view',
-                            profile:'no-user'
-                        },
-                    });
+                    console.log('show')
+                    setVisible(true)
                 }
                 break;
         }
@@ -174,7 +176,23 @@ const SiteLayout = ({ children }) => {
                         </SearchCont>
                     </HeaderGradient>
                 </Header>
-            <Page toggle={toggle}>{children}</Page>
+
+
+                <CustomModal
+                        title="Login or Signup to view the profile page"
+                        isActive={visible}
+                        handleClose={() => setVisible(false)}
+                        children={<Form 
+                            toggle={formToggle}
+                            onChangeToggle={()=>{
+                                setFormToggle(!formToggle)
+                            }}
+                        />}
+                    />
+                <Page toggle={toggle}>
+                    {children}
+                </Page>
+
             </Container>
         </>
     );

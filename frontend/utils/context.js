@@ -1,38 +1,23 @@
 import React, { useState, useEffect, createContext } from 'react';
+import axios from 'axios';
+import jsCookie from 'js-cookie';
+import router from 'next/router';
 
 export const PageContext = createContext({
-    user:{},
-    setUser:()=>{},
-    keyword:{},
-    setKeyword:()=>{},
-    loggedIn:{},
-    setLoggedIn:()=>{},
-    toggle:{},
-    setToggle:()=>{},
+    keyword: {},
+    setKeyword: () => { },
+    toggle: {},
+    setToggle: () => { },
 })
 
-const Provider = ({children}) => {
 
-    const [user, setUser] = useState()
+const Provider = ({ children }) => {
+
     const [keyword, setKeyword] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false)
     const [toggle, setToggle] = useState(true)
-    
-    useEffect(()=>{
-        const userData = sessionStorage.getItem("user");
-        setUser(JSON.parse(userData));  
-        console.log('loggedIncontete')
-        if(window.sessionStorage.getItem("token")){
-            setLoggedIn(true)
-          }else{
-            setLoggedIn(false)
-            setUser({})
-          } 
-          console.log('run')
-    }, []);
 
     return (
-        <PageContext.Provider value={{user, setUser, keyword, setKeyword, loggedIn, setLoggedIn, toggle, setToggle}}>
+        <PageContext.Provider value={{ keyword, setKeyword, toggle, setToggle }}>
             {children}
         </PageContext.Provider>
     )

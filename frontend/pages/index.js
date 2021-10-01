@@ -10,28 +10,36 @@ import PlaylistCard from "../components/PlaylistCard"
 import { PageContext } from "../utils/context";
 import { useRouter } from 'next/router'
 import { URL } from "../utils/constants"
+import { useAuth } from '../utils/authContext'
 
 export default function Home() {
 
   const router = useRouter()
+  const { auth } = useAuth()
 
-  const { user, keyword, toggle, loggedIn } = useContext(PageContext)
+  const { toggle } = useContext(PageContext)
 
   const [playlists, setPlaylists] = useState([])
   const [liked, setLiked] = useState([])
 
-  // console.log(user, 'user on page')
-  console.log(loggedIn, 'keyword')
+  useEffect(() => {
+    console.log(auth, 'user on page')
+
+  },[auth])
+  // console.log(auth, 'keyword')
 
   const getPlaylists = async () => {
     const result = await axios.get(`${URL}/api/playlists`)
     const playlistArr = result.data.playlists
-    if(loggedIn){
+    console.log('her')
+    if (auth.status === "SIGNED_IN") {
+      console.log('hero aced')
+
       const liked = await axios.get(`${URL}/api/users_liked_playlists`)
-      for(let i = 0; i < playlistArr.length; i++) {
+      for (let i = 0; i < playlistArr.length; i++) {
         const playlist = playlistArr[i]
-        for(const i of liked.data.result) {
-          if(i.id === playlist.id) {
+        for (const i of liked.data.result) {
+          if (i.id === playlist.id) {
             playlist.liked = true
           }
         }
@@ -43,29 +51,30 @@ export default function Home() {
     for (let i = 0; i < playlistArr.length; i++) {
       const playlist_id = playlistArr[i].id
       const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
-      playlistArr[i].tags = tags.data.tags.map(o => o.tag = {tag: o.text})
+      playlistArr[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
     setPlaylists(playlistArr)
   }
 
-  // const getLikedPlaylists = async () => {
-  //   if(user){
-  //     const result = await axios.get(`${URL}/api/users_liked_playlists`)
-  //     setLiked(result.data.result)
-  //   }
-  // }
-  const likePlaylist = async (id) => {
-      const result = await axios.post(`${URL}/api/like_playlist`, {
-        playlist_id:id
-      })
-    
-      getPlaylists()
-
+  const getLikedPlaylists = async () => {
+    if(auth.status === "SIGNED_IN"){
+      const result = await axios.get(`${URL}/api/users_liked_playlists`)
+      // console.log(result.data.result, 'rere')
+      setLiked(result.data.result)
     }
-  
+  }
+  const likePlaylist = async (id) => {
+    const result = await axios.post(`${URL}/api/like_playlist`, {
+      playlist_id: id
+    })
+
+    getPlaylists()
+
+  }
+
   const unlikePlaylist = async (id) => {
     const result = await axios.post(`${URL}/api/unlike_playlist`, {
-      playlist_id:id
+      playlist_id: id
     })
     getPlaylists()
 
@@ -74,8 +83,8 @@ export default function Home() {
 
   useEffect(() => {
     getPlaylists()
-    // getLikedPlaylists()
-  }, [])
+    getLikedPlaylists()
+  }, [auth])
 
   return (
     <Container toggle={toggle}>
@@ -86,6 +95,7 @@ export default function Home() {
         //     state = true
         //   }
         // }
+      // console.log(o)
         return (
           <PlaylistCard key={i}
             toggle={toggle}
@@ -97,11 +107,11 @@ export default function Home() {
             tags={o.tags}
             showClose={false}
             liked={o.liked}
-            showLike={loggedIn}
+            showLike={auth.status === "SIGNED_IN" ? true : false}
             onLike={() => {
-              if(o.liked){
+              if (o.liked) {
                 unlikePlaylist(o.id)
-              }else{
+              } else {
                 likePlaylist(o.id)
               }
             }}

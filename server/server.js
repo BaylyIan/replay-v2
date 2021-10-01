@@ -93,14 +93,30 @@ app.post('/api/users/login', (req, res) => {
     console.log(error)
     if (error) {
       res.send({ error })
-      // console.log("we have an issue")
+      console.log("we have an issue")
       return
     }
     const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
     // res.send({ userId: user.id, name: user.name, email: user.email })
-    res.send({ token })
+    res.send({ token: token, user:user })
     console.log({ token })
   })
+})
+
+//get users profile 
+app.get('/api/profile', jwt.authorize, (req, res) => {
+  console.log(req.user, 'ehehrherhre')
+  //token's user id
+  const id = req.user.userId
+  database.userCredentials(id, (error, result) => {
+    if (error) {
+      res.send({ error: error.message })
+      console.log('fart')
+      return
+    }
+    res.send({ result })
+  })
+  
 })
 
 
@@ -319,14 +335,7 @@ app.get('/api/count_user_likes/:id', (req, res) => {
 
 
 
-//get users profile
-app.get('/api/profile', jwt.authorize, (req, res) => {
-  //token's user id
-  const id = req.user.userId
-  database.userCredentials(id, (error, result) => {
-    res.send({ result })
-  })
-})
+
 
 
 
