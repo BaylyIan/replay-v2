@@ -6,26 +6,22 @@ import { getSessionStorage } from '../utils'
 
 const AuthContext = createContext();
 
-export const getUser = async (ctx) => {
+export const getUser = async (token) => {
     console.log('ran main getUser fun on COntext')
-    // axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-
-    // console.log(user, 'context getSSuser')
 
     return await axios
-        .get('http://localhost:4200/api/profile')
-        .then((user) => {
-            console.log(user, ' getUser context')
-            // console.log(result.data.result[0], 'res.dadada')
-            if (user) {
-                return { status: 'SIGNED_IN', user: user };
-            } else {
-                return { status: 'SIGNED_OUT', user: null };
-            }
-        })
-        .catch((error) => {
-            return { status: 'SIGNED_OUT', user: null };
-        });
+    .get('http://localhost:4200/api/profile', {token, token})
+    .then((res) => {
+        console.log(res.data.result[0], 'res')
+      if (res.data.result[0]) {
+        return { status: 'SIGNED_IN', user: res.data.result[0] };
+      } else {
+        return { status: 'SIGNED_OUT', user: null };
+      }
+    })
+    .catch((error) => {
+      return { status: 'SIGNED_OUT', user: null };
+    });
 };
 
 export const AuthProvider = (props) => {
@@ -38,7 +34,8 @@ export const AuthProvider = (props) => {
             password: password
         })
             .then((result) => {
-                console.log(result.data.token, result.data.user, 'should be token + userInfo')
+                
+                console.log(result, 'login result')
                 // router.push('/');
                 sessionStorage.setItem('token', result.data.token);
                 axios.defaults.headers.common['Authorization'] = "Bearer " + result.data.token;
