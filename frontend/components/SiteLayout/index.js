@@ -18,19 +18,24 @@ import { RiHomeLine, RiCompassLine, RiUserLine, RiAddLine } from 'react-icons/ri
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs'
 import CustomModal from '../../components/Modal'
 import Form from '../Form'
+import CreatePlaylist from '../../components/CreatePlaylist'
 
 const SiteLayout = ({ children }) => {
 
+    //context
     const { keyword, setKeyword, toggle, setToggle } = useContext(PageContext);
     const { auth, login, register } = useAuth()
-    const [visible, setVisible, toggleModal] = useModal()
+
+    //modals
+    const [showReg, setShowReg, toggleReg] = useModal()
+    const [showCreate, setShowCreate, toggleCreate] = useModal()
     const [formToggle, setFormToggle] = useState()
 
 
     const router = useRouter()
     const { id, params } = router.query;
     // console.log(router.route.startsWith('/Profile'), 'params')
-    // console.log(auth.user.result[0].id, 'here')
+    // console.log(auth.user, 'siteLay auth')
 
     // const [toggle, setToggle] = useState(true)
     const [tabs, setTabs] = useState()
@@ -72,7 +77,7 @@ const SiteLayout = ({ children }) => {
                     });
                 } else {
                     console.log('show')
-                    setVisible(true)
+                    setShowReg(true)
                 }
                 break;
         }
@@ -150,10 +155,7 @@ const SiteLayout = ({ children }) => {
                             width={toggle ? '51px' : 'calc(100% - 25px)'}
                             height={'51px'}
                             onClick={() => {
-                                setTabs(4)
-                                router.push({
-                                    pathname: "/CreatePlaylist"
-                                });
+                                setShowCreate(true)
                             }}
                         />
                         <UserCont toggle={toggle}>
@@ -179,16 +181,28 @@ const SiteLayout = ({ children }) => {
 
 
                 <CustomModal
-                        title="Login or Signup to view the profile page"
-                        isActive={visible}
-                        handleClose={() => setVisible(false)}
-                        children={<Form 
-                            toggle={formToggle}
-                            onChangeToggle={()=>{
-                                setFormToggle(!formToggle)
-                            }}
-                        />}
-                    />
+                    title="Create Playlist"
+                    isActive={showCreate}
+                    handleClose={() => {
+                        setShowCreate(false)
+                        console.log('hai')
+                    }
+                    }
+                    children={<CreatePlaylist
+
+                    />}
+                />
+                <CustomModal
+                    title="Login or Signup to view the profile page"
+                    isActive={showReg}
+                    handleClose={() => setShowReg(false)}
+                    children={<Form
+                        toggle={formToggle}
+                        onChangeToggle={() => {
+                            setShowReg(!toggleReg)
+                        }}
+                    />}
+                />
                 <Page toggle={toggle}>
                     {children}
                 </Page>

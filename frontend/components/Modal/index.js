@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import {Theme } from '../../styles/theme'
 import { MdClose } from 'react-icons/md'
 
-import { Container, Background, CloseWrap, Title} from './style'
+import { Container, Background, CloseWrap, Title, PageWrap} from './style'
 
 const CustomModal = ({ isActive, children, handleClose, title}) => {
     return isActive ? (
-        <Background onClick={handleClose}>
+        <PageWrap>
            <Container>
+               <Background onClick={handleClose} />
                 <CloseWrap>
                     <Title><h2>{title}</h2></Title>
                     <MdClose 
@@ -19,7 +20,7 @@ const CustomModal = ({ isActive, children, handleClose, title}) => {
                 </CloseWrap>
                 {children}
            </Container>
-        </Background>
+        </PageWrap>
     ) : null;
 }
 

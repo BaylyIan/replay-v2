@@ -9,15 +9,13 @@ export const Page = styled.div`
     align-items:Center;
     position:relative;
     z-index:1;
-
-    /* border:1px solid red; */
     & > h1 {
+        margin-top:40px;
         color:${Theme.colors.white};
         font-size:26px;
-        margin-top:40px;
         z-index:4;
-
     }
+    /* border:1px solid red; */
 `;
 
 export const Gradient = styled.div`

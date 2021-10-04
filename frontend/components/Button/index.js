@@ -13,7 +13,9 @@ const Button = ({ onClick, text, color, showIcon, icon, width, height, textColor
 }
 
 Button.defaultProps = {
-    onClick: () => { }
+    onClick: () => { },
+    height:'48px',
+    color:'transparent'
 }
 
 Button.propTypes = {

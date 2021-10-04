@@ -52,7 +52,7 @@ function getUser(email, password, callback) {
 
     const user = results[0]
 
-    console.log(user.password, password)
+    console.log(user.password, password, 'user, password db.js')
     bcrypt.compare(password, user.password, (error, same) => {
       console.log(error)
       if (error) {

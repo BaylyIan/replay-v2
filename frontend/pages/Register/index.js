@@ -26,10 +26,12 @@ const Register = ({}) => {
         case true:
           //login
         const result = login(e)
-        if(result){
+        console.log(result.data, 'frontend error')
+        if(result.data === undefined || !result.data) {
           console.log(result, 'rererere')
           router.push("/")
         }
+
           break;
         case false:
           //sign up
