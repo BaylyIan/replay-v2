@@ -13,28 +13,22 @@ import { AuthProvider, getUser } from "../utils/authContext"
 import { getSessionStorage } from '../utils'
 
 
-function MyApp({ Component, pageProps, router, auth }) {
+function MyApp({ Component, pageProps, router }) {
 
   const { id, params } = router.query;
 
+  const [auth, setAuth] = useState()
 
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const token = window.sessionStorage.getItem('token');
-  //     axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-  //     const res = await getUser(token)
-  //     if(!res) return 
-  //     setAuth(res)
-  //   })()
-  // }, [])
-
-
-
-  console.log(auth, 'app')
-
-
-
+  useEffect(() => {
+    (async () => {
+      const token = window.sessionStorage.getItem('token');
+      axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+      const res = await getUser(token)
+      if(!res) return 
+      setAuth(res)
+    })()
+  }, [])
+ 
   if (router.pathname === '/Register') {
     console.log('path')
     return (
@@ -57,12 +51,12 @@ function MyApp({ Component, pageProps, router, auth }) {
   }
 }
 
-MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext)
-  const auth = await getUser()
-  console.log('getInitialProps ran')
-  return { ...appProps, auth: auth }
-}
+// MyApp.getInitialProps = async (appContext) => {
+//   const appProps = await App.getInitialProps(appContext)
+//   const auth = await getUser()
+//   console.log('getInitialProps ran')
+//   return { ...appProps, auth: auth }
+// }
 
 
 export default MyApp

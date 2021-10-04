@@ -3,7 +3,7 @@ import { SMALL, MED, LARGE, XLARGE} from '../../utils/constants'
 import { Theme } from '../../styles/theme'
 
 export const Container = styled.div`
-    min-width:400px;
+    min-width:450px;
     width:auto; 
     height:400px;
     height:auto;
@@ -13,8 +13,8 @@ export const Container = styled.div`
     /* justify-content:center; */
     /* border:1px solid red; */
     background-color:${Theme.colors.black};
-    padding:0px 30px 10px 30px;
-    z-index:4;
+    padding:0px 10px 10px 10px;
+    z-index:5;
 `;
 
 export const Background = styled.div`
@@ -27,7 +27,7 @@ export const Background = styled.div`
     display:flex;   
     align-items:Center;
     justify-content:center;
-    z-index:3;
+    z-index:0;
 `;
 export const CloseWrap = styled.div`
     width:100%;
@@ -47,4 +47,13 @@ export const Title = styled.div`
     color:${Theme.colors.lightGrey};
     height:auto;
     max-width:220px;
+`;
+
+export const PageWrap = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position: absolute;
+    width:100%;
+    height:100%;
 `;

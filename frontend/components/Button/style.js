@@ -12,9 +12,18 @@ export const Container = styled.button`
     align-items: center;
     justify-content:center;
     background-color:${({ color }) => color ? color : Theme.colors.black};
+    /* background-color: transparent; */
+    background-repeat: no-repeat;
+    :hover {
+        background-color: ${Theme.colors.orange};
+        & > p {
+            color: ${Theme.colors.white}
+        }
+    }
     & > p{
-        color:${({ textColor }) => textColor ? textColor : Theme.colors.orange};
+        color:${Theme.colors.orange};
         font-size: 16px;
+
         /* margin-left:${({ margin }) => margin ? null : '0px'}  */
     }
 `;

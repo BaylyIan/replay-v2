@@ -13,7 +13,7 @@ export const Container = styled.div`
     position: relative;
     cursor: pointer;
     aspect-ratio:1/ 1.6;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: ${Theme.colors.darkGrey};
     @media (max-width: ${MED}){
         aspect-ratio:1/ 1.5;
