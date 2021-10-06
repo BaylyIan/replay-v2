@@ -5,7 +5,6 @@ import { Theme } from '../../styles/theme'
 export const Container = styled.div`
     min-width:450px;
     width:auto; 
-    height:400px;
     height:auto;
     display:flex;
     flex-direction:column;
@@ -39,6 +38,7 @@ export const CloseWrap = styled.div`
     position:relative;
     & > :nth-child(2){
         position:absolute;
+        margin-right:10px;
         right:0;
     }
 `;

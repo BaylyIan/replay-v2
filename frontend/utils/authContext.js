@@ -12,7 +12,7 @@ export const getUser = async (token) => {
     return await axios
     .get('http://localhost:4200/api/profile', {token, token})
     .then((res) => {
-        console.log(res.data.result[0], 'res')
+        console.log(res.data.result[0], 'getUSer useAUth')
       if (res.data.result[0]) {
         return { status: 'SIGNED_IN', user: res.data.result[0] };
       } else {
@@ -34,16 +34,18 @@ export const AuthProvider = (props) => {
             password: password
         })
             .then((result) => {
-                
-                console.log(result, 'login result')
-                // router.push('/');
-                sessionStorage.setItem('token', result.data.token);
-                axios.defaults.headers.common['Authorization'] = "Bearer " + result.data.token;
-                sessionStorage.setItem('user', JSON.stringify(result.data.user))
-                console.log('user signed in');
+                console.log(result.data, 'heyeyey') 
+                if(result.data.error) return result.data.error
+                else{
+                    sessionStorage.setItem('token', result.data.token);
+                    axios.defaults.headers.common['Authorization'] = "Bearer " + result.data.token;
+                    sessionStorage.setItem('user', JSON.stringify(result.data.user))
+                    console.log('user signed in');
+                    router.push('/');
+                }
             })
-            .catch((error) => {
-                console.error("Username or password is incorrect!!")
+            .catch((err) => {
+                console.error(err)
             })
     };
 
@@ -54,11 +56,14 @@ export const AuthProvider = (props) => {
             password: password,
         })
             .then((result) => {
-                router.push('/')
-                const token = result.data.token
-                sessionStorage.setItem('token', token);
-                axios.defaults.headers.common['Authorization'] = "Bearer " + _token;
-                console.log('user registered')
+                if(result.data.error) return result.data.error
+                else{
+                    router.push('/')
+                    const token = result.data.token
+                    sessionStorage.setItem('token', token);
+                    axios.defaults.headers.common['Authorization'] = "Bearer " + _token;
+                    console.log('user registered')
+                }
             })
             .catch(function (error) {
                 console.error(error.message)

@@ -6,7 +6,7 @@ import Input from '../Input'
 import TextArea from '../TextArea'
 import TagArea from '../TagArea'
 
-import { Container, Wrap, PhotoWrap, FormWrap, ButtonWrap, FileLabel, FileInput, TagWrap, Pic } from './style'
+import { Container, PhotoWrap, FormWrap, ButtonWrap, FileLabel, FileInput, TagWrap, Pic } from './style'
 
 import { BsUpload } from 'react-icons/bs'
 
@@ -104,7 +104,6 @@ const CreatePlaylist = ({ }) => {
 
     return (
         <Container>
-            <Wrap>
                 <PhotoWrap onSubmit={submit}>
                     <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
                     {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
@@ -158,7 +157,6 @@ const CreatePlaylist = ({ }) => {
                         </ButtonWrap>
                     </div>
                 </FormWrap>
-            </Wrap>
         </Container>
     ) 
 }

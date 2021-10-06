@@ -160,7 +160,7 @@ const SiteLayout = ({ children }) => {
                         />
                         <UserCont toggle={toggle}>
                             <Avatar />
-                            {!toggle && user ? <h3 style={{ color: `${Theme.colors.white}` }}>{user.name}</h3> : null}
+                            {!toggle && auth.status === "SIGNED_IN" ? <h3 style={{ color: `${Theme.colors.white}` }}>{auth.user.name}</h3> : null}
                         </UserCont>
                         <ToggleCont toggle={toggle} onClick={() => {
                             setToggle(!toggle)
