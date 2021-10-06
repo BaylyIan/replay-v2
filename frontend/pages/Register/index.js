@@ -24,22 +24,11 @@ const Register = ({}) => {
     try {
       switch (toggle) {
         case true:
-          //login
-        const result = login(e)
-        console.log(result.data, 'frontend error')
-        if(result.data === undefined || !result.data) {
-          console.log(result, 'rererere')
-          router.push("/")
-        }
-
+        login(e)
           break;
         case false:
           //sign up
-        const _result = register(e)
-        if(_result){
-          router.push("/")
-          console.log(_result, 'signup')
-        }
+        register(e)
         break;
       }
     } catch (err) {

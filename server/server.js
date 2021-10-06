@@ -71,7 +71,6 @@ const { uploadPlaylistPicture, getPlaylistFileStream } = require('./s3')
 
 // create a user
 app.post('/api/create_user', (req, res) => {
-  console.log(req.body, 'here')
   const { name, email, password } = req.body
   database.createUser(name, email, password, (error, userId) => {
     if (error) {
@@ -92,14 +91,13 @@ app.post('/api/users/login', (req, res) => {
   database.getUser(email, password, (error, user) => {
     console.log(error)
     if (error) {
-      res.send({ error })
-      console.log("we have an issue")
+      res.send({ error: error })
+      console.log(error, 'here backend')
       return
     }
     const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
     // res.send({ userId: user.id, name: user.name, email: user.email })
     res.send({ token: token, user:user })
-    console.log({ token })
   })
 })
 
