@@ -33,8 +33,6 @@ export default function Home() {
     const playlistArr = result.data.playlists
     console.log('her')
     if (auth.status === "SIGNED_IN") {
-      console.log('hero aced')
-
       const liked = await axios.get(`${URL}/api/users_liked_playlists`)
       for (let i = 0; i < playlistArr.length; i++) {
         const playlist = playlistArr[i]
@@ -46,7 +44,6 @@ export default function Home() {
       }
 
     }
-
 
     for (let i = 0; i < playlistArr.length; i++) {
       const playlist_id = playlistArr[i].id
@@ -84,7 +81,7 @@ export default function Home() {
   useEffect(() => {
     getPlaylists()
     getLikedPlaylists()
-  }, [auth])
+  }, [])
 
   return (
     <Container toggle={toggle}>

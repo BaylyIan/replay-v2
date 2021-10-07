@@ -11,6 +11,7 @@ export const Container = styled.div`
     align-items:Center;
     justify-content:space-between;
     position:relative;
+    padding:0px 20px 0px 20px;
     /* border:1px solid red; */
     & > div {
         width:100%;

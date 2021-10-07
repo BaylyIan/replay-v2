@@ -5,15 +5,15 @@ import { useRouter } from 'next/router'
 import { Theme } from '../../../styles/theme'
 import axios from 'axios'
 
-import { URL } from "../../../utils/constants"
 import { useAuth } from '../../../utils/authContext'
 
 //comps 
-import { Page, Avatar, Gradient, InfoCont, Line, Wrap, UserCont } from '../../../pageStyles/Profile/style';
+import { Page, Avatar, Gradient, InfoCont, Line, Wrap, UserCont, FileInput } from '../../../pageStyles/Profile/style';
 import PlaylistTab from '../../../components/PlaylistTab'
 import Button from '../../../components/Button'
 import { AiFillHeart } from 'react-icons/ai'
 import { BsThreeDotsVertical } from 'react-icons/bs'
+import { AiOutlineEdit } from 'react-icons/ai'
 
 const Profile = ({ }) => {
 
@@ -28,24 +28,38 @@ const Profile = ({ }) => {
   const [playlists, setPlaylists] = useState()
   const [liked, setLiked] = useState([])
 
+  const [file, setFile] = useState()
+  const [tempFile, setTempFile] = useState()
+
   const getUsersPlaylist = async () => {
-    const result = await axios.get(`${URL}/api/playlist_by_id/${auth.user.id}`)
-    // console.log(result.data.result)
+    const result = await axios.get(`http://localhost:4200/api/playlist_by_id/${auth.user.id}`)
+    console.log(result.data.result)
     setPlaylists(result.data.result)
     setNum_playlists(result.data.result.length)
   }
 
   const getLikedPlaylists = async () => {
-    const result = await axios.get(`${URL}/api/users_liked_playlists`)
+    const result = await axios.get(`http://localhost:4200/api/users_liked_playlists`)
     setLiked(result.data.result)
     // console.log(result.data.result)
   }
 
   const getUserLikes = async () => {
-    const result = await axios.get(`${URL}/api/count_user_likes/${auth.user.id}`)
+    const result = await axios.get(`http://localhost:4200/api/count_user_likes/${auth.user.id}`)
     let count = result.data.result[0]
     setNum_likes(count[Object.keys(count)[0]])
   }
+
+  //user pic
+  const fileSelected = event => {
+    const file = event.target.files[0]
+    console.log(file, 'file')
+    if (file) {
+      setTempFile(URL.createObjectURL(file))
+      setFile(file)
+    }
+  }
+
 
   useEffect(() => {
     if (auth.status === "SIGNED_IN") {
@@ -94,7 +108,7 @@ const Profile = ({ }) => {
           return (
             <PlaylistTab
               showLike={false}
-              user_pic={`${URL}/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
             />
@@ -107,7 +121,7 @@ const Profile = ({ }) => {
           return (
             <PlaylistTab
               showLike={false}
-              user_pic={`${URL}/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
             />
@@ -140,8 +154,15 @@ const Profile = ({ }) => {
         />
       </div>
       <Avatar>
-        <img src={auth.user.image_url ? auth.user.image_url : '/Icons/default_profile.png'} />
+        <img src={tempFile ? tempFile : auth.user.user_pic ? auth.user.user_pic : '/Icons/default_profile.png'} />
       </Avatar>
+        <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected} />
+      <UserCont  htmlFor='file'>
+        <AiOutlineEdit
+          size={28}
+          fill={Theme.colors.white}
+        />
+      </UserCont>
       <h1>{auth.user.name}</h1>
       <InfoCont>
         <h3>{num_playlists} playlists </h3>
@@ -154,7 +175,7 @@ const Profile = ({ }) => {
           return (
             <PlaylistTab
               showLike={false}
-              user_pic={`${URL}/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
             />
@@ -167,7 +188,7 @@ const Profile = ({ }) => {
           return (
             <PlaylistTab
               showLike={false}
-              user_pic={`${URL}/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
             />

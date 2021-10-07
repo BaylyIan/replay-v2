@@ -62,3 +62,12 @@ export const Info = styled.div`
         }
     }
 `;
+
+export const TagWrap = styled.div`
+    width:100%;
+    height:auto;
+    min-height:30px;
+    display:flex;
+    flex-wrap: wrap;
+    border:1px solid red;
+`;

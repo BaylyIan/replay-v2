@@ -37,11 +37,12 @@ export const AuthProvider = (props) => {
                 console.log(result.data, 'heyeyey') 
                 if(result.data.error) return result.data.error
                 else{
+                    router.push('/');
                     sessionStorage.setItem('token', result.data.token);
                     axios.defaults.headers.common['Authorization'] = "Bearer " + result.data.token;
                     sessionStorage.setItem('user', JSON.stringify(result.data.user))
                     console.log('user signed in');
-                    router.push('/');
+                    router.reload()
                 }
             })
             .catch((err) => {
@@ -63,6 +64,7 @@ export const AuthProvider = (props) => {
                     sessionStorage.setItem('token', token);
                     axios.defaults.headers.common['Authorization'] = "Bearer " + _token;
                     console.log('user registered')
+                    router.reload()
                 }
             })
             .catch(function (error) {

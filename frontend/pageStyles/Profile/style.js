@@ -38,11 +38,13 @@ export const Avatar = styled.div`
     justify-content:center;
     align-items:center;
     object-fit:cover;
+    overflow:hidden;
     z-index:3;
-    & > img{
-        width:100%;
+    & > img {
         height:100%;
-        border-radius: 50%;
+        width:100%;
+        object-fit:cover;
+        overflow: hidden;
     }
    @media (max-width: ${MED}){
     height:140px;
@@ -169,4 +171,19 @@ export const NoUserWrap = styled.div`
     position:absolute;
     top:0;
 
+`;
+
+export const UserCont = styled.label`
+    display:flex;
+    width:180px;
+    /* border:1px solid green; */
+    height:auto;
+    justify-content:flex-end;
+    z-index:4;
+`;
+export const FileInput = styled.input`
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
 `;
