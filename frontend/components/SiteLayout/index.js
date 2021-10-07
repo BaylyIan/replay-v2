@@ -7,6 +7,8 @@ import { PageContext } from "../../utils/context";
 import { useRouter } from "next/router";
 import { useModal } from "../../utils/useModal"
 import { useAuth } from "../../utils/authContext"
+import { postImage } from '../../utils'
+import axios from 'axios'
 
 //comps
 import { Container, Nav, Header, Page, NavHeader, Icon, ItemWrap, NavFooter, Slider, Indicator, ToggleCont, UserCont, HeaderGradient, SearchCont, PageTitle } from './style'
@@ -29,9 +31,9 @@ const SiteLayout = ({ children }) => {
     //modals
     const [showReg, setShowReg, toggleReg] = useModal()
     const [showCreate, setShowCreate, toggleCreate] = useModal()
-    const [formToggle, setFormToggle] = useState()
+    const [formToggle, setFormToggle] = useState(true)
 
-
+    const [error, setError] = useState(false)
     const router = useRouter()
     const { id, params } = router.query;
     // console.log(router.route.startsWith('/Profile'), 'params')
@@ -81,6 +83,47 @@ const SiteLayout = ({ children }) => {
                 }
                 break;
         }
+    }
+
+    const handleSubmit = async (e) => {
+        try {
+            switch (toggle) {
+                case true:
+                    login(e)
+                    break;
+                case false:
+                    //sign up
+                    register(e)
+                    break;
+            }
+        } catch (err) {
+            console.log(err)
+        }
+        setShowReg(!showReg)
+        // router.reload()
+    }
+
+    const createPlaylist = async ({ name, desc, tags, file }) => {
+        console.log({ name, desc, tags, file }, 'createPlaylist')
+        if (name === "" || file === undefined) {
+            setError(true)
+            return
+        }
+        setError(false)
+        // console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
+        const result_ = await postImage({ image: file, type: 'playlist' })
+        const result = await axios.post('http://localhost:4200/api/create_playlist', ({
+            name: name,
+            image: result_.imagePath.replace('/playlistImage/', ''),
+            description: desc,
+            userId: auth.user.id,
+            tags: tags
+        }))
+
+        // console.log(result_.imagePath.replace('/playlistImage/', ''), 'upload imagepath')
+
+        //new thing to work on - profile page
+        router.push('/')
     }
 
     const handleKeyword = (e) => {
@@ -155,7 +198,11 @@ const SiteLayout = ({ children }) => {
                             width={toggle ? '51px' : 'calc(100% - 25px)'}
                             height={'51px'}
                             onClick={() => {
-                                setShowCreate(true)
+                                if (auth.status === "SIGNED_IN") {
+                                    setShowCreate(true)
+                                } else {
+                                    setShowReg(true)
+                                }
                             }}
                         />
                         <UserCont toggle={toggle}>
@@ -189,7 +236,13 @@ const SiteLayout = ({ children }) => {
                     }
                     }
                     children={<CreatePlaylist
-
+                        submit={(e) => {
+                            createPlaylist(e)
+                        }}
+                        closeModal={() => {
+                            setShowCreate(!showCreate)
+                        }}
+                        error={error}
                     />}
                 />
                 <CustomModal
@@ -199,7 +252,10 @@ const SiteLayout = ({ children }) => {
                     children={<Form
                         toggle={formToggle}
                         onChangeToggle={() => {
-                            setShowReg(!toggleReg)
+                            setFormToggle(!formToggle)
+                        }}
+                        onSubmit={(e) => {
+                            handleSubmit(e)
                         }}
                     />}
                 />

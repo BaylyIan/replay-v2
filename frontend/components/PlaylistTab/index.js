@@ -6,7 +6,7 @@ import { Theme } from '../../styles/theme'
 
 
 
-import { Container, Cover, Info } from './style'
+import { Container, Cover, Info, TagWrap } from './style'
 
 const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username }) => {
     return (
@@ -20,10 +20,10 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username }) => 
                     size={36}
                     color={'#CA3433'}
                     onClick={onLike} /> :
-                showLike && !liked ? <AiOutlineHeart
-                    size={36}
-                    color={`${Theme.colors.white}`}
-                    onClick={onLike} /> : null}
+                    showLike && !liked ? <AiOutlineHeart
+                        size={36}
+                        color={`${Theme.colors.white}`}
+                        onClick={onLike} /> : null}
             </Info>
             <p>{username}</p>
         </Container>
@@ -33,10 +33,10 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username }) => 
 PlaylistTab.defaultProps = {
     user_pic: '/Icons/default_playlist.png',
     title: "playlist",
-    showLike:false,
-    liked:false,
-    onLike:()=>{},
-    username:'user'
+    showLike: false,
+    liked: false,
+    onLike: () => { },
+    username: 'user'
 }
 
 PlaylistTab.propTypes = {
