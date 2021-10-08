@@ -6,6 +6,8 @@ import { Theme } from '../../../styles/theme'
 import axios from 'axios'
 
 import { useAuth } from '../../../utils/authContext'
+import { postImage } from '../../../utils'
+
 
 //comps 
 import { Page, Avatar, Gradient, InfoCont, Line, Wrap, UserCont, FileInput } from '../../../pageStyles/Profile/style';
@@ -58,6 +60,12 @@ const Profile = ({ }) => {
       setTempFile(URL.createObjectURL(file))
       setFile(file)
     }
+  }
+
+  const uploadProfilePicture = async ({ file }) => {
+    if(file === undefined) return
+    const result = await postImage({ image: file, type: 'profile' })
+    console.log(result, 'profile upload')
   }
 
 
@@ -143,6 +151,7 @@ const Profile = ({ }) => {
           textColor={Theme.colors.white}
           text={'Save Profile'}
           onClick={() => {
+            uploadProfilePicture(file)
             router.push({
               pathname: "/Profile/[id]/[profile]",
               query: {

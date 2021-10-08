@@ -27,6 +27,7 @@ app.use('/', function (req, res, next) {
 })
 
 const { uploadPlaylistPicture, getPlaylistFileStream } = require('./s3')
+const { uploadProfilePicture, getProfileFileStream } = require('./s3')
 
 
 // const s3 = require('./s3')
@@ -115,6 +116,21 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
     res.send({ result })
   })
   
+})
+
+//upload profile picture
+app.post('/profileImage', uploadProfile.single('image'), async (req, res) => {
+  const file = req.file
+  const result = await uploadProfilePicture(file)
+  await unlinkFile(file.path)
+  res.send({ imagePath: `/profileImage/${result.key}` })
+})
+
+//get profile Picture from s3
+app.get('/profileImage/:key', (req, res) => {
+  const key = req.params.key
+  const readStream = getProfileFileStream(key)
+  readStream.pipe(res)
 })
 
 
