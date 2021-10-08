@@ -3,7 +3,7 @@ const fs = require('fs')
 const S3 = require('aws-sdk/clients/s3')
 
 const playlistBucket = process.env.AWS_PLAYLIST_BUCKET_NAME
-const profileBucket = process.env.AWS_BUCKET_NAME
+const profileBucket = process.env.AWS_PROFILE_BUCKET_NAME
 const region = process.env.AWS_BUCKET_REGION
 const accessKeyId = process.env.AWS_ACCESS_KEY
 const secretAccessKey = process.env.AWS_SECRET_KEY
@@ -40,3 +40,32 @@ function getPlaylistFileStream(fileKey) {
   return s3.getObject(downloadParams).createReadStream()
 }
 exports.getPlaylistFileStream = getPlaylistFileStream
+
+
+
+// // uploads a profile file to s3
+function uploadProfilePicture(file) {
+  const fileStream = fs.createReadStream(file.path)
+
+  const uploadParams = {
+    Bucket: profileBucket,
+    Body: fileStream,
+    Key: file.filename
+  }
+
+  return s3.upload(uploadParams).promise()
+}
+exports.uploadProfilePicture = uploadProfilePicture
+
+
+// // downloads a file from s3
+function getProfileFileStream(fileKey) {
+  console.log(fileKey, 'fileKey')
+  const downloadParams = {
+    Key: fileKey,
+    Bucket: playlistBucket
+  }
+
+  return s3.getObject(downloadParams).createReadStream()
+}
+exports.getProfileFileStream = getProfileFileStream
