@@ -63,6 +63,7 @@ const Profile = ({ }) => {
   }
 
   const uploadProfilePicture = async ({ file }) => {
+    console.log(file, 'file upload ran')
     if(file === undefined) return
     const result = await postImage({ image: file, type: 'profile' })
     console.log(result, 'profile upload')
@@ -82,6 +83,7 @@ const Profile = ({ }) => {
     return <Page>Loading...</Page>
   }
 
+  console.log(auth.user)
   // Once the user request finishes, handle authentication
   return id === 'view' && profile == auth.user.id ? (
     <Page>
@@ -102,7 +104,7 @@ const Profile = ({ }) => {
         }}
       />
       <Avatar>
-        <img src={auth.user.image_url ? auth.user.image_url : '/Icons/default_profile.png'} />
+        <img src={auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
       </Avatar>
       <h1>{auth.user.name}</h1>
       <InfoCont>
@@ -151,7 +153,7 @@ const Profile = ({ }) => {
           textColor={Theme.colors.white}
           text={'Save Profile'}
           onClick={() => {
-            uploadProfilePicture(file)
+            uploadProfilePicture({ file })
             router.push({
               pathname: "/Profile/[id]/[profile]",
               query: {
