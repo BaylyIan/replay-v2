@@ -50,6 +50,7 @@ export default function Home() {
       const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
       playlistArr[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
+    console.log(playlistArr)
     setPlaylists(playlistArr)
   }
 
@@ -83,6 +84,11 @@ export default function Home() {
     getLikedPlaylists()
   }, [])
 
+    // Server-render loading state
+    if (!auth || auth.status === "SIGNED_OUT") {
+      return <Page>Loading...</Page>
+    }
+
   return (
     <Container toggle={toggle}>
       {playlists && liked && playlists.length !== 0 ? playlists.map((o, i) => {
@@ -100,7 +106,7 @@ export default function Home() {
             playlist_name={o.name}
             playlist_pic={`${URL}/playlistImage/${o.image_url}`}
             username={o.username}
-            user_pic={o.usersimg ? usersimg : '/Icons/default_profile.png'}
+            user_pic={o.usersimg !== null ? `http://localhost:4200/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
             tags={o.tags}
             showClose={false}
             liked={o.liked}

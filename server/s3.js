@@ -63,7 +63,7 @@ function getProfileFileStream(fileKey) {
   console.log(fileKey, 'fileKey')
   const downloadParams = {
     Key: fileKey,
-    Bucket: playlistBucket
+    Bucket: profileBucket
   }
 
   return s3.getObject(downloadParams).createReadStream()
