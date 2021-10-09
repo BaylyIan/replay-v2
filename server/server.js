@@ -119,11 +119,20 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
 })
 
 //upload profile picture
-app.post('/profileImage', uploadProfile.single('image'), async (req, res) => {
+app.post('/profileImage', jwt.authorize, uploadProfile.single('image'), async (req, res) => {
   const file = req.file
-  const result = await uploadProfilePicture(file)
+  const id = req.user.userId
+  const { Key } = await uploadProfilePicture(file)
+  console.log(Key, id, 's3 result ')
+  database.addProfilePicture(Key, id, (error, result) => {
+    if(error){
+      res.send({ error })
+      return
+    }
+    res.send({db:result, imagePath: `profileImage/${Key}`})
+  })
   await unlinkFile(file.path)
-  res.send({ imagePath: `/profileImage/${result.key}` })
+  // res.send({ imagePath: `/profileImage/${result.key}` })
 })
 
 //get profile Picture from s3
@@ -132,6 +141,8 @@ app.get('/profileImage/:key', (req, res) => {
   const readStream = getProfileFileStream(key)
   readStream.pipe(res)
 })
+
+
 
 
 //CREATE PLAYLIST ------------------------------
