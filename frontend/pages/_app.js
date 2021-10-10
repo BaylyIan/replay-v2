@@ -6,11 +6,9 @@ import { useEffect, useState } from 'react'
 import "./_app.scss";
 import SiteLayout from "../components/SiteLayout"
 
-// cookies / axios
+// axios
 import axios from 'axios';
-import jsCookie from 'js-cookie';
 import { AuthProvider, getUser } from "../utils/authContext"
-import { getSessionStorage } from '../utils'
 
 
 function MyApp({ Component, pageProps, router }) {
@@ -30,7 +28,6 @@ function MyApp({ Component, pageProps, router }) {
   }, [])
  
   if (router.pathname === '/Register') {
-    console.log('path')
     return (
       <AuthProvider myAuth={auth}>
         <Provider>

@@ -9,6 +9,8 @@ export const Container = styled.div`
     min-width:100%;
     min-height:100vh;
     flex-direction: column;
+    overflow-y: hidden;
+    /* border:1px solid green; */
 `;
 export const Nav = styled.div`
     min-width:${({ toggle }) => toggle ? '81px' : '300px'};

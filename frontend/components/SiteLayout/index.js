@@ -122,7 +122,6 @@ const SiteLayout = ({ children }) => {
 
         // console.log(result_.imagePath.replace('/playlistImage/', ''), 'upload imagepath')
 
-        //new thing to work on - profile page
         router.push('/')
     }
 
