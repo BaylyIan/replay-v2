@@ -122,7 +122,6 @@ const SiteLayout = ({ children }) => {
 
         // console.log(result_.imagePath.replace('/playlistImage/', ''), 'upload imagepath')
 
-        //new thing to work on - profile page
         router.push('/')
     }
 
@@ -134,6 +133,11 @@ const SiteLayout = ({ children }) => {
         handleTabs()
         // console.log(user, 'new')
     })
+
+    // Server-render loading state
+    if (!auth || auth.status === "SIGNED_OUT") {
+        return <Page>Loading...</Page>
+    }
 
     return (
         <>
@@ -206,7 +210,9 @@ const SiteLayout = ({ children }) => {
                             }}
                         />
                         <UserCont toggle={toggle}>
-                            <Avatar />
+                            <Avatar
+                            image={auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : `/Icons/default.png`}
+                            />
                             {!toggle && auth.status === "SIGNED_IN" ? <h3 style={{ color: `${Theme.colors.white}` }}>{auth.user.name}</h3> : null}
                         </UserCont>
                         <ToggleCont toggle={toggle} onClick={() => {

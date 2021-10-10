@@ -64,7 +64,7 @@ const Profile = ({ }) => {
 
   const uploadProfilePicture = async ({ file }) => {
     console.log(file, 'file upload ran')
-    if(file === undefined) return
+    if (file === undefined) return console.error('no file sent to s3')
     const result = await postImage({ image: file, type: 'profile' })
     console.log(result, 'profile upload')
   }
@@ -83,7 +83,7 @@ const Profile = ({ }) => {
     return <Page>Loading...</Page>
   }
 
-  console.log(auth.user)
+  console.log(auth.user.image_url, 'file key')
   // Once the user request finishes, handle authentication
   return id === 'view' && profile == auth.user.id ? (
     <Page>
@@ -117,6 +117,7 @@ const Profile = ({ }) => {
         {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
           return (
             <PlaylistTab
+              key={i}
               showLike={false}
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
@@ -130,6 +131,7 @@ const Profile = ({ }) => {
         {liked && liked.length !== 0 ? liked.map((o, i) => {
           return (
             <PlaylistTab
+              key={i}
               showLike={false}
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
@@ -165,10 +167,10 @@ const Profile = ({ }) => {
         />
       </div>
       <Avatar>
-        <img src={tempFile ? tempFile : auth.user.user_pic ? auth.user.user_pic : '/Icons/default_profile.png'} />
+        <img src={tempFile ? tempFile : auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
       </Avatar>
-        <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected} />
-      <UserCont  htmlFor='file'>
+      <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected} />
+      <UserCont htmlFor='file'>
         <AiOutlineEdit
           size={28}
           fill={Theme.colors.white}
@@ -185,6 +187,7 @@ const Profile = ({ }) => {
         {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
           return (
             <PlaylistTab
+              key={i}
               showLike={false}
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
@@ -198,6 +201,7 @@ const Profile = ({ }) => {
         {liked && liked.length !== 0 ? liked.map((o, i) => {
           return (
             <PlaylistTab
+              key={i}
               showLike={false}
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
