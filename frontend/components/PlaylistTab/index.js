@@ -1,14 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
+import { AiOutlineHeart, AiFillHeart, AiOutlineDelete } from 'react-icons/ai'
 import { Theme } from '../../styles/theme'
 
 
+import { Container, Cover, Info, TagWrap, Cont } from './style'
 
-import { Container, Cover, Info, TagWrap } from './style'
+const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, deletePlaylist, edit }) => {
 
-const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username }) => {
+    const [color, setColor] = useState()
+
+    const handleHover = () => {
+        setColor(!color)
+    }
     return (
         <Container>
             <Cover>
@@ -25,7 +30,20 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username }) => 
                         color={`${Theme.colors.white}`}
                         onClick={onLike} /> : null}
             </Info>
+            <Cont>
             <p>{username}</p>
+            {edit ? <div 
+                onMouseEnter={handleHover}
+                onMouseLeave={handleHover}
+                onClick={deletePlaylist}
+            >
+            <AiOutlineDelete 
+                size={28}
+                fill={color ? Theme.colors.orange : Theme.colors.lightGrey}
+
+            />
+            </div> : null}
+            </Cont>
         </Container>
     );
 }
@@ -36,7 +54,8 @@ PlaylistTab.defaultProps = {
     showLike: false,
     liked: false,
     onLike: () => { },
-    username: 'user'
+    username: 'user',
+    deletePlaylist:()=>{}
 }
 
 PlaylistTab.propTypes = {

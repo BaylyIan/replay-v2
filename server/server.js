@@ -226,6 +226,20 @@ app.get('/api/playlist_by_id/:id', (req, res) => {
   })
 })
 
+//DELETE PLAYLIST --------------------------------------------------------------
+
+//delete a playlst and all its contents
+app.delete('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
+  const id = req.params.id
+  database.deletePlaylist(id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ result })
+  })
+})
+
 //LIKES ----------------------------------------------------------------
 
 //user liked a playlist
@@ -366,17 +380,7 @@ app.get('/api/count_user_likes/:id', (req, res) => {
 
 
 
-//delete a playlst and all its contents
-app.delete('/api/delete_playlist/:id', (req, res) => {
-  const id = req.params.id
-  database.deletePlaylist(id, (error, result) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    res.send({ result })
-  })
-})
+
 
 // update a playlist name
 app.use(express.json())
