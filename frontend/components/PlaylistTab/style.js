@@ -71,3 +71,15 @@ export const TagWrap = styled.div`
     flex-wrap: wrap;
     border:1px solid red;
 `;
+
+export const Cont = styled.div`
+    width:100%;
+    height:auto;
+    display:flex;
+    align-items: center;
+    justify-content:space-between;
+    & > p {
+        color:${Theme.colors.lightGrey};
+        font-size:16px;
+    }
+`;
