@@ -63,10 +63,14 @@ const Profile = ({ }) => {
   }
 
   const uploadProfilePicture = async ({ file }) => {
-    console.log(file, 'file upload ran')
     if (file === undefined) return console.error('no file sent to s3')
-    const result = await postImage({ image: file, type: 'profile' })
-    console.log(result, 'profile upload')
+    await postImage({ image: file, type: 'profile' })
+  }
+
+  const deletePlaylist = async ({ id }) => {
+    console.log(id)
+    const result = await axios.post(`http://localhost:4200/api/delete_playlist/${id}`)
+    console.log(result, 'delete play')
   }
 
 
@@ -83,7 +87,6 @@ const Profile = ({ }) => {
     return <Page>Loading...</Page>
   }
 
-  console.log(auth.user.image_url, 'file key')
   // Once the user request finishes, handle authentication
   return id === 'view' && profile == auth.user.id ? (
     <Page>
@@ -192,6 +195,10 @@ const Profile = ({ }) => {
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
+              edit={true}
+              deletePlaylist={() => {
+                deletePlaylist(o)
+              }}
             />
           )
         }) : null}
