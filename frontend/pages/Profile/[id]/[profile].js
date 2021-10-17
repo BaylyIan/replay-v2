@@ -67,11 +67,11 @@ const Profile = ({ }) => {
     await postImage({ image: file, type: 'profile' })
   }
 
-  // const deletePlaylist = async ({ id }) => {
-  //   console.log(id)
-  //   const result = await axios.post(`http://localhost:4200/api/delete_playlist/${id}`)
-  //   console.log(result, 'delete play')
-  // }
+  const deletePlaylist = async ({ id }) => {
+    console.log(id)
+    const result = await axios.post(`http://localhost:4200/api/delete_playlist/${id}`)
+    console.log(result, 'delete play')
+  }
 
 
   useEffect(() => {
