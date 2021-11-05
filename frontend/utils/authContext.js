@@ -20,6 +20,7 @@ export const getUser = async (token) => {
       }
     })
     .catch((error) => {
+        console.log('error here')
       return { status: 'SIGNED_OUT', user: null };
     });
 };

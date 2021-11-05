@@ -21,7 +21,7 @@ export const Container = styled.button`
         }
     }
     & > p{
-        color:${Theme.colors.orange};
+        color:${({ textColor }) => textColor};
         font-size: 16px;
 
         /* margin-left:${({ margin }) => margin ? null : '0px'}  */

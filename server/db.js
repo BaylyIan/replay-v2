@@ -272,10 +272,10 @@ function createPlaylistTag(playlistId, tagId, callback) {
     INSERT INTO playlist_tags (playlist_id, tag_id)
     VALUES (?, ?)
 `
-const params = [playlistId, tagId]
-connection.query(query, params, (error, result, fields) => {
-  callback(error, result)
-})
+  const params = [playlistId, tagId]
+  connection.query(query, params, (error, result, fields) => {
+    callback(error, result)
+  })
 }
 exports.createPlaylistTag = createPlaylistTag
 
@@ -288,8 +288,8 @@ function getPlaylistTags(playlistId, callback) {
   `
   const params = [playlistId, callback]
   connection.query(query, params, function (error, result, fields) {
-  callback(error, result)
-})
+    callback(error, result)
+  })
 }
 exports.getPlaylistTags = getPlaylistTags
 
@@ -297,8 +297,10 @@ exports.getPlaylistTags = getPlaylistTags
 //delete a playlist and all its contents
 function deletePlaylist(playlist_id, callback) {
   const query = `
-    DELETE FROM playlists
-    WHERE id = ?
+  DELETE FROM playlist_tags
+  WHERE playlist_id = ?;
+  DELETE FROM playlists
+  WHERE id = ?;
     `
   const params = [playlist_id, callback]
   connection.query(query, params, function (error, result, fields) {
@@ -447,7 +449,7 @@ function userLikedPlaylists(user_id, callback) {
 }
 exports.userLikedPlaylists = userLikedPlaylists
 
-function unlikePlaylist(playlist_id, user_id, callback){
+function unlikePlaylist(playlist_id, user_id, callback) {
   const query = `
     DELETE FROM liked
     WHERE playlist_id = ?
@@ -461,7 +463,7 @@ function unlikePlaylist(playlist_id, user_id, callback){
 exports.unlikePlaylist = unlikePlaylist
 
 //count a users total likePlaylist
-function countUserLikes(user_id, callback){
+function countUserLikes(user_id, callback) {
   const query = `
   SELECT COUNT(*) FROM liked
   INNER JOIN playlists ON liked.playlist_id = playlists.id 
@@ -530,3 +532,16 @@ function getPlaylistById(playlist_id, callback) {
   })
 }
 exports.getPlaylistById = getPlaylistById
+
+function getUserById(user_id, callback) {
+  const query = `
+    SELECT * FROM
+    users
+    WHERE id = ?
+  `
+  const params = [user_id, callback]
+  connection.query(query, params, function (error, result) {
+    callback(error, result)
+  })
+}
+exports.getUserById = getUserById

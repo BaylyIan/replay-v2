@@ -28,6 +28,7 @@ function authorize(req, res, next) {
       decoded = jwt.verify(token, secret);
     } catch(error) {
       console.error(error)
+      console.log('edc')
       res.status(403).send({error: "Invalid Token"})
       return
     }

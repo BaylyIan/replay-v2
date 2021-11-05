@@ -22,11 +22,14 @@ const Profile = ({ }) => {
   const { keyword, toggle } = useContext(PageContext)
   const router = useRouter()
 
-  const { id, profile } = router.query
+  const { id, profile, otherUser } = router.query
   const { auth } = useAuth()
+
+  console.log(profile, 'viewing this profile')
 
   const [num_playlists, setNum_playlists] = useState()
   const [num_likes, setNum_likes] = useState(0)
+  const [__num_likes, __setNum_likes] = useState(0)
   const [playlists, setPlaylists] = useState()
   const [liked, setLiked] = useState([])
 
@@ -67,24 +70,38 @@ const Profile = ({ }) => {
     await postImage({ image: file, type: 'profile' })
   }
 
+  const getOtherUsersLikes = async () => {
+    const result = await axios.get(`http://localhost:4200/api/count_user_likes/${JSON.parse(otherUser).id}`)
+    let count = result.data.result[0]
+    __setNum_likes(count[Object.keys(count)[0]])
+  }
+
   // const deletePlaylist = async ({ id }) => {
   //   console.log(id)
   //   const result = await axios.post(`http://localhost:4200/api/delete_playlist/${id}`)
   //   console.log(result, 'delete play')
   // }
 
+  //viewing other profile
+  //user Info (name, picture, # playlists, # likes)
+  //playlists created
+  //liked playlist
 
   useEffect(() => {
-    if (auth.status === "SIGNED_IN") {
+    if (auth.status === "SIGNED_IN" && auth.user.id == profile) {
       getUserLikes()
       getUsersPlaylist()
       getLikedPlaylists()
     }
+    getOtherUsersLikes()
   }, [auth])
+
+  // console.log(JSON.parse(pro), 'wuery')
+  // console.log(JSON.parse(otherUser), 'query')
 
   // Server-render loading state
   if (!auth || auth.status === "SIGNED_OUT") {
-    return <Page>Loading...</Page>
+    return <Page>Loading.....</Page>
   }
 
   // Once the user request finishes, handle authentication
@@ -146,7 +163,45 @@ const Profile = ({ }) => {
     </Page>
   ) : id === 'view' && profile !== auth.user.id ? (
     <Page>
-      <h1>VIEW OTHER PROFILE</h1>
+      {/* <h1>VIEW OTHER PROFILE</h1> */}
+      <Gradient />
+      <Avatar>
+        <img src={JSON.parse(otherUser).image_url !== null ? `http://localhost:4200/profileImage/${JSON.parse(otherUser).image_url}` : '/Icons/default_profile.png'} />
+      </Avatar>
+      <h1>{JSON.parse(otherUser).name}</h1>
+      <InfoCont>
+        <h3>{num_playlists} playlists </h3>
+        <Line />
+        <h3> <AiFillHeart fill={`${Theme.colors.lightGrey}`} style={{ marginRight: '5px' }} />{__num_likes} Likes</h3>
+      </InfoCont>
+      {playlists && playlists.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>My Playlists</h1> : null}
+      <Wrap toggle={toggle}>
+        {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
+          return (
+            <PlaylistTab
+              key={i}
+              showLike={false}
+              // user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              title={o.name}
+              username={auth.user.name}
+            />
+          )
+        }) : null}
+      </Wrap>
+      {liked.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>Liked Playlists</h1> : null}
+      <Wrap toggle={toggle}>
+        {liked && liked.length !== 0 ? liked.map((o, i) => {
+          return (
+            <PlaylistTab
+              key={i}
+              showLike={false}
+              // user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              title={o.name}
+              username={auth.user.name}
+            />
+          )
+        }) : null}
+      </Wrap>
     </Page>
   ) : id === 'edit' && profile == auth.user.id ? (
     <Page>
@@ -157,6 +212,7 @@ const Profile = ({ }) => {
           width={'140px'}
           textColor={Theme.colors.white}
           text={'Save Profile'}
+          textColor={Theme.colors.orange}
           onClick={() => {
             uploadProfilePicture({ file })
             router.push({
