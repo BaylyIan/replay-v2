@@ -313,6 +313,18 @@ app.get('/api/count_user_likes/:id', (req, res) => {
   })
 })
 
+app.get('/api/otherUser_liked_playlists/:id', (req, res) => {
+  const id = req.params.id
+  console.log(id, 'tetetet')
+  database.userLikedPlaylists(id, (error, result) => {
+    if (error) {
+      res.send({error})
+      return
+    }
+    res.send({result})
+  })
+})
+
 // app.get('/api/playlist_songs/:id', (req, res) => {
 //   const playlist_id = req.params.id
 //   database.getPlaylistSongs(playlist_id, (error, result) => {
