@@ -110,7 +110,6 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
   database.userCredentials(id, (error, result) => {
     if (error) {
       res.send({ error: error.message })
-      console.log('fart')
       return
     }
     res.send({ result })
@@ -140,6 +139,20 @@ app.get('/profileImage/:key', (req, res) => {
   const key = req.params.key
   const readStream = getProfileFileStream(key)
   readStream.pipe(res)
+})
+
+//get user by user_id
+app.get('/api/profile_by_id/:id', (req, res) => {
+  const user_id = req.params.id
+  console.log(user_id, 'server.js userId from requert')
+  database.getUserById(user_id, (error, result) => {
+    if(error){
+      res.send({ error })
+      return
+    }
+    res.send({ result })
+    console.log(result, 'profileById')
+  })
 })
 
 
@@ -229,8 +242,9 @@ app.get('/api/playlist_by_id/:id', (req, res) => {
 //DELETE PLAYLIST --------------------------------------------------------------
 
 //delete a playlst and all its contents
-app.delete('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
+app.post('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
   const id = req.params.id
+  console.log(id, 'playlistid')
   database.deletePlaylist(id, (error, result) => {
     if (error) {
       res.send({ error })

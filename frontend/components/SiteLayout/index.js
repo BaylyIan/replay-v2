@@ -87,7 +87,7 @@ const SiteLayout = ({ children }) => {
 
     const handleSubmit = async (e) => {
         try {
-            switch (toggle) {
+            switch (formToggle) {
                 case true:
                     login(e)
                     break;
@@ -135,7 +135,7 @@ const SiteLayout = ({ children }) => {
     })
 
     // Server-render loading state
-    if (!auth || auth.status === "SIGNED_OUT") {
+    if (!auth) {
         return <Page>Loading...</Page>
     }
 
@@ -197,6 +197,7 @@ const SiteLayout = ({ children }) => {
                             color={Theme.colors.orange}
                             icon={<RiAddLine size={24} fill={Theme.colors.white} />}
                             showIcon={true}
+                            textColor={'red'}
                             text={toggle ? null : 'Create Playlist'}
                             textColor={`${Theme.colors.white}`}
                             width={toggle ? '51px' : 'calc(100% - 25px)'}
@@ -211,7 +212,7 @@ const SiteLayout = ({ children }) => {
                         />
                         <UserCont toggle={toggle}>
                             <Avatar
-                            image={auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : `/Icons/default.png`}
+                            image={auth.status === 'SIGNED_IN' && auth.user.image_url !== null ? `http://localhost:4200/profileImage/${auth.user.image_url}` : `/Icons/default_profile.png`}
                             />
                             {!toggle && auth.status === "SIGNED_IN" ? <h3 style={{ color: `${Theme.colors.white}` }}>{auth.user.name}</h3> : null}
                         </UserCont>
@@ -252,7 +253,7 @@ const SiteLayout = ({ children }) => {
                     />}
                 />
                 <CustomModal
-                    title="Login or Signup to view the profile page"
+                    title={'Please sign up or log in to Replay'}
                     isActive={showReg}
                     handleClose={() => setShowReg(false)}
                     children={<Form

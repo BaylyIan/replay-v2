@@ -22,6 +22,7 @@ function MyApp({ Component, pageProps, router }) {
       const token = window.sessionStorage.getItem('token');
       axios.defaults.headers.common['Authorization'] = "Bearer " + token;
       const res = await getUser(token)
+      console.log(res, ';appjs')
       if(!res) return 
       setAuth(res)
     })()

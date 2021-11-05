@@ -25,8 +25,8 @@ export default function Home() {
   useEffect(() => {
     console.log(auth, 'user on page')
 
-  },[auth])
-  // console.log(auth, 'keyword')
+  }, [auth])
+  console.log(auth, 'here')
 
   const getPlaylists = async () => {
     const result = await axios.get(`${URL}/api/playlists`)
@@ -55,14 +55,14 @@ export default function Home() {
   }
 
   const getLikedPlaylists = async () => {
-    if(auth.status === "SIGNED_IN"){
+    if (auth.status === "SIGNED_IN") {
       const result = await axios.get(`${URL}/api/users_liked_playlists`)
       // console.log(result.data.result, 'rere')
       setLiked(result.data.result)
     }
   }
   const likePlaylist = async (id) => {
-    const result = await axios.post(`${URL}/api/like_playlist`, {
+    await axios.post(`${URL}/api/like_playlist`, {
       playlist_id: id
     })
 
@@ -71,23 +71,36 @@ export default function Home() {
   }
 
   const unlikePlaylist = async (id) => {
-    const result = await axios.post(`${URL}/api/unlike_playlist`, {
+    await axios.post(`${URL}/api/unlike_playlist`, {
       playlist_id: id
     })
     getPlaylists()
-
   }
 
+  const viewOtherProfile = async ( id ) => {
+    console.log(id, 'id')
+    await axios.get(`http://localhost:4200/api/profile_by_id/${id}`).then((res) => {
+      // console.log(res.data.result[0], 'test here')
+      router.push({
+        pathname: "/Profile/[id]/[profile]",
+        query: {
+          id: 'view',
+          profile: res.data.result[0].id,
+          otherUser: JSON.stringify(res.data.result[0])
+        },
+      })
+    })
+  }
 
   useEffect(() => {
     getPlaylists()
     getLikedPlaylists()
   }, [])
 
-    // Server-render loading state
-    if (!auth || auth.status === "SIGNED_OUT") {
-      return <Page>Loading...</Page>
-    }
+  // Server-render loading state
+  if (!auth) {
+    return <Page>Loading...</Page>
+  }
 
   return (
     <Container toggle={toggle}>
@@ -98,7 +111,6 @@ export default function Home() {
         //     state = true
         //   }
         // }
-      // console.log(o)
         return (
           <PlaylistCard key={i}
             toggle={toggle}
@@ -117,6 +129,13 @@ export default function Home() {
               } else {
                 likePlaylist(o.id)
               }
+            }}
+            onProfileView={() => {
+              // console.log(o.user_id)
+              viewOtherProfile(o.user_id)
+            }}
+            onPlaylistView={() => {
+              console.log('playlist')
             }}
           >
 

@@ -5,9 +5,9 @@ import { Container } from './style'
 
 const Button = ({ onClick, text, color, showIcon, icon, width, height, textColor, margin, fontSize}) => {
     return (
-        <Container onClick={onClick} color={color} width={width} height={height} textColor={textColor} margin={margin}>
+        <Container onClick={onClick} color={color} width={width} height={height} margin={margin} textColor={textColor}>
             {showIcon ? icon : null}
-            <p>{text}</p>
+            <p >{text}</p>
         </Container>
     );
 }
