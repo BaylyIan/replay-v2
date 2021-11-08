@@ -20,7 +20,7 @@ const PlaylistCard = ({ toggle, username, user_pic, playlist_pic, playlist_name,
       <Cover onClick={onPlaylistView}>
         <img src={playlist_pic} />
       </Cover>
-      <TitleCont onClick={onPlaylistView}>
+      <TitleCont>
         <h1>{playlist_name}</h1>
         {showLike && liked ? <AiFillHeart
           size={36}

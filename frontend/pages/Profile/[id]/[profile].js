@@ -28,10 +28,13 @@ const Profile = ({ }) => {
   console.log(profile, 'viewing this profile')
 
   const [num_playlists, setNum_playlists] = useState()
+  const [__num_playlists, __setNum_playlists] = useState()
   const [num_likes, setNum_likes] = useState(0)
   const [__num_likes, __setNum_likes] = useState(0)
   const [playlists, setPlaylists] = useState()
+  const [__playlists, __setPlaylists] = useState()
   const [liked, setLiked] = useState([])
+  const [__liked, __setLiked] = useState([])
 
   const [file, setFile] = useState()
   const [tempFile, setTempFile] = useState()
@@ -46,13 +49,6 @@ const Profile = ({ }) => {
   const getLikedPlaylists = async () => {
     const result = await axios.get(`http://localhost:4200/api/users_liked_playlists`)
     setLiked(result.data.result)
-    // console.log(result.data.result)
-  }
-
-  const getUserLikes = async () => {
-    const result = await axios.get(`http://localhost:4200/api/count_user_likes/${auth.user.id}`)
-    let count = result.data.result[0]
-    setNum_likes(count[Object.keys(count)[0]])
   }
 
   //user pic
@@ -70,10 +66,16 @@ const Profile = ({ }) => {
     await postImage({ image: file, type: 'profile' })
   }
 
-  const getOtherUsersLikes = async () => {
-    const result = await axios.get(`http://localhost:4200/api/count_user_likes/${JSON.parse(otherUser).id}`)
-    let count = result.data.result[0]
-    __setNum_likes(count[Object.keys(count)[0]])
+  const getOtherUsersPlaylists = async () => {
+    const result = await axios.get(`http://localhost:4200/api/playlist_by_id/${JSON.parse(otherUser).id}`)
+    // console.log(result.data.result)
+    __setPlaylists(result.data.result)
+    __setNum_playlists(result.data.result.length)
+  }
+
+  const getOtherUsersLikedPlaylists = async () => {
+    const result = await axios.get(`http://localhost:4200/api/otherUser_liked_playlists/${JSON.parse(otherUser).id}`)
+    __setLiked(result.data.result)
   }
 
   // const deletePlaylist = async ({ id }) => {
@@ -82,18 +84,17 @@ const Profile = ({ }) => {
   //   console.log(result, 'delete play')
   // }
 
-  //viewing other profile
-  //user Info (name, picture, # playlists, # likes)
-  //playlists created
-  //liked playlist
 
   useEffect(() => {
-    if (auth.status === "SIGNED_IN" && auth.user.id == profile) {
-      getUserLikes()
+    if (id === 'view' && profile == auth.user.id ) {
+      // getUserLikes()
       getUsersPlaylist()
       getLikedPlaylists()
+    }else if(id === 'view' && profile !== auth.user.id ) {
+      // countOtherUsersLikes()
+      getOtherUsersPlaylists()
+      getOtherUsersLikedPlaylists()
     }
-    getOtherUsersLikes()
   }, [auth])
 
   // console.log(JSON.parse(pro), 'wuery')
@@ -130,7 +131,7 @@ const Profile = ({ }) => {
       <InfoCont>
         <h3>{num_playlists} playlists </h3>
         <Line />
-        <h3> <AiFillHeart fill={`${Theme.colors.lightGrey}`} style={{ marginRight: '5px' }} />{num_likes} Likes</h3>
+        <h3> <AiFillHeart fill={`${Theme.colors.lightGrey}`} style={{ marginRight: '5px' }} />{liked.length} Likes</h3>
       </InfoCont>
       {playlists && playlists.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>My Playlists</h1> : null}
       <Wrap toggle={toggle}>
@@ -170,34 +171,34 @@ const Profile = ({ }) => {
       </Avatar>
       <h1>{JSON.parse(otherUser).name}</h1>
       <InfoCont>
-        <h3>{num_playlists} playlists </h3>
+        <h3>{__num_playlists} playlists </h3>
         <Line />
-        <h3> <AiFillHeart fill={`${Theme.colors.lightGrey}`} style={{ marginRight: '5px' }} />{__num_likes} Likes</h3>
+        <h3> <AiFillHeart fill={`${Theme.colors.lightGrey}`} style={{ marginRight: '5px' }} />{__liked.length} Likes</h3>
       </InfoCont>
-      {playlists && playlists.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>My Playlists</h1> : null}
+      {__playlists && __playlists.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>Playlists </h1> : null}
       <Wrap toggle={toggle}>
-        {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
+        {__playlists && __playlists.length !== 0 ? __playlists.map((o, i) => {
           return (
             <PlaylistTab
               key={i}
               showLike={false}
-              // user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
-              username={auth.user.name}
+              username={JSON.parse(otherUser).name}
             />
           )
         }) : null}
       </Wrap>
-      {liked.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>Liked Playlists</h1> : null}
+      {__liked.length !== 0 ? <h1 style={{ alignSelf: 'flex-start', marginLeft: '15px' }}>Liked Playlists</h1> : null}
       <Wrap toggle={toggle}>
-        {liked && liked.length !== 0 ? liked.map((o, i) => {
+        {__liked && __liked.length !== 0 ? __liked.map((o, i) => {
           return (
             <PlaylistTab
               key={i}
               showLike={false}
-              // user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
-              username={auth.user.name}
+              username={JSON.parse(otherUser).name}
             />
           )
         }) : null}

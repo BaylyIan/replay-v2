@@ -111,6 +111,7 @@ export default function Home() {
         //     state = true
         //   }
         // }
+        console.log(o)
         return (
           <PlaylistCard key={i}
             toggle={toggle}
@@ -135,7 +136,14 @@ export default function Home() {
               viewOtherProfile(o.user_id)
             }}
             onPlaylistView={() => {
-              console.log('playlist')
+              router.push({
+                pathname: "/Playlist/[id]/[playlist]",
+                query: {
+                  id: 'view',
+                  playlist: o.id,
+                  user:JSON.stringify(o.user_id)
+                },
+              })
             }}
           >
 
