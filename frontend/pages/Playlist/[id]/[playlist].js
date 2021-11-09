@@ -34,9 +34,9 @@ const Playlist = ({ }) => {
             <Header>
                 <Cover></Cover>
                 <Details>
-                    <SubHeader>
+                    {/* <SubHeader>
 
-                    </SubHeader>
+                    </SubHeader> */}
                 </Details>
             </Header>
         </Page>
