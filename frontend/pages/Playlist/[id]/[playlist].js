@@ -27,7 +27,9 @@ const Playlist = ({ }) => {
         return <Page>Loading.....</Page>
     }
 
-    return id === 'view' && JSON.parse(user) == auth.user.id ? (
+    const usr = JSON.parse(user) 
+
+    return id === 'view' && usr == auth.user.id ? (
         <Page>
             <Gradient />
             {/* <h1>VIEW OWN PLAYLIST</h1> */}
@@ -40,7 +42,7 @@ const Playlist = ({ }) => {
                 </Details>
             </Header>
         </Page>
-    ) : id === 'view' && JSON.parse(user) !== auth.user.id ? (
+    ) : id === 'view' && usr !== auth.user.id ? (
         <div>
             {/* <h1>VIEW OTHER PLAYLIST</h1> */}
         </div>
@@ -48,7 +50,7 @@ const Playlist = ({ }) => {
         <div>
             {/* <h1>NOT LOGGED IN VIEWING ANY PLAYLIST</h1> */}
         </div>
-    ) : id === 'edit' && JSON.parse(user) !== auth.user.id ? (
+    ) : id === 'edit' && usr !== auth.user.id ? (
         <div>
             {/* <h1>EDIT OWN PLAYLIST</h1> */}
         </div>
