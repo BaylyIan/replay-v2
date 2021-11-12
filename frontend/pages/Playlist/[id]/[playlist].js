@@ -37,10 +37,12 @@ const Playlist = ({ }) => {
                 <Cover></Cover>
                 <Details>
                     {/* <SubHeader>
+                    
 
                     </SubHeader> */}
+                    <h1>test</h1>
                 </Details>
-            </Header>
+            </Header>-
         </Page>
     ) : id === 'view' && usr !== auth.user.id ? (
         <div>
