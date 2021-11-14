@@ -29,27 +29,29 @@ export const Gradient = styled.div`
 `;
 
 export const Avatar = styled.div`
-    /* aspect-ratio:1/1; */
+    aspect-ratio:1/1;
     border-radius: 50%;
-    border:4px solid ${Theme.colors.white};
-    height:160px;
-    width:160px;
+    /* border:1px solid green; */
+    width:40px;
     display:flex;
     justify-content:center;
     align-items:center;
     object-fit:cover;
-    overflow:hidden;
-    z-index:3;
-    & > img {
-        height:100%;
+    border-radius: 50%;
+    margin-right:8px;
+    /* border:1px solid red; */
+    & > img{
         width:100%;
+        height:100%;
+        border-radius: 50%;
         object-fit:cover;
-        overflow: hidden;
     }
-   @media (max-width: ${MED}){
-    height:140px;
-    width:140px;
+   /* @media (max-width: ${MED}){
+        width:45px;
     }
+    @media (max-width: ${SMALL}){
+        width:35px;
+    } */
 `;
 export const Line = styled.div`
     width:2px;
@@ -65,11 +67,12 @@ export const Header = styled.div`
     /* padding:10px 20px 10px 20px; */
     border:1px solid red;
     z-index:2;
+    flex-wrap: wrap;
 
 `;
 export const Cover = styled.div`
-    width:250px;
-    height:250px;
+    min-width:250px;
+    min-height:250px;
     display:flex;
     align-items:center;
     object-fit: cover;
@@ -77,17 +80,27 @@ export const Cover = styled.div`
     & > img {
         width:100%;
         height:100%;
+        object-fit:contain;
     }
 `;
 export const Details = styled.div`
     display:flex;
     flex-direction: column;
     border:1px solid green;
+    min-width:400px;
+    & > div {
+        & > h3 {
+            color:${Theme.colors.white};
+        }
+    }
 `;
 export const SubHeader = styled.div`
     width:100%;
     display:flex;
     justify-items: space-between;
     border:1px solid magenta;
-    height:50px;
+    padding:50px 10px;
+    & > h1 {
+        color:${Theme.colors.white};
+    }
 `;
