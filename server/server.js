@@ -98,7 +98,7 @@ app.post('/api/users/login', (req, res) => {
     }
     const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
     // res.send({ userId: user.id, name: user.name, email: user.email })
-    res.send({ token: token, user:user })
+    res.send({ token: token, user: user })
   })
 })
 
@@ -114,7 +114,7 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
     }
     res.send({ result })
   })
-  
+
 })
 
 //upload profile picture
@@ -124,11 +124,11 @@ app.post('/profileImage', jwt.authorize, uploadProfile.single('image'), async (r
   const { Key } = await uploadProfilePicture(file)
   console.log(Key, id, 's3 result ')
   database.addProfilePicture(Key, id, (error, result) => {
-    if(error){
+    if (error) {
       res.send({ error })
       return
     }
-    res.send({db:result, imagePath: `profileImage/${Key}`})
+    res.send({ db: result, imagePath: `profileImage/${Key}` })
   })
   await unlinkFile(file.path)
   // res.send({ imagePath: `/profileImage/${result.key}` })
@@ -146,7 +146,7 @@ app.get('/api/profile_by_id/:id', (req, res) => {
   const user_id = req.params.id
   console.log(user_id, 'server.js userId from requert')
   database.getUserById(user_id, (error, result) => {
-    if(error){
+    if (error) {
       res.send({ error })
       return
     }
@@ -226,11 +226,24 @@ app.get('/api/playlist_tags/:id', (req, res) => {
   })
 })
 
-//get playlist by id
+//get playlists by user id
 app.get('/api/playlist_by_id/:id', (req, res) => {
   const user_id = req.params.id
-  console.log(req.params, 'user_id')
+  // console.log(req.params, 'user_id')
   database.getPlaylistById(user_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ result })
+  })
+})
+
+//get single playlist by playlist_id
+app.get('/api/single_playlist/:id', (req, res) => {
+  const playlist_id = req.params.id
+  // console.log(playlist_id, 'playlist_id')
+  database.getPlaylistInfo(playlist_id, (error, result) => {
     if (error) {
       res.send({ error })
       return
@@ -318,10 +331,10 @@ app.get('/api/otherUser_liked_playlists/:id', (req, res) => {
   console.log(id, 'tetetet')
   database.userLikedPlaylists(id, (error, result) => {
     if (error) {
-      res.send({error})
+      res.send({ error })
       return
     }
-    res.send({result})
+    res.send({ result })
   })
 })
 
