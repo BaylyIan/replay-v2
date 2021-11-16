@@ -31,7 +31,7 @@ const Playlist = ({ }) => {
         setPlay(res.data.result[0])
     }
     useEffect(()=>{
-        getPlaylist()
+        // getPlaylist()
     })
 
     if (!auth || auth.status === "SIGNED_OUT" || !play ) {
