@@ -25,11 +25,11 @@ const Playlist = ({ }) => {
 
     // console.log(playlist, 'playlist page')
 
-    const getPlaylist = async () => {
-        const res = await axios.get(`http://localhost:4200/api/single_playlist/${playlist}`)
-        // console.log(res.data.result[0], 'red')
-        setPlay(res.data.result[0])
-    }
+    // const getPlaylist = async () => {
+    //     const res = await axios.get(`http://localhost:4200/api/single_playlist/${playlist}`)
+    //     // console.log(res.data.result[0], 'red')
+    //     setPlay(res.data.result[0])
+    // }
     useEffect(()=>{
         // getPlaylist()
     })
