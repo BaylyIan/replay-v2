@@ -9,6 +9,6 @@ export const Container = styled.div`
     flex-wrap: wrap;
     align-items:space-around;
     & > * {
-        margin:5px;
+        margin-right:10px;
     }
 `;

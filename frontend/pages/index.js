@@ -141,7 +141,8 @@ export default function Home() {
                 query: {
                   id: 'view',
                   playlist: o.id,
-                  user:JSON.stringify(o.user_id)
+                  user:JSON.stringify(o.user_id),
+                  play:JSON.stringify(o)
                 },
               })
             }}

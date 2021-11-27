@@ -64,43 +64,84 @@ export const Header = styled.div`
     display:flex;
     width:100%;
     height:auto;
-    /* padding:10px 20px 10px 20px; */
     border:1px solid red;
     z-index:2;
     flex-wrap: wrap;
+    display:flex;
+    padding-left:20px;
+    @media (max-width: ${MED}){
+        flex-direction:column;
+        align-items:center;
+        padding-left:0px;
+    }
 
 `;
 export const Cover = styled.div`
-    min-width:250px;
-    min-height:250px;
+    width:250px;
+    height:250px;
     display:flex;
     align-items:center;
-    object-fit: cover;
-    border:1px solid blue;
+    box-shadow: 0px 3px 32px 12px rgba(0, 0, 0, 0.25);
+    /* border:1px solid blue; */
     & > img {
         width:100%;
         height:100%;
-        object-fit:contain;
+        object-fit:cover;
     }
 `;
 export const Details = styled.div`
     display:flex;
     flex-direction: column;
-    border:1px solid green;
-    min-width:400px;
+    /* border:1px solid green; */
+    min-width:420px;
+    padding:10px 0px 10px 20px;
+    @media (max-width: ${MED}){
+        margin-top:20px;
+        min-width:100%;
+        padding-right:20px;
+    }
     & > div {
-        & > h3 {
-            color:${Theme.colors.white};
-        }
+            & > h3 {
+                color:${Theme.colors.white};
+            }
     }
 `;
 export const SubHeader = styled.div`
     width:100%;
     display:flex;
     justify-items: space-between;
-    border:1px solid magenta;
-    padding:50px 10px;
+    /* border:1px solid magenta; */
+    padding:39px 10px;
     & > h1 {
         color:${Theme.colors.white};
     }
+    @media (max-width: ${MED}){
+        padding:34px 10px;
+    }
+    @media (max-width: ${SMALL}){
+        /* padding:10px 10px; */
+    }
+`;
+export const TagWrap = styled.div`
+    width:100%;
+    height:70px;
+    display:flex;
+    flex-wrap: wrap;
+    border-top:1px solid ${Theme.colors.lightGrey};
+    /* border:1px solid red; */
+    align-items:center;
+`;
+export const Main = styled.div`
+    width:100%;
+    height:auto;
+    border:1px solid blue;
+    padding:30px 0px 0px 0px;
+
+`;
+export const SongCont = styled.div`
+    width:100%;
+    height:auto;
+    background: #121212;
+    border-radius: 15px;
+    margin:30px 0px 0px 0px;
 `;
