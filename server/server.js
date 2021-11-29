@@ -338,6 +338,23 @@ app.get('/api/otherUser_liked_playlists/:id', (req, res) => {
   })
 })
 
+//================================================================
+
+//SONGS
+
+//search all songs containing a string
+app.post('/api/search_songs', (req, res) => {
+  const string = req.body.string
+  // console.log(string, string)
+  database.getSongsByInput(string, (err, result) => {
+    if(err){
+      res.send({ err })
+      return
+    }
+    res.send({ result })
+  })
+})
+
 // app.get('/api/playlist_songs/:id', (req, res) => {
 //   const playlist_id = req.params.id
 //   database.getPlaylistSongs(playlist_id, (error, result) => {

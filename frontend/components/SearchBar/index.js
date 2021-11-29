@@ -45,9 +45,9 @@ const SearchBar = ({ onChange, onSearch, main }) => {
                 onChange={onChange}
                 color={'white'}
             /> }
-                <Icon onClick={onSearch}>
+                {!main ? <Icon onClick={onSearch}>
                     <AiOutlineSearch size={22} fill={Theme.colors.white} />
-                </Icon>
+                </Icon> : null }
             </Container>
         )
     } else if (router.pathname.startsWith("/") && !router.pathname.startsWith("/CreatePlaylist")) {

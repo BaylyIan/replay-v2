@@ -8,10 +8,12 @@ import { Page, Avatar, Gradient, Line, Header, Cover, Details, SubHeader, TagWra
 
 import TagArea from '../../../components/TagArea';
 import SearchBar from '../../../components/SearchBar';
+import SongBar from '../../../components/SongBar';
 import { BsThreeDotsVertical } from 'react-icons/bs'
 
 
 import { useAuth } from '../../../utils/authContext'
+import useDebounce from '../../../utils/hooks/useDebounce'
 
 
 const Playlist = ({ }) => {
@@ -21,24 +23,22 @@ const Playlist = ({ }) => {
 
     const { id, user, play } = router.query
 
-    // const [playlist, setPlaylist] = useState()
+    const [searchValue, setSearchValue] = useState("")
+    const [songs, setSongs] = useState([])
 
-    // console.log(JSON.parse(play), 'play')
     //for view playlist, need playlist image, playlist name, playlist tags, playlist description, playlist creator name + image, playlist songs
 
 
-    // console.log(playlist, 'playlist page')
-
-    // const getPlaylist = async () => {
-    //     const res = await axios.get(`http://localhost:4200/api/single_playlist/${playlist}`)
-    //     // console.log(res.data.result[0], 'red')
-    //     setPlay(res.data.result[0])
-    // }
+    const getSongs = async (value) => {
+        const result = await axios.post(`http://localhost:4200/api/search_songs`, { string: value })
+        // console.log(result.data.result, 'find songs')
+        setSongs(result.data.result)
+    }
+    useDebounce(() => getSongs(searchValue), 1000, [searchValue])
     useEffect(() => {
     }, [])
 
-    // const playlist = JSON.parse(play)
-    console.log(JSON.parse(play), 'here')
+    // console.log(JSON.parse(play), 'here')
 
     if (!auth || auth.status === "SIGNED_OUT" || !play) {
         return <Page>Loading.....</Page>
@@ -88,12 +88,26 @@ const Playlist = ({ }) => {
                 /> */}
             </Header>
             <Main>
-                <SearchBar 
-                    text="Search Songs"
+                <SearchBar
                     main={true}
+                    showSearch={false}
+                    onChange={(e) => {
+                        setSearchValue(e.target.value)
+                    }}
                 />
                 <SongCont>
-                    
+                    {songs && songs.length !== 0 ? playlists.map((o, i) => {
+                        console.log(o)
+                        return (
+                            <SongBar key={i}
+                              
+                            >
+
+                            </SongBar>
+
+                        )
+                    }) : null}
+
                 </SongCont>
                 <SongCont>
 

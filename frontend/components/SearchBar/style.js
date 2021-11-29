@@ -20,6 +20,7 @@ export const Input = styled.input`
     border: none;
     background-color: #57535C;
     caret-color:${Theme.colors.white};
+    color:${Theme.colors.white};
     /* border:1px solid blue; */
 `;
 export const Icon = styled.div`
