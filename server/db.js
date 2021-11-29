@@ -546,3 +546,17 @@ function getUserById(user_id, callback) {
 }
 exports.getUserById = getUserById
 
+function getSongsByInput(string, callback) {
+  console.log(string, 'here')
+  const query = `
+    SELECT * FROM songs
+    WHERE title REGEXP ?
+     OR artist REGEXP ?
+  `
+  const params = [string, string, callback]
+  connection.query(query, params, function (error, result) {
+    callback(error, result)
+  })
+}
+exports.getSongsByInput = getSongsByInput
+

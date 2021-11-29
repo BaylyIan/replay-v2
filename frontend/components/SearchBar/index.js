@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { AiOutlineSearch } from 'react-icons/ai'
 import { Theme } from '../../styles/theme';
 
-const SearchBar = ({ onChange, onSearch }) => {
+const SearchBar = ({ onChange, onSearch, main }) => {
 
     const router = useRouter();
 
@@ -35,15 +35,19 @@ const SearchBar = ({ onChange, onSearch }) => {
                 </Icon>
             </Container>
         )
-    } else if (router.pathname.startsWith("/[playlist]")) {
+    } else if (router.pathname.startsWith("/Playlist")) {
         return (
             <Container show={true}>
-                <Input type="text" placeholder="Search songs"
+                {main ? <Input type="text" placeholder="Add songs"
                     onChange={onChange}
-                />
-                <Icon onClick={onSearch}>
+                    color={'white'}
+                /> : <Input type="text" placeholder="Find in playlist"
+                onChange={onChange}
+                color={'white'}
+            /> }
+                {!main ? <Icon onClick={onSearch}>
                     <AiOutlineSearch size={22} fill={Theme.colors.white} />
-                </Icon>
+                </Icon> : null }
             </Container>
         )
     } else if (router.pathname.startsWith("/") && !router.pathname.startsWith("/CreatePlaylist")) {
