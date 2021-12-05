@@ -3,7 +3,7 @@ import { Router, Switch, Route, Link } from "react-router-dom";
 import axios from 'axios'
 
 //comps
-import { Container } from "../pageStyles/Home/style.js";
+import { Container, Page } from "../pageStyles/Home/style.js";
 import PlaylistCard from "../components/PlaylistCard"
 
 //utills
@@ -11,74 +11,37 @@ import { PageContext } from "../utils/context";
 import { useRouter } from 'next/router'
 import { URL } from "../utils/constants"
 import { useAuth } from '../utils/authContext'
+import jsHttpCookie from 'cookie';
+import { parseCookie } from "../utils/index.js";
+import { useModal } from "../utils/useModal"
 
-export default function Home() {
+
+export default function Home({ playlists }) {
 
   const router = useRouter()
   const { auth } = useAuth()
 
-  const { toggle } = useContext(PageContext)
+  const { toggle, showReg, setShowReg, toggleReg } = useContext(PageContext)
 
-  const [playlists, setPlaylists] = useState([])
-  const [liked, setLiked] = useState([])
+  const refreshData = () => router.replace(router.asPath);
 
-  useEffect(() => {
-    console.log(auth, 'user on page')
-
-  }, [auth])
-  console.log(auth, 'here')
-
-  const getPlaylists = async () => {
-    const result = await axios.get(`${URL}/api/playlists`)
-    const playlistArr = result.data.playlists
-    console.log('her')
-    if (auth.status === "SIGNED_IN") {
-      const liked = await axios.get(`${URL}/api/users_liked_playlists`)
-      for (let i = 0; i < playlistArr.length; i++) {
-        const playlist = playlistArr[i]
-        for (const i of liked.data.result) {
-          if (i.id === playlist.id) {
-            playlist.liked = true
-          }
-        }
-      }
-
-    }
-
-    for (let i = 0; i < playlistArr.length; i++) {
-      const playlist_id = playlistArr[i].id
-      const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
-      playlistArr[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
-    }
-    console.log(playlistArr)
-    setPlaylists(playlistArr)
-  }
-
-  const getLikedPlaylists = async () => {
-    if (auth.status === "SIGNED_IN") {
-      const result = await axios.get(`${URL}/api/users_liked_playlists`)
-      // console.log(result.data.result, 'rere')
-      setLiked(result.data.result)
-    }
-  }
   const likePlaylist = async (id) => {
     await axios.post(`${URL}/api/like_playlist`, {
       playlist_id: id
+    }).then(() => {
+      refreshData()
     })
-
-    getPlaylists()
-
   }
 
   const unlikePlaylist = async (id) => {
     await axios.post(`${URL}/api/unlike_playlist`, {
       playlist_id: id
+    }).then(() => {
+      refreshData()
     })
-    getPlaylists()
   }
 
-  const viewOtherProfile = async ( id ) => {
-    console.log(id, 'id')
+  const viewOtherProfile = async (id) => {
     await axios.get(`http://localhost:4200/api/profile_by_id/${id}`).then((res) => {
       // console.log(res.data.result[0], 'test here')
       router.push({
@@ -92,26 +55,16 @@ export default function Home() {
     })
   }
 
-  useEffect(() => {
-    getPlaylists()
-    getLikedPlaylists()
-  }, [])
-
   // Server-render loading state
-  if (!auth) {
+  if (!auth || !playlists) {
     return <Page>Loading...</Page>
   }
 
   return (
     <Container toggle={toggle}>
-      {playlists && liked && playlists.length !== 0 ? playlists.map((o, i) => {
-        // let state = false
-        // for(const i of liked) {
-        //   if(i.id === o.id) {
-        //     state = true
-        //   }
-        // }
-        console.log(o)
+      {playlists && playlists.length !== 0 ? playlists.map((o, i) => {
+        // console.log(o, 'mapped')
+
         return (
           <PlaylistCard key={i}
             toggle={toggle}
@@ -126,25 +79,36 @@ export default function Home() {
             showLike={auth.status === "SIGNED_IN" ? true : false}
             onLike={() => {
               if (o.liked) {
+                console.log("unlike")
+
                 unlikePlaylist(o.id)
               } else {
+                console.log("like me")
+
                 likePlaylist(o.id)
               }
             }}
             onProfileView={() => {
-              // console.log(o.user_id)
-              viewOtherProfile(o.user_id)
+              if (auth.satus === "SIGNED_IN") {
+                viewOtherProfile(o.user_id)
+              } else {
+                setShowReg(true)
+              }
             }}
             onPlaylistView={() => {
-              router.push({
-                pathname: "/Playlist/[id]/[playlist]",
-                query: {
-                  id: 'view',
-                  playlist: o.id,
-                  user:JSON.stringify(o.user_id),
-                  play:JSON.stringify(o)
-                },
-              })
+              if (auth.satus === "SIGNED_IN") {
+                router.push({
+                  pathname: "/Playlist/[id]/[playlist]",
+                  query: {
+                    id: 'view',
+                    playlist: o.id,
+                    user: JSON.stringify(o.user_id),
+                    play: JSON.stringify(o)
+                  },
+                })
+              } else {
+                setShowReg(true)
+              }
             }}
           >
 
@@ -156,6 +120,42 @@ export default function Home() {
 
     </Container>
   )
+}
+
+export async function getServerSideProps({ req, res }) {
+
+  console.log('refresh')
+
+  const result = await axios.get(`${URL}/api/playlists`)
+  let playlists = result.data.playlists
+
+  try{
+    const result2 = await axios.get(`${URL}/api/users_liked_playlists`)
+    let likedPlaylists = result2.data.result
+    for (let i = 0; i < playlists.length; i++) {
+      const playlist = playlists[i]
+      for (const i of likedPlaylists) {
+        if (i.id === playlist.id) {
+          playlist.liked = true
+        }
+      }
+    }
+
+  for (let i = 0; i < playlists.length; i++) {
+    const playlist_id = playlists[i].id
+    const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
+    playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
+  }
+  return { props: { playlists } }
+  }catch(err){
+    console.log(err.message)
+    for (let i = 0; i < playlists.length; i++) {
+      const playlist_id = playlists[i].id
+      const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
+      playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
+    }
+    return { props: { playlists } }
+  }
 }
 
 

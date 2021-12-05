@@ -2,6 +2,7 @@ import axios from 'axios';
 import { createContext, useContext } from 'react';
 import router from 'next/router';
 import { getSessionStorage } from '../utils'
+import Cookies from 'js-cookie';
 
 
 const AuthContext = createContext();
@@ -10,10 +11,11 @@ export const getUser = async (token) => {
     console.log('ran main getUser fun on COntext')
 
     return await axios
-    .get('http://localhost:4200/api/profile', {token, token})
+    .get('http://localhost:4200/api/profile')
     .then((res) => {
         console.log(res.data.result[0], 'getUSer useAUth')
       if (res.data.result[0]) {
+        Cookies.set('user', JSON.stringify(res.data.result[0]))
         return { status: 'SIGNED_IN', user: res.data.result[0] };
       } else {
         return { status: 'SIGNED_OUT', user: null };
@@ -42,6 +44,7 @@ export const AuthProvider = (props) => {
                     sessionStorage.setItem('token', result.data.token);
                     axios.defaults.headers.common['Authorization'] = "Bearer " + result.data.token;
                     sessionStorage.setItem('user', JSON.stringify(result.data.user))
+                    Cookies.set('user', JSON.stringify(result.data.user))
                     console.log('user signed in');
                     router.reload()
                 }

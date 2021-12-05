@@ -46,3 +46,25 @@ export const Container = styled.div`
         padding: 20px;
     }
 `;
+
+export const Page = styled.div`
+    display:flex;
+    flex-direction:column;
+    padding:50px 10px 0px 10px;
+    align-items:Center;
+    position:relative;
+    z-index:1;
+    & > h1 {
+        margin-top:40px;
+        color:${Theme.colors.white};
+        font-size:26px;
+        z-index:4;
+    }
+    @media (max-width: ${MED}){
+
+    }
+    @media (max-width: ${SMALL}){
+        padding:50px 0px 0px 0px;
+    }
+    /* border:1px solid red; */
+`;

@@ -328,7 +328,7 @@ exports.updatePlaylist = updatePlaylist
 //add a song to a playlist 
 function addSong(playlist_id, song_id, callback) {
   const query = `
-    INSERT INTO playlist_songs (playlist_id, song_id)
+    INSERT IGNORE INTO playlist_songs (playlist_id, song_id)
     VALUES (?, ?)
     `
   const params = [playlist_id, song_id]

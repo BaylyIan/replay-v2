@@ -25,11 +25,10 @@ import CreatePlaylist from '../../components/CreatePlaylist'
 const SiteLayout = ({ children }) => {
 
     //context
-    const { keyword, setKeyword, toggle, setToggle } = useContext(PageContext);
+    const { keyword, setKeyword, toggle, setToggle, showReg, setShowReg, toggleReg } = useContext(PageContext);
     const { auth, login, register } = useAuth()
 
     //modals
-    const [showReg, setShowReg, toggleReg] = useModal()
     const [showCreate, setShowCreate, toggleCreate] = useModal()
     const [formToggle, setFormToggle] = useState(true)
 
@@ -103,6 +102,8 @@ const SiteLayout = ({ children }) => {
         // router.reload()
     }
 
+    const refreshData = () => router.replace(router.asPath);
+
     const createPlaylist = async ({ name, desc, tags, file }) => {
         console.log({ name, desc, tags, file }, 'createPlaylist')
         if (name === "" || file === undefined) {
@@ -121,7 +122,7 @@ const SiteLayout = ({ children }) => {
         }))
 
         // console.log(result_.imagePath.replace('/playlistImage/', ''), 'upload imagepath')
-
+        refreshData()
         router.push('/')
     }
 
@@ -199,7 +200,8 @@ const SiteLayout = ({ children }) => {
                             showIcon={true}
                             textColor={'red'}
                             text={toggle ? null : 'Create Playlist'}
-                            textColor={`${Theme.colors.white}`}
+                            textColor={Theme.colors.white}
+                            bgColor={Theme.colors.orange}
                             width={toggle ? '51px' : 'calc(100% - 25px)'}
                             height={'51px'}
                             onClick={() => {

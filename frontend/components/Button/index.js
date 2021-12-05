@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 
 import { Container } from './style'
 
-const Button = ({ onClick, text, color, showIcon, icon, width, height, textColor, margin, fontSize}) => {
+const Button = ({ onClick, text, bgColor, showIcon, icon, width, height, textColor, hoverBgColor, hoverTextColor, border }) => {
     return (
-        <Container onClick={onClick} color={color} width={width} height={height} margin={margin} textColor={textColor}>
+        <Container onClick={onClick}
+            width={width}
+            height={height}
+            border={border}
+            bgColor={bgColor}
+            hoverBgColor={hoverBgColor}
+            hoverTextColor={hoverTextColor}
+            textColor={textColor}
+            >
             {showIcon ? icon : null}
             <p >{text}</p>
         </Container>
@@ -14,8 +22,8 @@ const Button = ({ onClick, text, color, showIcon, icon, width, height, textColor
 
 Button.defaultProps = {
     onClick: () => { },
-    height:'48px',
-    color:'transparent'
+    height: '48px',
+    color: 'transparent'
 }
 
 Button.propTypes = {

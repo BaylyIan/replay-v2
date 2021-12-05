@@ -85,15 +85,12 @@ app.post('/api/create_user', (req, res) => {
   })
 })
 
-
 // log in a user
 app.post('/api/users/login', (req, res) => {
   const { email, password } = req.body
   database.getUser(email, password, (error, user) => {
-    console.log(error)
     if (error) {
       res.send({ error: error })
-      console.log(error, 'here backend')
       return
     }
     const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
@@ -122,7 +119,7 @@ app.post('/profileImage', jwt.authorize, uploadProfile.single('image'), async (r
   const file = req.file
   const id = req.user.userId
   const { Key } = await uploadProfilePicture(file)
-  console.log(Key, id, 's3 result ')
+  // console.log(Key, id, 's3 result ')
   database.addProfilePicture(Key, id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -144,14 +141,14 @@ app.get('/profileImage/:key', (req, res) => {
 //get user by user_id
 app.get('/api/profile_by_id/:id', (req, res) => {
   const user_id = req.params.id
-  console.log(user_id, 'server.js userId from requert')
+  // console.log(user_id, 'server.js userId from requert')
   database.getUserById(user_id, (error, result) => {
     if (error) {
       res.send({ error })
       return
     }
     res.send({ result })
-    console.log(result, 'profileById')
+    // console.log(result, 'profileById')
   })
 })
 
@@ -184,7 +181,7 @@ app.post('/api/create_playlist', jwt.authorize, (req, res) => {
 
   //create playlist in db
   database.createPlaylist(playlist, userId, (error, playlistId) => {
-    // console.log(playlistId, 'playlist id')
+    console.log(playlistId, 'playlist id')
     res.send({ playlistId })
 
     //loop through tags, add each one to db
@@ -257,7 +254,7 @@ app.get('/api/single_playlist/:id', (req, res) => {
 //delete a playlst and all its contents
 app.post('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
   const id = req.params.id
-  console.log(id, 'playlistid')
+  // console.log(id, 'playlistid')
   database.deletePlaylist(id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -273,7 +270,7 @@ app.post('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
 app.post('/api/like_playlist', jwt.authorize, (req, res) => {
   const playlistId = req.body.playlist_id //playlist id
   const userId = req.user.userId
-  console.log(playlistId, userId, 'req like')
+  // console.log(playlistId, userId, 'req like')
 
   database.likePlaylist(playlistId, userId, (error, result) => {
     if (error) {
@@ -290,7 +287,7 @@ app.post('/api/like_playlist', jwt.authorize, (req, res) => {
 app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
   const playlist_id = req.body.playlist_id
   const user_id = req.user.userId
-  console.log(playlist_id, user_id, 'req unlike')
+  // console.log(playlist_id, user_id, 'req unlike')
   database.unlikePlaylist(playlist_id, user_id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -316,7 +313,7 @@ app.get('/api/users_liked_playlists', jwt.authorize, (req, res) => {
 //count how many likes a users playlists have gotten
 app.get('/api/count_user_likes/:id', (req, res) => {
   const user_id = req.params.id
-  console.log(req.params.id, 'count')
+  // console.log(req.params.id, 'count')
   database.countUserLikes(user_id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -328,7 +325,7 @@ app.get('/api/count_user_likes/:id', (req, res) => {
 
 app.get('/api/otherUser_liked_playlists/:id', (req, res) => {
   const id = req.params.id
-  console.log(id, 'tetetet')
+  // console.log(id, 'tetetet')
   database.userLikedPlaylists(id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -349,6 +346,33 @@ app.post('/api/search_songs', (req, res) => {
   database.getSongsByInput(string, (err, result) => {
     if(err){
       res.send({ err })
+      return
+    }
+    res.send({ result })
+  })
+})
+
+// add a song to a playlist 
+app.post('/api/add_song', (req, res) => {
+  const playlist_id = req.body.playlist_id //playlist id
+  const song_id = req.body.song_id
+  database.addSong(playlist_id, song_id, (error, result) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    // song.id = song_id
+    console.log("song inserted")
+    res.send({ result })
+  })
+})
+
+//get all songs for a playlist
+app.get('/api/playlist_songs/:id', (req, res) => {
+  const playlist_id = req.params.id
+  database.getPlaylistSongs(playlist_id, (error, result) => {
+    if (error) {
+      res.send({ error })
       return
     }
     res.send({ result })
@@ -452,21 +476,6 @@ app.patch('/api/update_playlist_name/:id', (req, res) => {
   })
 })
 
-// add a song to a playlist 
-app.post('/api/add_song', (req, res) => {
-  const playlist_id = req.body.playlist_id //playlist id
-  const song_id = req.body.song_id
-  database.addSong(playlist_id, song_id, (error, result) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    // song.id = song_id
-    console.log("song inserted")
-    res.send({ result })
-  })
-})
-
 //get all songs that have been added to any playlist
 app.get('/api/all_songs', (req, res) => {
   database.allSongs((error, result) => {
@@ -482,16 +491,7 @@ app.get('/api/all_songs', (req, res) => {
 
 //get all songs for a specific playlist 
 app.use(express.json())
-app.get('/api/playlist_songs/:id', (req, res) => {
-  const playlist_id = req.params.id
-  database.getPlaylistSongs(playlist_id, (error, result) => {
-    if (error) {
-      res.send({ error })
-      return
-    }
-    res.send({ result })
-  })
-})
+
 
 
 

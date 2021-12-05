@@ -24,7 +24,7 @@ export const Container = styled.div`
     width:90%;
 }
 `;
-export const Toggle = styled.div`
+export const ToggleCont = styled.div`
     width:100%;
     height:51px;
     display:flex;

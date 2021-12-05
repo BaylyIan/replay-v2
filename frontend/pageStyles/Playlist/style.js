@@ -15,6 +15,12 @@ export const Page = styled.div`
         font-size:26px;
         z-index:4;
     }
+    @media (max-width: ${MED}){
+
+    }
+    @media (max-width: ${SMALL}){
+        padding:50px 0px 0px 0px;
+    }
     /* border:1px solid red; */
 `;
 
@@ -64,7 +70,7 @@ export const Header = styled.div`
     display:flex;
     width:100%;
     height:auto;
-    border:1px solid red;
+    /* border:1px solid red; */
     z-index:2;
     flex-wrap: wrap;
     display:flex;
@@ -101,7 +107,7 @@ export const Details = styled.div`
         padding-right:20px;
     }
     & > div {
-            & > h3 {
+            & > h2 {
                 color:${Theme.colors.white};
             }
     }
@@ -124,7 +130,8 @@ export const SubHeader = styled.div`
 `;
 export const TagWrap = styled.div`
     width:100%;
-    height:70px;
+    height:auto;
+    padding:20px 0px 0px 0px;
     display:flex;
     flex-wrap: wrap;
     border-top:1px solid ${Theme.colors.lightGrey};
@@ -134,8 +141,12 @@ export const TagWrap = styled.div`
 export const Main = styled.div`
     width:100%;
     height:auto;
-    border:1px solid blue;
+    /* border:1px solid blue; */
     padding:30px 0px 0px 0px;
+    @media (max-width: ${SMALL}){
+        & > :nth-child(1) {
+            padding:30px 10px 0px 10px;
+    }    }
 
 `;
 export const SongCont = styled.div`
@@ -143,5 +154,21 @@ export const SongCont = styled.div`
     height:auto;
     background: #121212;
     border-radius: 15px;
-    margin:30px 0px 0px 0px;
+    margin:20px 0px 0px 0px;
+    padding:20px 0px 10px 5px;
+    @media (max-width: ${SMALL}){
+        padding:10px 0px 10px 5px;
+        margin:15px 0px 0px 0px;
+
+    }
+`;
+export const Show = styled.div`
+    width:100%;
+    display:flex;
+    align-items:Center;
+    justify-content: center;
+    padding:10px 0px 10px 0px;
+    & > h3 {
+        color:#155cf9;
+    }
 `;
