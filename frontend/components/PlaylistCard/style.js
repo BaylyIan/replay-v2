@@ -78,6 +78,18 @@ export const TitleCont = styled.div`
     /* border:1px solid green; */
     justify-content: space-between;
     align-items: center;
+    @media (max-width: ${XLARGE}){
+            margin-top:15px; 
+        }
+        @media (max-width: ${LARGE}){
+            margin-top:12px; 
+        }
+        @media (max-width: ${MED}){
+            margin-top:8px;  
+        }
+        @media (max-width: ${SMALL}){
+            margin-top:5px;        
+        }
     & > h1 {
         margin-left:5px;
         color:${Theme.colors.white};

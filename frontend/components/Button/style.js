@@ -5,19 +5,19 @@ import { Theme } from '../../styles/theme'
 export const Container = styled.button`
     width:${({ width }) => width};
     height:${({ height }) => height};
-    border:1px solid ${Theme.colors.orange};
+    border:1px solid ${({ border }) => border};
     box-sizing: border-box;
     border-radius: 7px;
     display:flex;
     align-items: center;
     justify-content:center;
-    background-color:${({ color }) => color ? color : Theme.colors.black};
+    background-color:${({ bgColor }) => bgColor};
     /* background-color: transparent; */
     background-repeat: no-repeat;
     :hover {
-        background-color: ${Theme.colors.orange};
+        background-color:${({ hoverBgColor }) => hoverBgColor};
         & > p {
-            color: ${Theme.colors.white}
+            color: ${({hoverTextColor}) => hoverTextColor};
         }
     }
     & > p{

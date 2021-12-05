@@ -1,6 +1,6 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
-import { useCallvack, useState, useRef, useEffect } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 
 
 export async function postImage({ image, type }) {
@@ -18,16 +18,17 @@ export async function postImage({ image, type }) {
 
 export async function getSessionStorage(key, initialValue) {
   try {
-      const token = window.sessionStorage.getItem(key);
-      console.log('getSessionStorage success')
-      return JSON.parse(token)
+    const token = window.sessionStorage.getItem(key);
+    console.log('getSessionStorage success')
+    return JSON.parse(token)
   } catch (e) {
     console.log('getSessionStorage error')
 
-      // if error, return initial value
-      return initialValue;
+    // if error, return initial value
+    return initialValue;
   }
 }
+
 
 // export const Login = async ({ email, password }) => {
 //   const result = await axios.post('http://localhost:4200/api/users/login', {

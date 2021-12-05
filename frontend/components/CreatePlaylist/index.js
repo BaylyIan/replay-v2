@@ -137,7 +137,11 @@ const CreatePlaylist = ({ closeModal, submit, error }) => {
                             width={'110px'}
                             height={'51px'}
                             text={'Next'}
-                            textColor={`${Theme.colors.white}`}
+                            textColor={Theme.colors.orange}
+                            border={Theme.colors.orange}
+                            bgColor={'transparent'}
+                            hoverBgColor={Theme.colors.orange}
+                            hoverTextColor={Theme.colors.white}
                             // color={`${Theme.colors.orange}`}
                             onClick={() => { submit({ name, desc, tags, file }); closeModal() }}
                         />
@@ -149,9 +153,9 @@ const CreatePlaylist = ({ closeModal, submit, error }) => {
 }
 
 CreatePlaylist.defualtProps = {
-    closeModal:()=>{},
-    submit:()=>{},
-    error:false
+    closeModal: () => { },
+    submit: () => { },
+    error: false
 }
 
 export default CreatePlaylist;

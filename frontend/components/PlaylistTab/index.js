@@ -7,7 +7,7 @@ import { Theme } from '../../styles/theme'
 
 import { Container, Cover, Info, TagWrap, Cont } from './style'
 
-const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, deletePlaylist, edit }) => {
+const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, deletePlaylist, edit, onClick}) => {
 
     const [color, setColor] = useState()
 
@@ -15,7 +15,7 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, delet
         setColor(!color)
     }
     return (
-        <Container>
+        <Container onClick={onClick}>
             <Cover>
                 <img src={user_pic} />
             </Cover>
@@ -55,7 +55,8 @@ PlaylistTab.defaultProps = {
     liked: false,
     onLike: () => { },
     username: 'user',
-    deletePlaylist:()=>{}
+    deletePlaylist:()=>{},
+    onClick: () => {}
 }
 
 PlaylistTab.propTypes = {

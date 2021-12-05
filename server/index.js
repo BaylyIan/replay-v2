@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var json_data = require('./songs/songs100.json');
+var json_data = require('./songs/songs99.json');
 
 var dbCon = mysql.createConnection({
   connectionLimit: 50,
@@ -22,7 +22,7 @@ dbCon.connect(function (err) {
 var data = json_data
 //   console.log(data)
 
-  const queryArr = [data.map((field) => [field.title, field.artist.name, field.preview])];
+  const queryArr = [data.map((field) => [field.title, field.artist.name, field.album.cover])];
 
   dbCon.query(sql, queryArr, function (err, result) {
     if (err) throw err;

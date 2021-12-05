@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 //comps
 import Input from '../Input'
 import Button from '../Button'
-import { Container, Toggle } from './style'
+import { Container, ToggleCont } from './style'
 
 //icons
 import { MdMail, MdLock, MdPerson } from 'react-icons/md'
@@ -24,15 +24,15 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
 
     return (
         <Container>
-            <Toggle toggle={toggle}>
+            <ToggleCont toggle={toggle}>
                 <p onClick={onChangeToggle}>Sign in</p>
                 <p onClick={onChangeToggle}>Sign up</p>
-            </Toggle>
+            </ToggleCont>
             <div>
                 {!toggle ? <Input
                     icon={<MdPerson size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Username'}
-                    onChange={(e)=>{setName(e.target.value)}}
+                    onChange={(e) => { setName(e.target.value) }}
                     label="username"
                     required
                 /> : null}
@@ -40,7 +40,7 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
                 <Input
                     icon={<MdMail size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Email'}
-                    onChange={(e)=>{setEmail(e.target.value)}}
+                    onChange={(e) => { setEmail(e.target.value) }}
                     label="email"
                     required
                 />
@@ -48,14 +48,21 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
                 <Input
                     icon={<MdLock size={20} fill={Theme.colors.lightGrey} />}
                     placeholder={'Password'}
-                    onChange={(e)=>{setPassword(e.target.value)}}
+                    onChange={(e) => { setPassword(e.target.value) }}
                     label="password"
                     required
                 />
                 {/* {errors.password && <Error>This is required!</Error>} */}
-                <Button text={toggle ? 'login' : 'Sign up'} type='submit' width={'100%'}
-                    onClick={()=> {onSubmit({name, email, password})}}
+                <Button text={toggle ? 'login' : 'Sign up'}
+                    type='submit'
+                    width={'100%'}
+                    onClick={() => { onSubmit({ name, email, password }) }}
                     height={'51px'}
+                    textColor={Theme.colors.orange}
+                    border={Theme.colors.orange}
+                    bgColor={'transparent'}
+                    hoverBgColor={Theme.colors.orange}
+                    hoverTextColor={Theme.colors.white}
 
                 />
                 {/* <input type='submit' /> */}
@@ -65,7 +72,7 @@ const Form = ({ toggle, onChangeToggle, onSubmit }) => {
 }
 
 Form.defaultProps = {
-    onSubmit:()=>{}
+    onSubmit: () => { }
 }
 
 Form.propTypes = {

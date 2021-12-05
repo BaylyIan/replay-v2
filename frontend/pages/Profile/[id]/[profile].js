@@ -101,7 +101,7 @@ const Profile = ({ }) => {
   // console.log(JSON.parse(otherUser), 'query')
 
   // Server-render loading state
-  if (!auth || auth.status === "SIGNED_OUT") {
+  if (!auth || auth.status === "SIGNED_OUT" || !profile) {
     return <Page>Loading.....</Page>
   }
 
@@ -143,6 +143,15 @@ const Profile = ({ }) => {
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
+              onClick={() => {
+                router.push({
+                  pathname: "/Playlist/[id]/[playlist]",
+                  query: {
+                    id: 'view',
+                    playlist: o.id
+                  },
+                })
+              }}
             />
           )
         }) : null}
@@ -157,6 +166,15 @@ const Profile = ({ }) => {
               user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
+              onClick={() => {
+                router.push({
+                  pathname: "/Playlist/[id]/[playlist]",
+                  query: {
+                    id: 'view',
+                    playlist: o.id
+                  },
+                })
+              }}
             />
           )
         }) : null}
@@ -211,9 +229,12 @@ const Profile = ({ }) => {
       <div style={{ zIndex: '3', alignSelf: 'flex-end' }}>
         <Button
           width={'140px'}
-          textColor={Theme.colors.white}
           text={'Save Profile'}
           textColor={Theme.colors.orange}
+          border={Theme.colors.orange}
+          bgColor={'transparent'}
+          hoverBgColor={Theme.colors.orange}
+          hoverTextColor={Theme.colors.white}
           onClick={() => {
             uploadProfilePicture({ file })
             router.push({
