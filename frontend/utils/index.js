@@ -1,5 +1,7 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
+import cookie from "cookie"
+
 import { useCallback, useState, useRef, useEffect } from 'react'
 
 
@@ -29,6 +31,9 @@ export async function getSessionStorage(key, initialValue) {
   }
 }
 
+export function parseCookies(req){
+  return cookie.parse(req ? req.headers.cookie || "" : document.cookie);
+}
 
 // export const Login = async ({ email, password }) => {
 //   const result = await axios.post('http://localhost:4200/api/users/login', {

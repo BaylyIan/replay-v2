@@ -26,6 +26,7 @@ const Playlist = ({ }) => {
     const [songs, setSongs] = useState([])
     const [count, setCount] = useState(10)
     const [playlistSongs, setPlaylistSongs] = useState([])
+    const [otherUser, setOtherUser] = useState()
     //for view playlist, need playlist image, playlist name, playlist tags, playlist description, playlist creator name + image, playlist songs
     // let count = 0
     let temp
@@ -56,16 +57,28 @@ const Playlist = ({ }) => {
         setPlaylistSongs(uniqueNames)
     }
 
+    const viewOtherPlaylist = async () => {
+        if(auth.status !== JSON.parse(play).id){
+            console.log(JSON.parse(play).id, 'other playlist id')
+            const res = await axios.get(`http://localhost:4200/api/playlist_creator/${JSON.parse(play).id}`)
+            console.log(res.data.result[0].user_id)
+            const res2 = await axios.get(`http://localhost:4200/api/profile_by_id/${res.data.result[0].user_id}`)
+            console.log(res2.data.result[0], 'user')
+            setOtherUser(res2.data.result[0])
+        }
+    }
+
     useDebounce(() => getSongs(searchValue, count), 1000, [searchValue])
 
     useEffect(() => {
         getPlaylistSongs()
-    }, [play])
+        viewOtherPlaylist()
+    }, [play, auth])
+
+    // console.log(JSON.parse(user), 'here')
 
 
-    // console.log(JSON.parse(play), 'here')
-
-    if (!auth || auth.status === "SIGNED_OUT" || !play) {
+    if (!auth || auth.status === "SIGNED_OUT" || !play || !otherUser) {
         return <Page>Loading.....</Page>
     }
 
@@ -171,7 +184,98 @@ const Playlist = ({ }) => {
         </Page>
     ) : id === 'view' && JSON.parse(user) !== auth.user.id ? (
         <div>
-            <h1>VIEW OTHER PLAYLIST</h1>
+            {/* <h1>VIEW OTHER PLAYLIST</h1> */}
+            <Page>
+            <Gradient />
+            {/* <h1>VIEW OWN PLAYLIST</h1> */}
+            <Header>
+                <Cover>
+                    <img src={JSON.parse(play).image_url ? `http://localhost:4200/playlistImage/${JSON.parse(play).image_url}` : '/Icons/default_playlist.png'} />
+                </Cover>
+                <Details>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Avatar>
+                            <img src={otherUser.image_url !== null ? `http://localhost:4200/profileImage/${otherUser.image_url}` : '/Icons/default_profile.png'} />
+                        </Avatar>
+                        <h2>{otherUser.name}</h2>
+
+                    </div>
+                    <SubHeader>
+
+                        <h1>{JSON.parse(play).name}</h1>
+
+                    </SubHeader>
+                    <TagWrap>
+                        <TagArea
+                            arr={JSON.parse(play).tags}
+                            showClose={false}
+                        />
+                    </TagWrap>
+
+                </Details>
+                {/* <BsThreeDotsVertical
+                    size={30}
+                    fill={Theme.colors.white}
+                //  onClick={() => {
+                //    router.push({
+                //      pathname: "/Profile/[id]/[profile]",
+                //      query: {
+                //        id: 'edit',
+                //        profile: auth.user.id
+                //      },
+                //    })
+                //  }}
+                /> */}
+            </Header>
+            <Main>
+               
+                {songs && songs.length !== 0 ? <SongCont>
+                    {songs && songs.length !== 0 ? songs.map((o, i) => {
+
+                        // console.log(o)
+                        return (
+                            <SongBar key={i}
+                                title={o.title}
+                                artist={o.artist}
+                                cover={o.image_url}
+                                showAdd={true}
+                                onClick={() => {
+                                    addSong(o.id)
+                                }}
+                            >
+
+                            </SongBar>
+
+                        )
+                    }) : null}
+                    {songs && songs.length !== 0 && songs.length >= 10 ? <Show onClick={() => {
+                        setCount(count + 10)
+                        console.log(count)
+                        getSongs(searchValue, count)
+                    }
+                    }>
+                        <h3>Show more</h3>
+                    </Show> : null}
+                </SongCont> : null}
+                {playlistSongs && playlistSongs.length !== 0 ? <SongCont>
+                    {playlistSongs && playlistSongs.length !== 0 ? playlistSongs.map((o, i) => {
+
+                        // console.log(o)
+                        return (
+                            <SongBar key={i}
+                                title={o.title}
+                                artist={o.artist}
+                                cover={o.image_url}
+                                showAdd={false}
+                            >
+
+                            </SongBar>
+
+                        )
+                    }) : null}
+                </SongCont> : null}
+            </Main>
+        </Page>
         </div>
     ) : id === 'view' && auth.status === "SIGNED_OUT" ? (
         <div>

@@ -46,7 +46,7 @@ export const AuthProvider = (props) => {
                     sessionStorage.setItem('user', JSON.stringify(result.data.user))
                     Cookies.set('user', JSON.stringify(result.data.user))
                     console.log('user signed in');
-                    router.reload()
+                    // router.reload()
                 }
             })
             .catch((err) => {
@@ -68,6 +68,7 @@ export const AuthProvider = (props) => {
                     sessionStorage.setItem('token', token);
                     axios.defaults.headers.common['Authorization'] = "Bearer " + _token;
                     console.log('user registered')
+                    Cookies.set('user', JSON.stringify(result.data.userId))
                     router.reload()
                 }
             })

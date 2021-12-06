@@ -47,7 +47,7 @@ const Profile = ({ }) => {
   }
 
   const getLikedPlaylists = async () => {
-    const result = await axios.get(`http://localhost:4200/api/users_liked_playlists`)
+    const result = await axios.get(`http://localhost:4200/api/users_liked_playlists/${auth.user.id}`)
     setLiked(result.data.result)
   }
 
@@ -101,7 +101,7 @@ const Profile = ({ }) => {
   // console.log(JSON.parse(otherUser), 'query')
 
   // Server-render loading state
-  if (!auth || auth.status === "SIGNED_OUT" || !profile) {
+  if (!auth || auth.status === "SIGNED_OUT" || !profile || !id) {
     return <Page>Loading.....</Page>
   }
 
@@ -148,7 +148,9 @@ const Profile = ({ }) => {
                   pathname: "/Playlist/[id]/[playlist]",
                   query: {
                     id: 'view',
-                    playlist: o.id
+                    playlist: o.id,
+                    user: JSON.stringify(o.user_id),
+                    play: JSON.stringify(o)
                   },
                 })
               }}

@@ -299,8 +299,9 @@ app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
 })
 
 //get all of a users liked playlists
-app.get('/api/users_liked_playlists', jwt.authorize, (req, res) => {
-  const user_id = req.user.userId
+app.get('/api/users_liked_playlists/:id', (req, res) => {
+  console.log(req.params, 'req')
+  const user_id = req.params.id
   database.userLikedPlaylists(user_id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -544,6 +545,7 @@ app.get('/api/liked_playlists', (req, res) => {
 // count number of likes on a playlist
 app.get('/api/count_playlist_likes', (req, res) => {
   const playlist_id = req.body.id
+ 
   database.countPlaylistLikes(playlist_id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -556,8 +558,9 @@ app.get('/api/count_playlist_likes', (req, res) => {
 
 //get user id from the playlist the user is currently viewing, so they can navigate to that users profile
 //we only need the playlist_id to do this
-app.get('/api/playlist_creator', (req, res) => {
+app.get('/api/playlist_creator/:id', (req, res) => {
   const playlist_id = req.params.id
+  console.log(playlist_id)
   database.getPlaylistCreator(playlist_id, (error, result) => {
     if (error) {
       res.send({ error })
