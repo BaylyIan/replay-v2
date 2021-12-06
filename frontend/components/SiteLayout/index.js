@@ -63,8 +63,8 @@ const SiteLayout = ({ children }) => {
                 console.log(tabs)
                 break;
             case tab = 2:
-                setPageName("Explore")
-                router.push('/Explore')
+                // setPageName("Explore")
+                // router.push('/Explore')
                 break;
             case tab = 3:
                 setPageName("Profile")
