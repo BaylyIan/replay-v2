@@ -27,7 +27,7 @@ export default function Home({ playlists }) {
   const refreshData = () => router.replace(router.asPath);
 
   const likePlaylist = async (id) => {
-    await axios.post(`${URL}/api/like_playlist`, {
+    await axios.post(`https://replay-v2.herokuapp.com/api/like_playlist`, {
       playlist_id: id
     }).then(() => {
       refreshData()
@@ -43,7 +43,7 @@ export default function Home({ playlists }) {
   }
 
   const viewOtherProfile = async (id) => {
-    await axios.get(`http://localhost:4200/api/profile_by_id/${id}`).then((res) => {
+    await axios.get(`https://replay-v2.herokuapp.com/api/profile_by_id/${id}`).then((res) => {
       // console.log(res.data.result[0], 'test here')
       router.push({
         pathname: "/Profile/[id]/[profile]",
@@ -73,7 +73,7 @@ export default function Home({ playlists }) {
             playlist_name={o.name}
             playlist_pic={`${URL}/playlistImage/${o.image_url}`}
             username={o.username}
-            user_pic={o.usersimg !== null ? `http://localhost:4200/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
+            user_pic={o.usersimg !== null ? ` https://replay-v2.herokuapp.com/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
             tags={o.tags}
             showClose={false}
             liked={o.liked}
@@ -138,13 +138,13 @@ export async function getServerSideProps({ req, res }) {
   console.log('refresh')
   const { user } = parseCookies(req);
 
-  const result = await axios.get(`${URL}/api/playlists`)
+  const result = await axios.get(` https://replay-v2.herokuapp.com/api/playlists`)
 
   let playlists = result.data.playlists
 
   if (user) {
 console.log('yes')
-    const result2 = await axios.get(`${URL}/api/users_liked_playlists/${JSON.parse(user).id}`)
+    const result2 = await axios.get(` https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
     let likedPlaylists = result2.data.result
 
     for (let i = 0; i < playlists.length; i++) {
@@ -158,7 +158,7 @@ console.log('yes')
 
     for (let i = 0; i < playlists.length; i++) {
       const playlist_id = playlists[i].id
-      const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
+      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
       playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
 
@@ -167,7 +167,7 @@ console.log('yes')
 
     for (let i = 0; i < playlists.length; i++) {
       const playlist_id = playlists[i].id
-      const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
+      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
       playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
 
