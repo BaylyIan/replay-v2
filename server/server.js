@@ -68,6 +68,10 @@ const { uploadProfilePicture, getProfileFileStream } = require('./s3')
 //   })
 // })
 
+app.get('/', (req, res) => {
+  res.render( "Helllo world")
+})
+
 //USER AUTH ----------------------------------------------------------------
 
 // create a user
@@ -584,7 +588,7 @@ app.get('/api/playlist_info/:id', (req, res) => {
   })
 })
 
-const port = process.env.PORT || 4200
+const port = process.env.PORT || 3306
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
