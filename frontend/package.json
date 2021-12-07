@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy":"https://replay-v2.herokuapp.com",
   "engines": {
     "node": "14.x"
   },

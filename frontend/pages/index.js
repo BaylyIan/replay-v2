@@ -70,9 +70,9 @@ export default function Home({ playlists }) {
           <PlaylistCard key={i}
             toggle={toggle}
             playlist_name={o.name}
-            playlist_pic={`${URL}/playlistImage/${o.image_url}`}
+            playlist_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
             username={o.username}
-            user_pic={o.usersimg !== null ? ` https://replay-v2.herokuapp.com/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
+            user_pic={o.usersimg !== null ? `https://replay-v2.herokuapp.com/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
             tags={o.tags}
             showClose={false}
             liked={o.liked}
