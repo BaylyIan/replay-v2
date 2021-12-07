@@ -11,7 +11,7 @@ export const getUser = async (token) => {
     console.log('ran main getUser fun on COntext')
 
     return await axios
-    .get(' https://replay-v2.herokuapp.com/api/profile')
+    .get('https://replay-v2.herokuapp.com/api/profile')
     .then((res) => {
         console.log(res.data.result[0], 'getUSer useAUth')
       if (res.data.result[0]) {
@@ -33,7 +33,7 @@ export const AuthProvider = (props) => {
     const auth = props.myAuth || { status: 'SIGNED_OUT', user: null };
 
     const login = async ({ email, password }) => {
-        return await axios.post(' https://replay-v2.herokuapp.com/api/users/login', {
+        return await axios.post('https://replay-v2.herokuapp.com/api/users/login', {
             email: email,
             password: password
         })
@@ -56,7 +56,7 @@ export const AuthProvider = (props) => {
     };
 
     const register = async ({ name, email, password }) => {
-        return await axios.post(" https://replay-v2.herokuapp.com/api/create_user", {
+        return await axios.post("https://replay-v2.herokuapp.com/api/create_user", {
             name: name,
             email: email,
             password: password,
