@@ -113,7 +113,7 @@ const SiteLayout = ({ children }) => {
         setError(false)
         // console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
         const result_ = await postImage({ image: file, type: 'playlist' })
-        const result = await axios.post('http://localhost:4200/api/create_playlist', ({
+        const result = await axios.post('https://replay-v2.herokuapp.com/api/create_playlist', ({
             name: name,
             image: result_.imagePath.replace('/playlistImage/', ''),
             description: desc,
@@ -214,7 +214,7 @@ const SiteLayout = ({ children }) => {
                         />
                         <UserCont toggle={toggle}>
                             <Avatar
-                            image={auth.status === 'SIGNED_IN' && auth.user.image_url !== null ? `http://localhost:4200/profileImage/${auth.user.image_url}` : `/Icons/default_profile.png`}
+                            image={auth.status === 'SIGNED_IN' && auth.user.image_url !== null ? `https://replay-v2.herokuapp.com/profileImage/${auth.user.image_url}` : `/Icons/default_profile.png`}
                             />
                             {!toggle && auth.status === "SIGNED_IN" ? <h3 style={{ color: `${Theme.colors.white}` }}>{auth.user.name}</h3> : null}
                         </UserCont>
@@ -244,30 +244,30 @@ const SiteLayout = ({ children }) => {
                         console.log('hai')
                     }
                     }
-                    children={<CreatePlaylist
-                        submit={(e) => {
-                            createPlaylist(e)
-                        }}
-                        closeModal={() => {
-                            setShowCreate(!showCreate)
-                        }}
-                        error={error}
-                    />}
-                />
+                   
+                ><CreatePlaylist
+                submit={(e) => {
+                    createPlaylist(e)
+                }}
+                closeModal={() => {
+                    setShowCreate(!showCreate)
+                }}
+                error={error}
+            /></CustomModal>
                 <CustomModal
                     title={'Please sign up or log in to Replay'}
                     isActive={showReg}
                     handleClose={() => setShowReg(false)}
-                    children={<Form
-                        toggle={formToggle}
-                        onChangeToggle={() => {
-                            setFormToggle(!formToggle)
-                        }}
-                        onSubmit={(e) => {
-                            handleSubmit(e)
-                        }}
-                    />}
-                />
+                    
+                ><Form
+                toggle={formToggle}
+                onChangeToggle={() => {
+                    setFormToggle(!formToggle)
+                }}
+                onSubmit={(e) => {
+                    handleSubmit(e)
+                }}
+            /></CustomModal>
                 <Page toggle={toggle}>
                     {children}
                 </Page>

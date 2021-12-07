@@ -3,10 +3,10 @@ var json_data = require('./songs/songs99.json');
 
 var dbCon = mysql.createConnection({
   connectionLimit: 50,
-  host: 'localhost',
-  user: 'ian',
-  password: 'NewApp#1',
-  database: 'replay_music',
+  host:'us-cdbr-east-04.cleardb.com',
+  user:'bef506f32ffc26',
+  password:'afed3b4a',
+  database:'heroku_5fcfa8c353e006b'
 
 });
 

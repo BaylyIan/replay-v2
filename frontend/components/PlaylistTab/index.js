@@ -17,7 +17,7 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, delet
     return (
         <Container onClick={onClick}>
             <Cover>
-                <img src={user_pic} />
+                <img alt='' src={user_pic} />
             </Cover>
             <Info>
                 <h1>{title}</h1>

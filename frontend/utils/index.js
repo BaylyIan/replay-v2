@@ -10,10 +10,10 @@ export async function postImage({ image, type }) {
   formData.append("image", image)
   if (type === 'playlist') {
     console.log(formData, 'util')
-    const result = await axios.post('http://localhost:4200/playlistImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post('https://replay-v2.herokuapp.com/playlistImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     return result.data
   } else if (type === 'profile') {
-    const result = await axios.post('http://localhost:4200/profileImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post('https://replay-v2.herokuapp.com/profileImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     return result.data
   }
 }

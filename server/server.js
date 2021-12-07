@@ -68,9 +68,6 @@ const { uploadProfilePicture, getProfileFileStream } = require('./s3')
 //   })
 // })
 
-app.get('/', (req, res) => {
-  res.render( "Helllo world")
-})
 
 //USER AUTH ----------------------------------------------------------------
 

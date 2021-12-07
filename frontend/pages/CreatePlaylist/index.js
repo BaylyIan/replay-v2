@@ -79,7 +79,7 @@ const CreatePlaylist = ({ }) => {
         setError(false)
         console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
         const result_ = await postImage({image: file, type:'playlist'})
-        const result = await axios.post('http://localhost:4200/api/create_playlist', ({
+        const result = await axios.post('https://replay-v2.herokuapp.com/api/create_playlist', ({
             name:name,
             image:result_.imagePath.replace('/playlistImage/', ''),
             description:desc,
@@ -108,7 +108,7 @@ const CreatePlaylist = ({ }) => {
             <Wrap>
                 <PhotoWrap onSubmit={submit}>
                     <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
-                    {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
+                    {tempFile ? <img src={tempFile} alt=''/> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
                     <FileLabel htmlFor='file'>
                         <p style={{ color: `${Theme.colors.orange}` }}>Upload Photo</p>
                     </FileLabel>
