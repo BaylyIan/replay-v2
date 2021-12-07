@@ -1,4 +1,4 @@
-// eslint-disable-next-line react/display-name
+/* eslint-disable react/display-name */
 import Document from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
  
@@ -29,7 +29,5 @@ class MyDocument extends Document {
     }
   }
 }
-
-MyDocument.displayName = 'MyDocument'
 
 export default MyDocument;
