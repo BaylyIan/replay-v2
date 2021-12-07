@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { AiOutlineHeart, AiFillHeart, AiOutlineDelete } from 'react-icons/ai'
@@ -7,7 +7,7 @@ import { Theme } from '../../styles/theme'
 
 import { Container, Cover, Info, TagWrap, Cont } from './style'
 
-const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, deletePlaylist, edit, onClick}) => {
+const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, deletePlaylist, edit, onClick }) => {
 
     const [color, setColor] = useState()
 
@@ -17,7 +17,7 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, delet
     return (
         <Container onClick={onClick}>
             <Cover>
-                <img src={user_pic} />
+                <img alt='' src={user_pic} />
             </Cover>
             <Info>
                 <h1>{title}</h1>
@@ -31,18 +31,18 @@ const PlaylistTab = ({ user_pic, title, showLike, liked, onLike, username, delet
                         onClick={onLike} /> : null}
             </Info>
             <Cont>
-            <p>{username}</p>
-            {edit ? <div 
-                onMouseEnter={handleHover}
-                onMouseLeave={handleHover}
-                onClick={deletePlaylist}
-            >
-            <AiOutlineDelete 
-                size={28}
-                fill={color ? Theme.colors.orange : Theme.colors.lightGrey}
+                <p>{username}</p>
+                {edit ? <div
+                    onMouseEnter={handleHover}
+                    onMouseLeave={handleHover}
+                    onClick={deletePlaylist}
+                >
+                    <AiOutlineDelete
+                        size={28}
+                        fill={color ? Theme.colors.orange : Theme.colors.lightGrey}
 
-            />
-            </div> : null}
+                    />
+                </div> : null}
             </Cont>
         </Container>
     );
@@ -55,8 +55,8 @@ PlaylistTab.defaultProps = {
     liked: false,
     onLike: () => { },
     username: 'user',
-    deletePlaylist:()=>{},
-    onClick: () => {}
+    deletePlaylist: () => { },
+    onClick: () => { }
 }
 
 PlaylistTab.propTypes = {

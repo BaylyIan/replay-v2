@@ -63,8 +63,8 @@ const SiteLayout = ({ children }) => {
                 console.log(tabs)
                 break;
             case tab = 2:
-                setPageName("Explore")
-                router.push('/Explore')
+                // setPageName("Explore")
+                // router.push('/Explore')
                 break;
             case tab = 3:
                 setPageName("Profile")
@@ -113,7 +113,7 @@ const SiteLayout = ({ children }) => {
         setError(false)
         // console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
         const result_ = await postImage({ image: file, type: 'playlist' })
-        const result = await axios.post('http://localhost:4200/api/create_playlist', ({
+        const result = await axios.post('https://replay-v2.herokuapp.com/api/create_playlist', ({
             name: name,
             image: result_.imagePath.replace('/playlistImage/', ''),
             description: desc,
@@ -146,7 +146,7 @@ const SiteLayout = ({ children }) => {
                 <Nav toggle={toggle}>
                     <NavHeader toggle={toggle}>
                         <Icon header={true}>
-                            <img src={'/Icons/play.png'} />
+                            <img alt='' src={'/Icons/play.png'} />
                         </Icon>
                         {!toggle ? <h1>Replay</h1> : null}
                     </NavHeader>
@@ -198,7 +198,6 @@ const SiteLayout = ({ children }) => {
                             color={Theme.colors.orange}
                             icon={<RiAddLine size={24} fill={Theme.colors.white} />}
                             showIcon={true}
-                            textColor={'red'}
                             text={toggle ? null : 'Create Playlist'}
                             textColor={Theme.colors.white}
                             bgColor={Theme.colors.orange}
@@ -214,7 +213,7 @@ const SiteLayout = ({ children }) => {
                         />
                         <UserCont toggle={toggle}>
                             <Avatar
-                            image={auth.status === 'SIGNED_IN' && auth.user.image_url !== null ? `http://localhost:4200/profileImage/${auth.user.image_url}` : `/Icons/default_profile.png`}
+                                image={auth.status === 'SIGNED_IN' && auth.user.image_url !== null ? `https://replay-v2.herokuapp.com/profileImage/${auth.user.image_url}` : `/Icons/default_profile.png`}
                             />
                             {!toggle && auth.status === "SIGNED_IN" ? <h3 style={{ color: `${Theme.colors.white}` }}>{auth.user.name}</h3> : null}
                         </UserCont>
@@ -244,7 +243,8 @@ const SiteLayout = ({ children }) => {
                         console.log('hai')
                     }
                     }
-                    children={<CreatePlaylist
+
+                ><CreatePlaylist
                         submit={(e) => {
                             createPlaylist(e)
                         }}
@@ -252,13 +252,13 @@ const SiteLayout = ({ children }) => {
                             setShowCreate(!showCreate)
                         }}
                         error={error}
-                    />}
-                />
+                    /></CustomModal>
                 <CustomModal
                     title={'Please sign up or log in to Replay'}
                     isActive={showReg}
                     handleClose={() => setShowReg(false)}
-                    children={<Form
+
+                ><Form
                         toggle={formToggle}
                         onChangeToggle={() => {
                             setFormToggle(!formToggle)
@@ -266,8 +266,7 @@ const SiteLayout = ({ children }) => {
                         onSubmit={(e) => {
                             handleSubmit(e)
                         }}
-                    />}
-                />
+                    /></CustomModal>
                 <Page toggle={toggle}>
                     {children}
                 </Page>

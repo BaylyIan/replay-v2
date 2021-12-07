@@ -1,5 +1,7 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
+import cookie from "cookie"
+
 import { useCallback, useState, useRef, useEffect } from 'react'
 
 
@@ -8,10 +10,10 @@ export async function postImage({ image, type }) {
   formData.append("image", image)
   if (type === 'playlist') {
     console.log(formData, 'util')
-    const result = await axios.post('http://localhost:4200/playlistImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post('https://replay-v2.herokuapp.com/playlistImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     return result.data
   } else if (type === 'profile') {
-    const result = await axios.post('http://localhost:4200/profileImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post('https://replay-v2.herokuapp.com/profileImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     return result.data
   }
 }
@@ -29,6 +31,9 @@ export async function getSessionStorage(key, initialValue) {
   }
 }
 
+export function parseCookies(req){
+  return cookie.parse(req ? req.headers.cookie || "" : document.cookie);
+}
 
 // export const Login = async ({ email, password }) => {
 //   const result = await axios.post('http://localhost:4200/api/users/login', {

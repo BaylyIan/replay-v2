@@ -40,14 +40,14 @@ const Profile = ({ }) => {
   const [tempFile, setTempFile] = useState()
 
   const getUsersPlaylist = async () => {
-    const result = await axios.get(`http://localhost:4200/api/playlist_by_id/${auth.user.id}`)
+    const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_by_id/${auth.user.id}`)
     console.log(result.data.result)
     setPlaylists(result.data.result)
     setNum_playlists(result.data.result.length)
   }
 
   const getLikedPlaylists = async () => {
-    const result = await axios.get(`http://localhost:4200/api/users_liked_playlists`)
+    const result = await axios.get(`https://replay-v2.herokuapp.com/api/users_liked_playlists/${auth.user.id}`)
     setLiked(result.data.result)
   }
 
@@ -67,14 +67,14 @@ const Profile = ({ }) => {
   }
 
   const getOtherUsersPlaylists = async () => {
-    const result = await axios.get(`http://localhost:4200/api/playlist_by_id/${JSON.parse(otherUser).id}`)
+    const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_by_id/${JSON.parse(otherUser).id}`)
     // console.log(result.data.result)
     __setPlaylists(result.data.result)
     __setNum_playlists(result.data.result.length)
   }
 
   const getOtherUsersLikedPlaylists = async () => {
-    const result = await axios.get(`http://localhost:4200/api/otherUser_liked_playlists/${JSON.parse(otherUser).id}`)
+    const result = await axios.get(`https://replay-v2.herokuapp.com/api/otherUser_liked_playlists/${JSON.parse(otherUser).id}`)
     __setLiked(result.data.result)
   }
 
@@ -95,13 +95,13 @@ const Profile = ({ }) => {
       getOtherUsersPlaylists()
       getOtherUsersLikedPlaylists()
     }
-  }, [auth])
+  }, [auth, id, profile])
 
   // console.log(JSON.parse(pro), 'wuery')
   // console.log(JSON.parse(otherUser), 'query')
 
   // Server-render loading state
-  if (!auth || auth.status === "SIGNED_OUT" || !profile) {
+  if (!auth || auth.status === "SIGNED_OUT" || !profile || !id) {
     return <Page>Loading.....</Page>
   }
 
@@ -125,7 +125,7 @@ const Profile = ({ }) => {
         }}
       />
       <Avatar>
-        <img src={auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
+        <img alt='' src={auth.user.image_url ? `https://replay-v2.herokuapp.com/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
       </Avatar>
       <h1>{auth.user.name}</h1>
       <InfoCont>
@@ -140,7 +140,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
               onClick={() => {
@@ -148,7 +148,9 @@ const Profile = ({ }) => {
                   pathname: "/Playlist/[id]/[playlist]",
                   query: {
                     id: 'view',
-                    playlist: o.id
+                    playlist: o.id,
+                    user: JSON.stringify(o.user_id),
+                    play: JSON.stringify(o)
                   },
                 })
               }}
@@ -163,7 +165,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
               onClick={() => {
@@ -185,7 +187,7 @@ const Profile = ({ }) => {
       {/* <h1>VIEW OTHER PROFILE</h1> */}
       <Gradient />
       <Avatar>
-        <img src={JSON.parse(otherUser).image_url !== null ? `http://localhost:4200/profileImage/${JSON.parse(otherUser).image_url}` : '/Icons/default_profile.png'} />
+        <img alt='' src={JSON.parse(otherUser).image_url !== null ? `https://replay-v2.herokuapp.com/profileImage/${JSON.parse(otherUser).image_url}` : '/Icons/default_profile.png'} />
       </Avatar>
       <h1>{JSON.parse(otherUser).name}</h1>
       <InfoCont>
@@ -200,7 +202,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={JSON.parse(otherUser).name}
             />
@@ -214,7 +216,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={JSON.parse(otherUser).name}
             />
@@ -248,7 +250,7 @@ const Profile = ({ }) => {
         />
       </div>
       <Avatar>
-        <img src={tempFile ? tempFile : auth.user.image_url ? `http://localhost:4200/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
+        <img alt='' src={tempFile ? tempFile : auth.user.image_url ? `https://replay-v2.herokuapp.com/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
       </Avatar>
       <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected} />
       <UserCont htmlFor='file'>
@@ -270,7 +272,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
               edit={true}
@@ -288,7 +290,7 @@ const Profile = ({ }) => {
             <PlaylistTab
               key={i}
               showLike={false}
-              user_pic={`http://localhost:4200/playlistImage/${o.image_url}`}
+              user_pic={`https://replay-v2.herokuapp.com/playlistImage/${o.image_url}`}
               title={o.name}
               username={auth.user.name}
             />

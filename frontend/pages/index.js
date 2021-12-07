@@ -6,13 +6,14 @@ import axios from 'axios'
 import { Container, Page } from "../pageStyles/Home/style.js";
 import PlaylistCard from "../components/PlaylistCard"
 
+
 //utills
 import { PageContext } from "../utils/context";
 import { useRouter } from 'next/router'
 import { URL } from "../utils/constants"
 import { useAuth } from '../utils/authContext'
 import jsHttpCookie from 'cookie';
-import { parseCookie } from "../utils/index.js";
+import { parseCookies } from "../utils/index.js";
 import { useModal } from "../utils/useModal"
 
 
@@ -26,7 +27,7 @@ export default function Home({ playlists }) {
   const refreshData = () => router.replace(router.asPath);
 
   const likePlaylist = async (id) => {
-    await axios.post(`${URL}/api/like_playlist`, {
+    await axios.post(`https://replay-v2.herokuapp.com/api/like_playlist`, {
       playlist_id: id
     }).then(() => {
       refreshData()
@@ -42,7 +43,7 @@ export default function Home({ playlists }) {
   }
 
   const viewOtherProfile = async (id) => {
-    await axios.get(`http://localhost:4200/api/profile_by_id/${id}`).then((res) => {
+    await axios.get(`https://replay-v2.herokuapp.com/api/profile_by_id/${id}`).then((res) => {
       // console.log(res.data.result[0], 'test here')
       router.push({
         pathname: "/Profile/[id]/[profile]",
@@ -68,11 +69,10 @@ export default function Home({ playlists }) {
         return (
           <PlaylistCard key={i}
             toggle={toggle}
-            liked={false}
             playlist_name={o.name}
             playlist_pic={`${URL}/playlistImage/${o.image_url}`}
             username={o.username}
-            user_pic={o.usersimg !== null ? `http://localhost:4200/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
+            user_pic={o.usersimg !== null ? ` https://replay-v2.herokuapp.com/profileImage/${o.usersimg}` : '/Icons/default_profile.png'}
             tags={o.tags}
             showClose={false}
             liked={o.liked}
@@ -89,14 +89,24 @@ export default function Home({ playlists }) {
               }
             }}
             onProfileView={() => {
-              if (auth.satus === "SIGNED_IN") {
+              if (auth.status === "SIGNED_IN" && auth.user.id === o.user_id) {
+                router.push({
+                  pathname: "/Profile/[id]/[profile]",
+                  query: {
+                    id: 'view',
+                    profile: auth.user.id
+                  }
+                });
+              } else if (auth.status === "SIGNED_IN") {
                 viewOtherProfile(o.user_id)
               } else {
                 setShowReg(true)
+
               }
             }}
             onPlaylistView={() => {
-              if (auth.satus === "SIGNED_IN") {
+              if (auth.status === "SIGNED_IN") {
+                console.log('pop')
                 router.push({
                   pathname: "/Playlist/[id]/[playlist]",
                   query: {
@@ -125,13 +135,17 @@ export default function Home({ playlists }) {
 export async function getServerSideProps({ req, res }) {
 
   console.log('refresh')
+  const { user } = parseCookies(req);
 
-  const result = await axios.get(`${URL}/api/playlists`)
+  const result = await axios.get(` https://replay-v2.herokuapp.com/api/playlists`)
+
   let playlists = result.data.playlists
 
-  try{
-    const result2 = await axios.get(`${URL}/api/users_liked_playlists`)
+  if (user) {
+    console.log('yes')
+    const result2 = await axios.get(` https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
     let likedPlaylists = result2.data.result
+
     for (let i = 0; i < playlists.length; i++) {
       const playlist = playlists[i]
       for (const i of likedPlaylists) {
@@ -141,21 +155,25 @@ export async function getServerSideProps({ req, res }) {
       }
     }
 
-  for (let i = 0; i < playlists.length; i++) {
-    const playlist_id = playlists[i].id
-    const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
-    playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
-  }
-  return { props: { playlists } }
-  }catch(err){
-    console.log(err.message)
     for (let i = 0; i < playlists.length; i++) {
       const playlist_id = playlists[i].id
-      const tags = await axios.get(`${URL}/api/playlist_tags/${playlist_id}`)
+      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
       playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
-    return { props: { playlists } }
+
+  } else {
+    console.log('no')
+
+    for (let i = 0; i < playlists.length; i++) {
+      const playlist_id = playlists[i].id
+      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
+      playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
+    }
+
   }
+
+  // Pass data to the page via props
+  return { props: { playlists } }
 }
 
 
