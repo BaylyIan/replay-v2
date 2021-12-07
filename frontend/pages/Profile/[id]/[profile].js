@@ -40,15 +40,19 @@ const Profile = ({ }) => {
   const [tempFile, setTempFile] = useState()
 
   const getUsersPlaylist = async () => {
-    const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_by_id/${auth.user.id}`)
-    console.log(result.data.result)
-    setPlaylists(result.data.result)
-    setNum_playlists(result.data.result.length)
+    if (id === 'view' && profile == auth.user.id ) {
+      const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_by_id/${auth.user.id}`)
+      console.log(result.data.result)
+      setPlaylists(result.data.result)
+      setNum_playlists(result.data.result.length)
+    }
   }
 
   const getLikedPlaylists = async () => {
+    if (id === 'view' && profile == auth.user.id ) {
     const result = await axios.get(`https://replay-v2.herokuapp.com/api/users_liked_playlists/${auth.user.id}`)
     setLiked(result.data.result)
+    }
   }
 
   //user pic
@@ -67,15 +71,19 @@ const Profile = ({ }) => {
   }
 
   const getOtherUsersPlaylists = async () => {
+    if(id === 'view' && profile !== auth.user.id ) {
     const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_by_id/${JSON.parse(otherUser).id}`)
     // console.log(result.data.result)
     __setPlaylists(result.data.result)
     __setNum_playlists(result.data.result.length)
+    }
   }
 
   const getOtherUsersLikedPlaylists = async () => {
+    if(id === 'view' && profile !== auth.user.id ) {
     const result = await axios.get(`https://replay-v2.herokuapp.com/api/otherUser_liked_playlists/${JSON.parse(otherUser).id}`)
     __setLiked(result.data.result)
+    }
   }
 
   // const deletePlaylist = async ({ id }) => {
@@ -86,15 +94,12 @@ const Profile = ({ }) => {
 
 
   useEffect(() => {
-    if (id === 'view' && profile == auth.user.id ) {
       // getUserLikes()
       getUsersPlaylist()
       getLikedPlaylists()
-    }else if(id === 'view' && profile !== auth.user.id ) {
       // countOtherUsersLikes()
       getOtherUsersPlaylists()
       getOtherUsersLikedPlaylists()
-    }
   }, [auth, id, profile])
 
   // console.log(JSON.parse(pro), 'wuery')
