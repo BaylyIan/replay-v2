@@ -91,12 +91,12 @@ const Playlist = ({ }) => {
             {/* <h1>VIEW OWN PLAYLIST</h1> */}
             <Header>
                 <Cover>
-                    <img src={JSON.parse(play).image_url ? `http://localhost:4200/playlistImage/${JSON.parse(play).image_url}` : '/Icons/default_playlist.png'} />
+                    <img src={JSON.parse(play).image_url ? `https://replay-v2.herokuapp.com/playlistImage/${JSON.parse(play).image_url}` : '/Icons/default_playlist.png'} />
                 </Cover>
                 <Details>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar>
-                            <img src={auth.user.image_url !== null ? `http://localhost:4200/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
+                            <img src={auth.user.image_url !== null ? `https://replay-v2.herokuapp.com/profileImage/${auth.user.image_url}` : '/Icons/default_profile.png'} />
                         </Avatar>
                         <h2>{auth.user.name}</h2>
 
