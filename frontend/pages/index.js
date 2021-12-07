@@ -35,7 +35,7 @@ export default function Home({ playlists }) {
   }
 
   const unlikePlaylist = async (id) => {
-    await axios.post(`${URL}/api/unlike_playlist`, {
+    await axios.post(`https://replay-v2.herokuapp.com/api/unlike_playlist`, {
       playlist_id: id
     }).then(() => {
       refreshData()
@@ -137,13 +137,13 @@ export async function getServerSideProps({ req, res }) {
   console.log('refresh')
   const { user } = parseCookies(req);
 
-  const result = await axios.get(` https://replay-v2.herokuapp.com/api/playlists`)
+  const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlists`)
 
   let playlists = result.data.playlists
 
   if (user) {
     console.log('yes')
-    const result2 = await axios.get(` https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
+    const result2 = await axios.get(`https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
     let likedPlaylists = result2.data.result
 
     for (let i = 0; i < playlists.length; i++) {
@@ -157,7 +157,7 @@ export async function getServerSideProps({ req, res }) {
 
     for (let i = 0; i < playlists.length; i++) {
       const playlist_id = playlists[i].id
-      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
+      const tags = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
       playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
 
@@ -166,7 +166,7 @@ export async function getServerSideProps({ req, res }) {
 
     for (let i = 0; i < playlists.length; i++) {
       const playlist_id = playlists[i].id
-      const tags = await axios.get(` https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
+      const tags = await axios.get(`https://replay-v2.herokuapp.com/api/playlist_tags/${playlist_id}`)
       playlists[i].tags = tags.data.tags.map(o => o.tag = { tag: o.text })
     }
 
