@@ -91,7 +91,7 @@ const CreatePlaylist = ({ closeModal, submit, error }) => {
         <Container>
             <PhotoWrap onSubmit={submit}>
                 <PhotoCont>
-                    {tempFile ? <img src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
+                    {tempFile ? <img alt='' src={tempFile} /> : <div ><BsUpload size={60} fill={Theme.colors.white} /></div>}
                 </PhotoCont>
                 <FileInput type='file' name='file' id='file' accept='image/*' onChange={fileSelected}></FileInput>
                 <FileLabel htmlFor='file'>

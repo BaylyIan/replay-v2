@@ -69,7 +69,6 @@ export default function Home({ playlists }) {
         return (
           <PlaylistCard key={i}
             toggle={toggle}
-            liked={false}
             playlist_name={o.name}
             playlist_pic={`${URL}/playlistImage/${o.image_url}`}
             username={o.username}
@@ -94,10 +93,10 @@ export default function Home({ playlists }) {
                 router.push({
                   pathname: "/Profile/[id]/[profile]",
                   query: {
-                      id: 'view',
-                      profile: auth.user.id
+                    id: 'view',
+                    profile: auth.user.id
                   }
-              });
+                });
               } else if (auth.status === "SIGNED_IN") {
                 viewOtherProfile(o.user_id)
               } else {
@@ -143,7 +142,7 @@ export async function getServerSideProps({ req, res }) {
   let playlists = result.data.playlists
 
   if (user) {
-console.log('yes')
+    console.log('yes')
     const result2 = await axios.get(` https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
     let likedPlaylists = result2.data.result
 
