@@ -19,6 +19,7 @@ function MyApp({ Component, pageProps, router }) {
 
   useEffect(() => {
     (async () => {
+      console.log(document.cookie, 'cookie')
       const token = window.sessionStorage.getItem('token');
       axios.defaults.headers.common['Authorization'] = "Bearer " + token;
       const res = await getUser(token)

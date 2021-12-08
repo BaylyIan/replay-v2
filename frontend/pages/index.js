@@ -140,8 +140,9 @@ export async function getServerSideProps({ req, res }) {
   const result = await axios.get(`https://replay-v2.herokuapp.com/api/playlists`)
 
   let playlists = result.data.playlists
+  console.log(playlists)
 
-  if (user) {
+  if (user && playlists) {
     console.log('yes')
     const result2 = await axios.get(`https://replay-v2.herokuapp.com/api/users_liked_playlists/${JSON.parse(user).id}`)
     let likedPlaylists = result2.data.result
