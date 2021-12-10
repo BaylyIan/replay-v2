@@ -80,7 +80,7 @@ function getUser(email, password, callback) {
 exports.getUser = getUser
 
 //get all users
-function getAllUsers(callback) {
+function allUsers(callback) {
   const query = `
   SELECT * FROM users
   WHERE id = ?
@@ -90,7 +90,7 @@ function getAllUsers(callback) {
     callback(error, result)
   })
 }
-exports.getAllUsers = getAllUsers
+exports.allUsers = allUsers
 
 
 
