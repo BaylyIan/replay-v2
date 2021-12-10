@@ -24,7 +24,7 @@ export const Gradient = styled.div`
     background: linear-gradient(180deg, #423F46 0%, #1E1C21 100%);
     position:absolute;
     top:0;
-    z-index:2;
+    z-index:-1;
     max-height:300px;
 `;
 
@@ -170,7 +170,6 @@ export const NoUserWrap = styled.div`
     max-height:100%;
     position:absolute;
     top:0;
-
 `;
 
 export const UserCont = styled.label`
@@ -179,7 +178,7 @@ export const UserCont = styled.label`
     /* border:1px solid green; */
     height:auto;
     justify-content:flex-end;
-    z-index:4;
+    z-index:5;
 `;
 export const FileInput = styled.input`
     width: 0.1px;

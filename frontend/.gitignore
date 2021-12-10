@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# "start": "next start -p $PORT",
+

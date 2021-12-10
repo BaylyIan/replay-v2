@@ -18,6 +18,10 @@ export const Container = styled.div`
     @media (max-width: ${MED}){
         aspect-ratio:1/ 1.5;
     }
+    @media (max-width: ${SMALL}){
+        aspect-ratio:1/ 1.5;
+        min-height:250px;
+    }
 
     `;
 
@@ -37,6 +41,8 @@ export const Avatar = styled.div`
     border-radius: 50%;
     /* border:1px solid green; */
     width:50px;
+    min-width:50px;
+    min-height:50px;
     display:flex;
     justify-content:center;
     align-items:center;

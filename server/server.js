@@ -74,14 +74,14 @@ const { uploadProfilePicture, getProfileFileStream } = require('./s3')
 // create a user
 app.post('/api/create_user', (req, res) => {
   const { name, email, password } = req.body
-  database.createUser(name, email, password, (error, userId) => {
+  database.createUser(name, email, password, (error, id) => {
     if (error) {
       res.send({ error: error.message })
       return
     }
     // res.send({ token })
-    const token = jwt.generateToken({ userId: userId, name: name, email: email })
-    res.send({ userId, name, email, token })
+    // const token = jwt.generateToken({ userId: userId, name: name, email: email })
+    res.send({ id, name, email, password })
     // console.log({ userId, name, email, token }, 'here')
   })
 })
@@ -94,17 +94,17 @@ app.post('/api/users/login', (req, res) => {
       res.send({ error: error })
       return
     }
-    const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
+    // const token = jwt.generateToken({ userId: user.id, name: user.name, email: user.email })
     // res.send({ userId: user.id, name: user.name, email: user.email })
-    res.send({ token: token, user: user })
+    res.send({ user: user })
   })
 })
 
 //get users profile 
-app.get('/api/profile', jwt.authorize, (req, res) => {
-  console.log(req.user, 'ehehrherhre')
+app.get('/api/profile/:id', (req, res) => {
   //token's user id
-  const id = req.user.userId
+  const id = req.params.id
+  console.log(id, 'id passed into server.js')
   database.userCredentials(id, (error, result) => {
     if (error) {
       res.send({ error: error.message })
@@ -116,11 +116,11 @@ app.get('/api/profile', jwt.authorize, (req, res) => {
 })
 
 //upload profile picture
-app.post('/profileImage', jwt.authorize, uploadProfile.single('image'), async (req, res) => {
+app.post('/profileImage/:id', uploadProfile.single('image'), async (req, res) => {
   const file = req.file
-  const id = req.user.userId
+  const id = req.params.id
   const { Key } = await uploadProfilePicture(file)
-  // console.log(Key, id, 's3 result ')
+  console.log(Key, id, 's3 result ')
   database.addProfilePicture(Key, id, (error, result) => {
     if (error) {
       res.send({ error })
@@ -153,6 +153,15 @@ app.get('/api/profile_by_id/:id', (req, res) => {
   })
 })
 
+app.get('/api/users', (req, res) => {
+  database.allUsers((error, users) => {
+    if (error) {
+      res.send({ error })
+      return
+    }
+    res.send({ users })
+  })
+})
 
 
 
@@ -176,8 +185,8 @@ app.get('/playlistImage/:key', (req, res) => {
 })
 
 //create new playlist
-app.post('/api/create_playlist', jwt.authorize, (req, res) => {
-  const userId = req.user.userId
+app.post('/api/create_playlist', (req, res) => {
+  const userId = req.body.userId
   const playlist = req.body
 
   //create playlist in db
@@ -253,7 +262,7 @@ app.get('/api/single_playlist/:id', (req, res) => {
 //DELETE PLAYLIST --------------------------------------------------------------
 
 //delete a playlst and all its contents
-app.post('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
+app.post('/api/delete_playlist/:id', (req, res) => {
   const id = req.params.id
   // console.log(id, 'playlistid')
   database.deletePlaylist(id, (error, result) => {
@@ -268,9 +277,9 @@ app.post('/api/delete_playlist/:id', jwt.authorize, (req, res) => {
 //LIKES ----------------------------------------------------------------
 
 //user liked a playlist
-app.post('/api/like_playlist', jwt.authorize, (req, res) => {
+app.post('/api/like_playlist', (req, res) => {
   const playlistId = req.body.playlist_id //playlist id
-  const userId = req.user.userId
+  const userId = req.body.userId
   // console.log(playlistId, userId, 'req like')
 
   database.likePlaylist(playlistId, userId, (error, result) => {
@@ -285,9 +294,9 @@ app.post('/api/like_playlist', jwt.authorize, (req, res) => {
 })
 
 //user unliked a playlists
-app.post('/api/unlike_playlist', jwt.authorize, (req, res) => {
+app.post('/api/unlike_playlist', (req, res) => {
   const playlist_id = req.body.playlist_id
-  const user_id = req.user.userId
+  const user_id = req.body.userId
   // console.log(playlist_id, user_id, 'req unlike')
   database.unlikePlaylist(playlist_id, user_id, (error, result) => {
     if (error) {
@@ -585,7 +594,7 @@ app.get('/api/playlist_info/:id', (req, res) => {
   })
 })
 
-const port = process.env.PORT || 3306
+const port = process.env.PORT || 4200
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })

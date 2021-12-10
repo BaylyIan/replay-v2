@@ -12,6 +12,7 @@ import { BsUpload } from 'react-icons/bs'
 
 import { Theme } from '../../styles/theme'
 import { useForm } from "react-hook-form";
+import { DB_URL } from '../../utils/constants'
 
 import { postImage } from '../../utils'
 import axios from 'axios';
@@ -79,7 +80,7 @@ const CreatePlaylist = ({ }) => {
         setError(false)
         console.log({ name: name, description: desc, tags: tags, image: file, user: user }, 'HEY')
         const result_ = await postImage({image: file, type:'playlist'})
-        const result = await axios.post('https://replay-v2.herokuapp.com/api/create_playlist', ({
+        const result = await axios.post(`${DB_URL}/api/create_playlist`, ({
             name:name,
             image:result_.imagePath.replace('/playlistImage/', ''),
             description:desc,
