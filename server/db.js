@@ -3,21 +3,21 @@ const bcrypt = require('bcryptjs')
 
 // 2
 
-// const dbDetails = {
-//   connectionLimit: 10,
-//   host: process.env.MYSQL_HOST || 'localhost',
-//   user: process.env.MYSQL_USERNAME || 'ian',
-//   password: process.env.MYSQL_PASSWORD || 'NewApp#1',
-//   database: process.env.MYSQL_DATABASE || 'replay_music'
-// }
-// const connection = mysql.createConnection(dbDetails)
+const dbDetails = {
+  connectionLimit: 10,
+  host: process.env.MYSQL_HOST || 'localhost',
+  user: process.env.MYSQL_USERNAME || 'ian',
+  password: process.env.MYSQL_PASSWORD || 'NewApp#1',
+  database: process.env.MYSQL_DATABASE || 'replay_music'
+}
+const connection = mysql.createConnection(dbDetails)
 
-const connection = mysql.createConnection({
-  host:'us-cdbr-east-04.cleardb.com',
-  user:'bef506f32ffc26',
-  password:'afed3b4a',
-  database:'heroku_5fcfa8c353e006b'
-})
+// const connection = mysql.createConnection({
+//   host:'us-cdbr-east-04.cleardb.com',
+//   user:'bef506f32ffc26',
+//   password:'afed3b4a',
+//   database:'heroku_5fcfa8c353e006b'
+// })
 
 
 // const connection = mysql.createConnection("mysql://b37836ucuxmm23hu:wjd9ez3dhpo61q3b@xlf3ljx3beaucz9x.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/tb1rbcip564kgd16")
@@ -130,6 +130,7 @@ function addProfilePicture(image_url, id, callback) {
       return
     }
     callback(null, result.insertId)
+    console.log(result, 'db.js')
   })
 }
 exports.addProfilePicture = addProfilePicture
@@ -243,6 +244,17 @@ function allPlaylists(callback) {
   })
 }
 exports.allPlaylists = allPlaylists
+
+// get all playlists
+function allUsers(callback) {
+  const query = `
+      SELECT * FROM users
+    `
+  connection.query(query, null, (error, results, fields) => {
+    callback(error, results)
+  })
+}
+exports.allUsers = allUsers
 
 
 // create a playlist

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { SMALL, MED, LARGE, XLARGE} from '../../utils/constants'
 import { Theme } from '../../styles/theme'
 
-export const Container = styled.div`
+export const Container = styled.button`
     width:${({ toggle }) => toggle ? 'calc(100% - 10px)' : 'calc(100% - 20px);'};
     height:51px;
     background-color:${({ selected }) => selected ? `${Theme.colors.medGrey}` : `${Theme.colors.darkGrey}`};
@@ -13,6 +13,7 @@ export const Container = styled.div`
     border-radius: 7px;
     position:relative;
     transition: transform 200ms ease-in-out;
+    border:none;
     & > h3{
         color:${({ selected }) => selected ? `${Theme.colors.white}` : `${Theme.colors.lightGrey}`};
         margin-left:${({ toggle }) => toggle ? null : '16px'}

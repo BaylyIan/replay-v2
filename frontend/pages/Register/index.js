@@ -11,6 +11,7 @@ import Form from '../../components/Form'
 import jsCookie from 'js-cookie';
 import axios from 'axios';
 import { useAuth } from '../../utils/authContext'
+import { DB_URL } from '../../utils/constants'
 
 const Register = ({}) => {
   //check if user has been logged in recently, and either set toggle to true or bypass login entirely

@@ -1,19 +1,21 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import cookie from "cookie"
+import { DB_URL } from '../utils/constants'
 
 import { useCallback, useState, useRef, useEffect } from 'react'
 
 
-export async function postImage({ image, type }) {
+export async function postImage({ image, type, id }) {
   const formData = new FormData();
   formData.append("image", image)
   if (type === 'playlist') {
     console.log(formData, 'util')
-    const result = await axios.post('https://replay-v2.herokuapp.com/playlistImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post(`${DB_URL}/playlistImage`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
     return result.data
   } else if (type === 'profile') {
-    const result = await axios.post('https://replay-v2.herokuapp.com/profileImage', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const result = await axios.post(`${DB_URL}/profileImage/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } } )
+    console.log(result.data, 'after image ')
     return result.data
   }
 }
