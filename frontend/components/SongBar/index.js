@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Container, Cover, Left, Right, Spacer } from './style'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 
-import { DefaultPlaylist } from '../../public/Icons/default_playlist.png'
 import { Theme } from '../../styles/theme';
 
 const SongBar = ({ title, artist, cover, onClick, showAdd}) => {
@@ -42,7 +41,7 @@ const SongBar = ({ title, artist, cover, onClick, showAdd}) => {
 SongBar.defaultProps = {
     title: "West End Blues",
     artist: "Bob",
-    cover: DefaultPlaylist,
+    cover: '/Icons/default_playlist.png',
     onClick:()=>{}
 }
 
