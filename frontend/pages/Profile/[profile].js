@@ -54,9 +54,9 @@ const Profile = ({ playlists, liked, profile }) => {
   // }
 
   // Server-render loading state
-  // if (!auth || auth.status === "SIGNED_OUT") {
-  //   return <Page>Loading.....</Page>
-  // }
+  if (!auth || auth.status === "SIGNED_OUT") {
+    return <Page>Loading.....</Page>
+  }
 
   let av
   if (profile.id === auth.user.id && edit) {
@@ -122,7 +122,7 @@ const Profile = ({ playlists, liked, profile }) => {
               showLike={false}
               user_pic={`${DB_URL}/playlistImage/${o.image_url}`}
               title={o.name}
-              username={auth.user.name}
+              username={profile.name}
               onClick={() => {
                 router.push({
                   pathname: "/Playlist/[playlist]",
