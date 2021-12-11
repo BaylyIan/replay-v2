@@ -67,6 +67,7 @@ export const AuthProvider = (props) => {
                     Cookies.set('user', JSON.stringify(result.data.user))
                     console.log('user signed in');
                     router.push('/');
+                    router.reload()
                     // router.reload()
                 }
             })
@@ -90,6 +91,7 @@ export const AuthProvider = (props) => {
                     console.log(result.data, 'user registered')
                     Cookies.set('user', JSON.stringify(result.data))
                     router.push('/')
+                    router.reload()
                 }
             })
             .catch(function (error) {
