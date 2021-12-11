@@ -26,6 +26,8 @@ const Profile = ({ playlists, liked, profile }) => {
 
   const { auth } = useAuth()
 
+  console.log(auth, 'auth')
+
   const [file, setFile] = useState()
   const [tempFile, setTempFile] = useState()
   const [edit, setEdit] = useState()
@@ -52,9 +54,9 @@ const Profile = ({ playlists, liked, profile }) => {
   // }
 
   // Server-render loading state
-  if (!auth || auth.status === "SIGNED_OUT") {
-    return <Page>Loading.....</Page>
-  }
+  // if (!auth || auth.status === "SIGNED_OUT") {
+  //   return <Page>Loading.....</Page>
+  // }
 
   let av
   if (profile.id === auth.user.id && edit) {
@@ -182,7 +184,7 @@ export async function getStaticProps({ params }) {
 
   const res3 = await axios.get(`${DB_URL}/api/users_liked_playlists/${profile.id}`)
   const liked = res3.data.result
-  
+
   for (const i of liked) {
     await axios.get(`${DB_URL}/api/profile_by_id/${i.user_id}`).then((res) => {
       i.creator = {
