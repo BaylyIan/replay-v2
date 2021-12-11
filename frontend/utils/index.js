@@ -37,6 +37,15 @@ export function parseCookies(req){
   return cookie.parse(req ? req.headers.cookie || "" : document.cookie);
 }
 
+export const parseCookie = str =>
+  str
+  .split(';')
+  .map(v => v.split('='))
+  .reduce((acc, v) => {
+    acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+    return acc;
+  }, {});
+
 // export const Login = async ({ email, password }) => {
 //   const result = await axios.post('http://localhost:4200/api/users/login', {
 //     email: email,

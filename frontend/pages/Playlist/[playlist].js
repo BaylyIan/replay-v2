@@ -64,7 +64,7 @@ const Playlist = ({ playlist }) => {
                         <Avatar>
                             <img src={playlist.creator.name !== null ? `${DB_URL}/profileImage/${playlist.creator.image}` : '/Icons/default_profile.png'} />
                         </Avatar>
-                        <h2>{auth.user.name}</h2>
+                        <h2>{playlist.creator.name}</h2>
                     </div>
                     <SubHeader>
                         <h1>{playlist.name}</h1>
