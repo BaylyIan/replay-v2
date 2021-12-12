@@ -186,12 +186,12 @@ app.get('/playlistImage/:key', (req, res) => {
 
 //create new playlist
 app.post('/api/create_playlist', (req, res) => {
-  const userId = req.body.userId
+  // const userId = req.body.userId
   const playlist = req.body
-
+  // console.log(playlist, 'req playlist')
   //create playlist in db
-  database.createPlaylist(playlist, userId, (error, playlistId) => {
-    console.log(playlistId, 'playlist id')
+  database.createPlaylist(playlist, (error, playlistId) => {
+    // console.log(playlist, 'playlist server.js')
     res.send({ playlistId })
 
     //loop through tags, add each one to db
@@ -367,13 +367,15 @@ app.post('/api/search_songs', (req, res) => {
 app.post('/api/add_song', (req, res) => {
   const playlist_id = req.body.playlist_id //playlist id
   const song_id = req.body.song_id
+  console.log(playlist_id, song_id, 'req')
   database.addSong(playlist_id, song_id, (error, result) => {
     if (error) {
       res.send({ error })
       return
     }
     // song.id = song_id
-    console.log("song inserted")
+    console.log(result, 'res')
+
     res.send({ result })
   })
 })

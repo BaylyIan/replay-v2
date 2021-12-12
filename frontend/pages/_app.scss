@@ -2,6 +2,10 @@
 // @import "../pageStyles/Home/style.js";
 // @import "../pageStyles/Register/style.js";
 
+body::-webkit-scrollbar-track {
+  background: orange;        /* color of the tracking area */
+}
+
 html, body {
     height: 100%;
     font-family: 'Inter', sans-serif;
@@ -54,4 +58,6 @@ html, body {
     font-weight: 300;
     font-size: 13px;
   };
+
+
 
