@@ -258,16 +258,16 @@ exports.allUsers = allUsers
 
 
 // create a playlist
-function createPlaylist(playlist, userId, callback) {
-  // console.log(playlist, 'db')
+function createPlaylist(playlist, callback) {
+  console.log(playlist, 'db')
   const query = `
       INSERT INTO playlists (name, image_url, description, user_id)
       VALUES (?, ?, ?, ?)
   `
-  const params = [playlist.name, playlist.image, playlist.description, userId]
+  const params = [playlist.name, playlist.image_url, playlist.description, playlist.user_id]
   connection.query(query, params, (error, result, fields) => {
-    // console.log(result, 'red')
-    callback(error, result.insertId)
+    console.log(result, 'red')
+    callback(error, result)
     console.log(error, result)
   })
 }

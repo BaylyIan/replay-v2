@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+body::-webkit-scrollbar-track {
+  background: orange;        /* color of the tracking area */
+}
+

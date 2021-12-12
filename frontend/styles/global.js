@@ -23,6 +23,9 @@ export const GlobalStyles = createGlobalStyle`
         color: #000;
       }
     };
+    body::-webkit-scrollbar-track {
+  background: orange;        /* color of the tracking area */
+}
   }
   h1 {
     font-family: 'Inter', sans-serif;
